@@ -1,0 +1,19 @@
+{
+  "name": "express-api",
+  "version": "1.0.0",
+  "description": "Simple Express API for the POC stack",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "PORT=3000 node src/server.js",
+    "start": "node src/server.js"
+  },
+  "keywords": [
+    "express",
+    "poc"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

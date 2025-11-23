@@ -1,0 +1,58 @@
+# Development override for docker-compose.yml
+# This allows testing with localhost domains over plain HTTP
+# without touching the production `.env` values.
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  traefik:
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --api.dashboard=true
+      - --api.insecure=true
+      - --accesslog=true
+      - --log.level=DEBUG
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dashboard.rule=Host(`traefik.localhost`)
+      - traefik.http.routers.dashboard.entrypoints=web
+      - traefik.http.services.dashboard.loadbalancer.server.port=8080
+
+  next-app-one:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nextone.rule=Host(`nextone.localhost`)
+      - traefik.http.routers.nextone.entrypoints=web
+      - traefik.http.routers.nextone.tls=false
+      - traefik.http.routers.nextone.tls.certresolver=
+      - traefik.http.services.nextone.loadbalancer.server.port=3000
+
+  next-app-two:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nexttwo.rule=Host(`nexttwo.localhost`)
+      - traefik.http.routers.nexttwo.entrypoints=web
+      - traefik.http.routers.nexttwo.tls=false
+      - traefik.http.routers.nexttwo.tls.certresolver=
+      - traefik.http.services.nexttwo.loadbalancer.server.port=3000
+
+  express-api:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.express.rule=Host(`api.localhost`)
+      - traefik.http.routers.express.entrypoints=web
+      - traefik.http.routers.express.tls=false
+      - traefik.http.routers.express.tls.certresolver=
+      - traefik.http.services.express.loadbalancer.server.port=4000
+
+  grafana:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.grafana.rule=Host(`grafana.localhost`)
+      - traefik.http.routers.grafana.entrypoints=web
+      - traefik.http.routers.grafana.tls=false
+      - traefik.http.routers.grafana.tls.certresolver=
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+

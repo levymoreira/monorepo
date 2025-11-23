@@ -1,0 +1,18 @@
+{
+  "name": "cron-logger",
+  "version": "1.0.0",
+  "description": "Simple cron job that logs a heartbeat every minute",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "cron",
+    "logger"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "node-cron": "^4.2.1"
+  }
+}

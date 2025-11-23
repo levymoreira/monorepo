@@ -1,0 +1,164 @@
+name: azure-sites-poc
+
+services:
+  traefik:
+    image: traefik:v2.11
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_ACME_EMAIL}
+      - --certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
+      - --accesslog=true
+      - --log.level=${TRAEFIK_LOG_LEVEL:-INFO}
+    environment:
+      - DOCKER_API_VERSION=1.44
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/acme.json:/etc/traefik/acme.json
+    networks:
+      - proxy
+      - internal
+      - monitoring
+    restart: unless-stopped
+
+  next-app-one:
+    build:
+      context: ./apps/next-app-one
+      dockerfile: Dockerfile
+    environment:
+      - PORT=3000
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nextone.rule=Host(`${NEXT_APP_ONE_DOMAIN}`)
+      - traefik.http.routers.nextone.entrypoints=websecure
+      - traefik.http.routers.nextone.tls.certresolver=letsencrypt
+      - traefik.http.services.nextone.loadbalancer.server.port=3000
+    networks:
+      - proxy
+      - internal
+    depends_on:
+      - traefik
+    restart: unless-stopped
+
+  next-app-two:
+    build:
+      context: ./apps/next-app-two
+      dockerfile: Dockerfile
+    environment:
+      - PORT=3000
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nexttwo.rule=Host(`${NEXT_APP_TWO_DOMAIN}`)
+      - traefik.http.routers.nexttwo.entrypoints=websecure
+      - traefik.http.routers.nexttwo.tls.certresolver=letsencrypt
+      - traefik.http.services.nexttwo.loadbalancer.server.port=3000
+    networks:
+      - proxy
+      - internal
+    depends_on:
+      - traefik
+    restart: unless-stopped
+
+  express-api:
+    build:
+      context: ./apps/express-api
+      dockerfile: Dockerfile
+    environment:
+      - PORT=4000
+      - SERVICE_NAME=express-api
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.express.rule=Host(`${EXPRESS_API_DOMAIN}`)
+      - traefik.http.routers.express.entrypoints=websecure
+      - traefik.http.routers.express.tls.certresolver=letsencrypt
+      - traefik.http.services.express.loadbalancer.server.port=4000
+    networks:
+      - proxy
+      - internal
+    depends_on:
+      - traefik
+    restart: unless-stopped
+
+  cron-logger:
+    build:
+      context: ./apps/cron-logger
+      dockerfile: Dockerfile
+    environment:
+      - CRON_MESSAGE=All systems green
+    networks:
+      - internal
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.4-alpine
+    command: redis-server --save 60 1 --loglevel warning --appendonly yes
+    volumes:
+      - redis-data:/data
+    networks:
+      - internal
+    restart: unless-stopped
+
+  loki:
+    image: grafana/loki:3.1.0
+    command: -config.file=/etc/loki/local-config.yml
+    volumes:
+      - ./monitoring/loki-config.yml:/etc/loki/local-config.yml:ro
+      - loki-data:/loki
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  promtail:
+    image: grafana/promtail:3.1.0
+    command: -config.file=/etc/promtail/config.yml
+    volumes:
+      - ./monitoring/promtail-config.yml:/etc/promtail/config.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_SERVER_DOMAIN=${GRAFANA_DOMAIN}
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s/
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.grafana.rule=Host(`${GRAFANA_DOMAIN}`)
+      - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.routers.grafana.tls.certresolver=letsencrypt
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+    networks:
+      - proxy
+      - monitoring
+    depends_on:
+      - loki
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+  grafana-storage:
+  loki-data:
+
+networks:
+  proxy:
+    driver: bridge
+  internal:
+    driver: bridge
+  monitoring:
+    driver: bridge
