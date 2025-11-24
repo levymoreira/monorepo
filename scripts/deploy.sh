@@ -14,6 +14,8 @@ NC='\033[0m' # No Color
 
 # Configuration
 ACR_REGISTRY="monoreporegistry.azurecr.io"
+ACR_USERNAME=${ACR_USERNAME}
+ACR_PASSWORD=${ACR_PASSWORD}
 PROJECT_NAME="monorepo"
 VERSION_FILE=".version"
 ALL_SERVICES=("next-app-one" "next-app-two" "express-api" "cron-logger")
@@ -74,17 +76,17 @@ login_acr() {
         az acr login --name monoreporegistry || {
             echo -e "${RED}✗ Azure CLI login failed${NC}"
             echo -e "${YELLOW}  Trying docker login...${NC}"
-            docker login ${ACR_REGISTRY} || {
+            echo "${ACR_PASSWORD}" | docker login --username "${ACR_USERNAME}" --password-stdin "${ACR_REGISTRY}" || {
                 echo -e "${RED}✗ Docker login failed. Please login manually:${NC}"
-                echo -e "  docker login ${ACR_REGISTRY}"
+                echo -e "  echo \"\$ACR_PASSWORD\" | docker login --username \"\$ACR_USERNAME\" --password-stdin \"\$ACR_REGISTRY\""
                 exit 1
             }
         }
     else
         echo -e "  Azure CLI not found, using docker login..."
-        docker login ${ACR_REGISTRY} || {
+        echo "${ACR_PASSWORD}" | docker login --username "${ACR_USERNAME}" --password-stdin "${ACR_REGISTRY}" || {
             echo -e "${RED}✗ Docker login failed. Please login manually:${NC}"
-            echo -e "  docker login ${ACR_REGISTRY}"
+            echo -e "  echo \"\$ACR_PASSWORD\" | docker login --username \"\$ACR_USERNAME\" --password-stdin \"\$ACR_REGISTRY\""
             exit 1
         }
     fi

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 # Server-side script to pull latest images from ACR and update services with zero downtime
 # This script runs on the remote server
@@ -14,6 +15,8 @@ NC='\033[0m' # No Color
 
 # Configuration (can be overridden via environment)
 ACR_REGISTRY=${ACR_REGISTRY:-monoreporegistry.azurecr.io}
+ACR_USERNAME=${ACR_USERNAME}
+ACR_PASSWORD=${ACR_PASSWORD}
 PROJECT_NAME=${PROJECT_NAME:-monorepo}
 ALL_SERVICES=("next-app-one" "next-app-two" "express-api" "cron-logger")
 
@@ -41,23 +44,29 @@ login_acr() {
     # Try azure cli login first
     if command -v az &> /dev/null; then
         echo -e "  Using Azure CLI..."
-        az acr login --name monoreporegistry || {
-            echo -e "${YELLOW}  Azure CLI login failed, trying docker login...${NC}"
-            docker login ${ACR_REGISTRY} || {
+        # Capture output and error streams
+        login_output=$(az acr login --name monoreporegistry 2>&1)
+        login_exit_code=$?
+        
+        if [ $login_exit_code -ne 0 ]; then
+            echo -e "${YELLOW}  Azure CLI login failed with exit code ${login_exit_code}, trying docker login...${NC}"
+            echo -e "  Output from 'az acr login':\n${login_output}"
+            
+            echo "${ACR_PASSWORD}" | docker login --username "${ACR_USERNAME}" --password-stdin "${ACR_REGISTRY}" || {
                 echo -e "${RED}✗ Failed to login to ACR${NC}"
                 echo -e "${YELLOW}  Please ensure you're authenticated:${NC}"
                 echo -e "    az acr login --name monoreporegistry"
                 echo -e "    or"
-                echo -e "    docker login ${ACR_REGISTRY}"
+                echo -e "    echo \"\$ACR_PASSWORD\" | docker login --username \"\$ACR_USERNAME\" --password-stdin \"\$ACR_REGISTRY\""
                 exit 1
             }
-        }
+        fi
     else
         echo -e "  Azure CLI not found, using docker login..."
-        docker login ${ACR_REGISTRY} || {
+        echo "${ACR_PASSWORD}" | docker login --username "${ACR_USERNAME}" --password-stdin "${ACR_REGISTRY}" || {
             echo -e "${RED}✗ Failed to login to ACR${NC}"
             echo -e "${YELLOW}  Please login manually:${NC}"
-            echo -e "    docker login ${ACR_REGISTRY}"
+            echo -e "    echo \"\$ACR_PASSWORD\" | docker login --username \"\$ACR_USERNAME\" --password-stdin \"\$ACR_REGISTRY\""
             exit 1
         }
     fi
@@ -189,7 +198,7 @@ display_summary() {
     done
     echo ""
     echo -e "${BLUE}Service Status:${NC}"
-    docker compose ps --format "table {{.Service}}\t{{.Status}}\t{{.Ports}}" | grep -E "SERVICE|next-app|express-api|cron-logger" || true
+    docker compose ps --format "table {{.Service}}	{{.Status}}	{{.Ports}}" | grep -E "SERVICE|next-app|express-api|cron-logger" || true
     echo ""
 }
 
@@ -223,4 +232,4 @@ main() {
 
 # Run main function
 main
-
+set +x
