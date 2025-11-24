@@ -34,7 +34,6 @@ services:
     build:
       context: ./apps/next-app-one
       dockerfile: Dockerfile
-      platform: linux/amd64
     environment:
       - PORT=3000
     labels:
@@ -54,7 +53,6 @@ services:
     build:
       context: ./apps/next-app-two
       dockerfile: Dockerfile
-      platform: linux/amd64
     environment:
       - PORT=3000
     labels:
@@ -74,7 +72,6 @@ services:
     build:
       context: ./apps/express-api
       dockerfile: Dockerfile
-      platform: linux/amd64
     environment:
       - PORT=4000
       - SERVICE_NAME=express-api
@@ -95,7 +92,6 @@ services:
     build:
       context: ./apps/cron-logger
       dockerfile: Dockerfile
-      platform: linux/amd64
     environment:
       - CRON_MESSAGE=All systems green
     networks:
