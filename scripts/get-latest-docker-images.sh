@@ -80,7 +80,7 @@ pull_image() {
     local image_name="${ACR_REGISTRY}/${PROJECT_NAME}-${service}:latest"
 
     echo -e "${YELLOW}  Pulling ${image_name}...${NC}"
-    docker pull "${image_name}" || {
+    docker pull --platform linux/amd64 "${image_name}" || {
         echo -e "${RED}✗ Failed to pull ${image_name}${NC}"
         return 1
     }
