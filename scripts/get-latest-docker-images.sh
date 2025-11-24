@@ -78,8 +78,8 @@ login_acr() {
 pull_image() {
     local service=$1
     local image_name="${ACR_REGISTRY}/${PROJECT_NAME}-${service}:latest"
-    
-    echo -e "${YELLOW}  Pulling ${service}...${NC}"
+
+    echo -e "${YELLOW}  Pulling ${image_name}...${NC}"
     docker pull "${image_name}" || {
         echo -e "${RED}✗ Failed to pull ${image_name}${NC}"
         return 1
