@@ -1,0 +1,156 @@
+.header {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 12px;
+  min-height: 59px;
+  width: 100%;
+  flex-wrap: wrap;
+  position: absolute;
+  top: 0;
+  z-index: 3;
+  margin-top: 13px;
+}
+
+@media (min-width: 760px) {
+  .header {
+    margin-top: 0;
+  }
+}
+
+.logo {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: var(--radii-borderRadius);
+  color: white;
+  cursor: pointer;
+  height: 34px;
+  padding: 0 10px;
+  transition: background var(--transitions-duration) ease-in-out;
+  font-weight: 700;
+  font-size: 32px;
+  text-decoration: none;
+  margin-left: 12px;
+  font-family: var(--fonts-heading);
+}
+
+.logo:hover {
+  background: var(--colors-hover);
+}
+
+.nav {
+  text-align: center;
+  flex: 1;
+  order: 2;
+  flex-basis: 100%;
+}
+
+@media (min-width: 760px) {
+  .nav {
+    order: 0;
+    flex-basis: initial;
+  }
+}
+
+@media (max-width: 780px) {
+  .nav {
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+}
+
+.navList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: inline-flex;
+  position: relative;
+  top: 5px;
+}
+
+@media (min-width: 425px) {
+  .navList {
+    justify-content: space-around;
+  }
+}
+
+.navLink {
+  border: 0;
+  position: relative;
+}
+
+.navLink:hover,
+.navLink:focus {
+  opacity: 1;
+}
+
+.navText {
+  color: var(--colors-secondary);
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  padding: 20px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color var(--transitions-duration) ease-in-out;
+}
+
+.navText:hover {
+  color: var(--colors-primary);
+}
+
+.navText::after {
+  content: "";
+  position: absolute;
+  margin: 0px auto;
+  top: 18px;
+  left: 0px;
+  right: 0px;
+  height: 1px;
+  width: 20px;
+  background: rgb(255, 255, 255);
+  opacity: 0;
+  transition: opacity var(--transitions-duration) ease-in-out;
+}
+
+.navTextActive {
+  color: var(--colors-primary);
+}
+
+.navTextActive::after {
+  opacity: 1;
+}
+
+.commandButton {
+  display: flex;
+  align-items: center;
+  padding-right: 12px;
+  margin-left: auto;
+}
+
+.commandBtn {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: var(--radii-borderRadius);
+  color: white;
+  cursor: pointer;
+  height: 34px;
+  padding: 0 8px;
+  transition: background var(--transitions-duration) ease-in-out;
+}
+
+.commandBtn:hover {
+  background: var(--colors-hover);
+}
+
+.commandBtn i {
+  font-size: 24px;
+  line-height: 32px;
+}
+

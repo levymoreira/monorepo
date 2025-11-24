@@ -1,0 +1,59 @@
+.footer {
+  background: var(--colors-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.socialLink {
+  color: var(--colors-secondary);
+  display: flex;
+  font-size: 15px;
+  border: 0;
+  margin-left: 20px;
+  text-decoration: none;
+  text-transform: lowercase;
+  transition: color var(--transitions-duration) ease-in-out;
+}
+
+.socialLink:hover,
+.socialLink:focus {
+  color: var(--colors-primary);
+  opacity: 1;
+}
+
+.socialLink:hover .socialIcon {
+  transition: opacity var(--transitions-duration) ease-in-out;
+  opacity: 1;
+}
+
+.socialLink:first-child {
+  margin: 0;
+}
+
+.socialText {
+  display: none;
+}
+
+@media (min-width: 760px) {
+  .socialText {
+    display: block;
+  }
+}
+
+.socialLink i {
+  color: var(--colors-primary);
+  opacity: 1;
+  margin-left: 5px;
+  margin-top: 1px;
+  font-size: 24px;
+}
+
+@media (min-width: 760px) {
+  .socialLink i {
+    opacity: 0;
+    font-size: 16px;
+  }
+}
+

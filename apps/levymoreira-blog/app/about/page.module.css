@@ -1,0 +1,154 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  z-index: 0;
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  padding: var(--space-navHeightMobile) 0;
+  overflow: hidden;
+  flex: 1 1;
+}
+
+@media (min-width: 760px) {
+  .main {
+    padding: var(--space-navHeightDesktop) 0;
+  }
+}
+
+.content {
+  align-items: center;
+  display: flex;
+  margin: 0 auto;
+}
+
+@media (min-width: 760px) {
+  .content {
+    width: 800px;
+  }
+}
+
+.content > div {
+  margin: 0 auto;
+  max-width: 760px;
+  padding: 0 20px;
+}
+
+.gradientHeading {
+  font-size: 48px;
+  line-height: 50px;
+  margin: 0 0 20px;
+  font-weight: bold;
+  font-family: var(--fonts-heading);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  background-image: linear-gradient(
+    135deg,
+    var(--colors-pink) 0%,
+    var(--colors-purple) 100%
+  );
+}
+
+.aboutLayout {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media (min-width: 760px) {
+  .aboutLayout {
+    flex-direction: row;
+  }
+}
+
+.avatarContainer {
+  margin-top: 0px;
+  width: auto;
+}
+
+@media (min-width: 760px) {
+  .avatarContainer {
+    width: 48%;
+  }
+}
+
+.avatarPlaceholder {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.avatarImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.textContainer {
+  margin-top: 0px;
+  width: auto;
+}
+
+@media (min-width: 760px) {
+  .textContainer {
+    width: 48%;
+  }
+}
+
+.paragraph {
+  font-size: 16px;
+  line-height: 32px;
+  color: var(--colors-secondary);
+  margin: 20px 0;
+  padding: 0;
+}
+
+.paragraph:first-child {
+  margin-top: 16px;
+}
+
+@media (min-width: 760px) {
+  .paragraph:first-child {
+    margin-top: -6px;
+  }
+}
+
+.paragraph strong {
+  color: var(--colors-primary);
+}
+
+.pronunciationButton {
+  background: transparent;
+  border: none;
+  color: var(--colors-primary);
+  cursor: pointer;
+  margin: 0 4px;
+  padding: 0;
+  position: relative;
+  top: 5px;
+  transform: none;
+  transition: transform 0.2s ease-in-out;
+}
+
+.pronunciationButton:hover {
+  transform: scale(1.1) translateZ(0);
+}
+
+.pronunciationButton i {
+  font-size: 24px;
+  line-height: 32px;
+}
+
