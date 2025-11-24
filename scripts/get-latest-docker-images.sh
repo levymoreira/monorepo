@@ -109,7 +109,7 @@ pull_image() {
                 return 1
             fi
         }
-    }
+    fi
     
     # Tag as local image for docker-compose
     docker tag "${image_name}" "${PROJECT_NAME}-${service}:latest" || {
