@@ -19,7 +19,7 @@ ACR_USERNAME='monoreporegistry'
 ACR_PASSWORD='4LrJVj4WpydE0AbB9LH+TvdfiJx7cGhseEXWpuTbJ0+ACRBwrhom'
 PROJECT_NAME=${PROJECT_NAME:-monorepo}
 PLATFORM=${PLATFORM:-}  # Empty means let Docker choose, or specify like linux/amd64, linux/arm64
-ALL_SERVICES=("next-app-one" "next-app-two" "express-api" "cron-logger")
+ALL_SERVICES=("next-app-one" "next-app-two" "levymoreira-blog" "express-api" "cron-logger")
 
 # Parse SERVICES from environment variable if provided, otherwise use all services
 if [ -n "$SERVICES" ]; then

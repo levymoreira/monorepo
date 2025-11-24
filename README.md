@@ -9,6 +9,7 @@ This proof of concept shows how to run multiple web properties on a single Azure
 | `traefik` | Terminates TLS, routes domains to the correct container, auto-renews Let's Encrypt certs |
 | `next-app-one` | First sample Next.js site generated with `npx create-next-app` |
 | `next-app-two` | Second sample Next.js site (also from `create-next-app`) |
+| `levymoreira-blog` | Personal blog site built with Next.js |
 | `express-api` | Simple Node/Express API that returns a JSON hello world |
 | `cron-logger` | Node-based cron job that logs a heartbeat every minute |
 | `redis` | Cache/data store available to any of your apps |
@@ -29,7 +30,7 @@ All app containers can be scaled to two replicas (or more) so you can deploy upd
    cp .env.example .env
    # edit .env to match your domains and contact email
    ```
-2. Make sure the DNS A records for `NEXT_APP_ONE_DOMAIN`, `NEXT_APP_TWO_DOMAIN`, `EXPRESS_API_DOMAIN`, and `GRAFANA_DOMAIN` all point at the VM.
+2. Make sure the DNS A records for `NEXT_APP_ONE_DOMAIN`, `NEXT_APP_TWO_DOMAIN`, `BLOG_DOMAIN`, `EXPRESS_API_DOMAIN`, and `GRAFANA_DOMAIN` all point at the VM.
 3. The `traefik/acme.json` file is already created with the required `chmod 600`. Traefik will store Let's Encrypt certs there.
 
 ## Local Development Setup
@@ -65,6 +66,7 @@ Add these lines:
 127.0.0.1 nextone.localhost
 127.0.0.1 nexttwo.localhost
 127.0.0.1 api.localhost
+127.0.0.1 blog.localhost
 127.0.0.1 grafana.localhost
 127.0.0.1 traefik.localhost
 ```
@@ -89,7 +91,8 @@ Or manually:
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build \
   --scale next-app-one=2 \
   --scale next-app-two=2 \
-  --scale express-api=2
+  --scale express-api=2 \
+  --scale levymoreira-blog=2
 ```
 
 ### Step 3: Access Your Services
@@ -99,6 +102,7 @@ Once running, access your services at:
 - `http://nextone.localhost` - Next.js App One
 - `http://nexttwo.localhost` - Next.js App Two
 - `http://api.localhost` - Express API
+- `http://blog.localhost` - Levy Moreira Blog
 - `http://grafana.localhost` - Grafana Dashboard
 - `http://traefik.localhost` - Traefik Dashboard (dev mode only)
 
@@ -134,7 +138,7 @@ Use the provided Makefile to boot everything with redundancy:
 make up
 ```
 
-This runs `docker compose up -d --build --scale next-app-one=2 --scale next-app-two=2 --scale express-api=2`, ensuring two replicas for each of your customer-facing services while the supporting services (Traefik, cron job, Redis, Grafana stack) run single instances.
+This runs `docker compose up -d --build --scale next-app-one=2 --scale next-app-two=2 --scale express-api=2 --scale levymoreira-blog=2`, ensuring two replicas for each of your customer-facing services while the supporting services (Traefik, cron job, Redis, Grafana stack) run single instances.
 
 To stop everything:
 
@@ -160,6 +164,7 @@ Test services directly without Traefik (useful for debugging):
 # Test Next.js apps
 docker compose exec next-app-one curl -s http://localhost:3000
 docker compose exec next-app-two curl -s http://localhost:3000
+docker compose exec levymoreira-blog curl -s http://localhost:3000
 
 # Test Express API
 docker compose exec express-api curl -s http://localhost:4000
@@ -202,7 +207,7 @@ docker compose build next-app-one
 docker compose up -d --no-deps --scale next-app-one=2 next-app-one
 ```
 
-Repeat for `next-app-two` or `express-api` whenever you ship a new Docker image.
+Repeat for `next-app-two`, `levymoreira-blog`, or `express-api` whenever you ship a new Docker image.
 
 ## Logging + monitoring
 
@@ -234,6 +239,7 @@ The `cron-logger` service demonstrates Dockerized cron-style work. It uses `node
 apps/
   next-app-one/        # Next.js sample site + Dockerfile
   next-app-two/        # Second Next.js site
+  levymoreira-blog/    # Personal blog site
   express-api/         # Node/Express API service
   cron-logger/         # Node cron worker
 monitoring/

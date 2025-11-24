@@ -68,6 +68,25 @@ services:
       - traefik
     restart: unless-stopped
 
+  levymoreira-blog:
+    build:
+      context: ./apps/levymoreira-blog
+      dockerfile: Dockerfile
+    environment:
+      - PORT=3000
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.blog.rule=Host(`${BLOG_DOMAIN}`)
+      - traefik.http.routers.blog.entrypoints=websecure
+      - traefik.http.routers.blog.tls.certresolver=letsencrypt
+      - traefik.http.services.blog.loadbalancer.server.port=3000
+    networks:
+      - proxy
+      - internal
+    depends_on:
+      - traefik
+    restart: unless-stopped
+
   express-api:
     build:
       context: ./apps/express-api

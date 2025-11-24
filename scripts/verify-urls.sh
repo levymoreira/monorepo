@@ -82,6 +82,13 @@ else
     echo -e "${YELLOW}⚠ EXPRESS_API_DOMAIN not set in .env${NC}"
 fi
 
+# Check Blog
+if [ -n "$BLOG_DOMAIN" ]; then
+    check_service "levymoreira-blog" "https://${BLOG_DOMAIN}" "Levy Moreira Blog"
+else
+    echo -e "${YELLOW}⚠ BLOG_DOMAIN not set in .env${NC}"
+fi
+
 # Check Grafana
 if [ -n "$GRAFANA_DOMAIN" ]; then
     check_service "grafana" "https://${GRAFANA_DOMAIN}" "Grafana Dashboard"
@@ -100,6 +107,7 @@ echo ""
 echo "Test services directly (bypassing Traefik):"
 echo "  docker compose exec next-app-one curl -s http://localhost:3000"
 echo "  docker compose exec next-app-two curl -s http://localhost:3000"
+echo "  docker compose exec levymoreira-blog curl -s http://localhost:3000"
 echo "  docker compose exec express-api curl -s http://localhost:4000"
 echo ""
 echo "View logs:"
