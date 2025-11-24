@@ -15,7 +15,16 @@ NC='\033[0m' # No Color
 # Configuration (can be overridden via environment)
 ACR_REGISTRY=${ACR_REGISTRY:-monoreporegistry.azurecr.io}
 PROJECT_NAME=${PROJECT_NAME:-azure-sites-poc}
-SERVICES=("next-app-one" "next-app-two" "express-api" "cron-logger")
+ALL_SERVICES=("next-app-one" "next-app-two" "express-api" "cron-logger")
+
+# Parse SERVICES from environment variable if provided, otherwise use all services
+if [ -n "$SERVICES" ]; then
+    # Convert space-separated string to array
+    read -ra SERVICES_ARRAY <<< "$SERVICES"
+    SERVICES=("${SERVICES_ARRAY[@]}")
+else
+    SERVICES=("${ALL_SERVICES[@]}")
+fi
 
 echo -e "${BLUE}════════════════════════════════════════${NC}"
 echo -e "${BLUE}🔄 Starting Zero-Downtime Update${NC}"

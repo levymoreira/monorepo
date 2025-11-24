@@ -5,3 +5,4 @@ monorepo-vm1_key
 open ports 443, 22 
 IP 98.71.75.120
 file access scripts/monorepo-vm1_key.pem
+folder with project: /home/azureuser/monorepo/

@@ -56,7 +56,7 @@ setup-dev-hosts:
 
 .PHONY: deploy
 deploy:
-	@./scripts/deploy.sh
+	@./scripts/deploy.sh $(SERVICE)
 
 .PHONY: connect
 connect:

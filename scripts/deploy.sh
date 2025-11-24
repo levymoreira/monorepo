@@ -16,7 +16,8 @@ NC='\033[0m' # No Color
 ACR_REGISTRY="monoreporegistry.azurecr.io"
 PROJECT_NAME="azure-sites-poc"
 VERSION_FILE=".version"
-SERVICES=("next-app-one" "next-app-two" "express-api" "cron-logger")
+ALL_SERVICES=("next-app-one" "next-app-two" "express-api" "cron-logger")
+SERVICES=()  # Will be set based on parameter or all services
 
 # Load deployment configuration
 if [ -f .deploy.env ]; then
@@ -27,7 +28,12 @@ fi
 SERVER_HOST=${SERVER_HOST:-}
 SERVER_USER=${SERVER_USER:-}
 SERVER_PATH=${SERVER_PATH:-/opt/azure-sites-poc}
-SSH_KEY=${SSH_KEY:-~/.ssh/id_rsa}
+
+# Get script directory and resolve key path
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+DEFAULT_SSH_KEY="${PROJECT_ROOT}/scripts/monorepo-vm1_key.pem"
+SSH_KEY=${SSH_KEY:-$DEFAULT_SSH_KEY}
 
 # Function to get current version
 get_current_version() {
@@ -165,7 +171,8 @@ trigger_server_update() {
     # Check if SSH key exists
     if [ ! -f "$SSH_KEY" ]; then
         echo -e "${RED}✗ SSH key not found: ${SSH_KEY}${NC}"
-        echo -e "${YELLOW}  Set SSH_KEY in .deploy.env or use default ~/.ssh/id_rsa${NC}"
+        echo -e "${YELLOW}  Set SSH_KEY in .deploy.env or ensure default key exists at:${NC}"
+        echo -e "${YELLOW}  ${DEFAULT_SSH_KEY}${NC}"
         exit 1
     fi
     
@@ -178,6 +185,9 @@ trigger_server_update() {
         exit 1
     }
     
+    # Build services list for server script
+    local services_list=$(IFS=' '; echo "${SERVICES[*]}")
+    
     # Execute update script on server
     echo -e "  Executing update script on server..."
     ssh -i "${SSH_KEY}" -o StrictHostKeyChecking=no \
@@ -186,12 +196,46 @@ trigger_server_update() {
          chmod +x scripts/get-latest-docker-images.sh && \
          ACR_REGISTRY=${ACR_REGISTRY} \
          PROJECT_NAME=${PROJECT_NAME} \
+         SERVICES='${services_list}' \
          bash scripts/get-latest-docker-images.sh" || {
         echo -e "${RED}✗ Server update failed${NC}"
         exit 1
     }
     
     echo -e "${GREEN}✓ Server update triggered successfully${NC}"
+}
+
+# Function to validate service name
+validate_service() {
+    local service=$1
+    
+    for valid_service in "${ALL_SERVICES[@]}"; do
+        if [ "$service" = "$valid_service" ]; then
+            return 0
+        fi
+    done
+    
+    return 1
+}
+
+# Function to show usage
+show_usage() {
+    echo "Usage:"
+    echo "  ./scripts/deploy.sh [SERVICE]"
+    echo ""
+    echo "Arguments:"
+    echo "  SERVICE    Optional. Service name to deploy. If omitted, deploys all services."
+    echo ""
+    echo "Available Services:"
+    for service in "${ALL_SERVICES[@]}"; do
+        echo "  - ${service}"
+    done
+    echo ""
+    echo "Examples:"
+    echo "  ./scripts/deploy.sh                    # Deploy all services"
+    echo "  ./scripts/deploy.sh next-app-one       # Deploy only next-app-one"
+    echo "  ./scripts/deploy.sh express-api        # Deploy only express-api"
+    echo ""
 }
 
 # Function to display summary
@@ -221,6 +265,39 @@ display_summary() {
 
 # Main deployment flow
 main() {
+    # Parse arguments
+    if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+        show_usage
+        exit 0
+    fi
+    
+    # Determine which services to deploy
+    if [ $# -eq 0 ]; then
+        # No argument - deploy all services
+        SERVICES=("${ALL_SERVICES[@]}")
+        echo -e "${BLUE}No service specified, deploying all services${NC}"
+    elif [ $# -eq 1 ]; then
+        # Single service specified
+        local requested_service=$1
+        
+        # Validate service name
+        if ! validate_service "$requested_service"; then
+            echo -e "${RED}Error: Invalid service name: ${requested_service}${NC}"
+            echo ""
+            show_usage
+            exit 1
+        fi
+        
+        SERVICES=("$requested_service")
+        echo -e "${BLUE}Deploying single service: ${requested_service}${NC}"
+    else
+        echo -e "${RED}Error: Too many arguments${NC}"
+        echo ""
+        show_usage
+        exit 1
+    fi
+    
+    echo ""
     echo -e "${BLUE}════════════════════════════════════════${NC}"
     echo -e "${BLUE}🚀 Starting Deployment${NC}"
     echo -e "${BLUE}════════════════════════════════════════${NC}"
@@ -257,6 +334,6 @@ main() {
     display_summary "$new_version"
 }
 
-# Run main function
-main
+# Run main function with all arguments
+main "${@}"
 
