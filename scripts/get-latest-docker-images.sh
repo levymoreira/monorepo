@@ -18,6 +18,7 @@ ACR_REGISTRY='monoreporegistry.azurecr.io'
 ACR_USERNAME='monoreporegistry'
 ACR_PASSWORD='4LrJVj4WpydE0AbB9LH+TvdfiJx7cGhseEXWpuTbJ0+ACRBwrhom'
 PROJECT_NAME=${PROJECT_NAME:-monorepo}
+PLATFORM=${PLATFORM:-}  # Empty means let Docker choose, or specify like linux/amd64, linux/arm64
 ALL_SERVICES=("next-app-one" "next-app-two" "express-api" "cron-logger")
 
 # Parse SERVICES from environment variable if provided, otherwise use all services
@@ -80,9 +81,34 @@ pull_image() {
     local image_name="${ACR_REGISTRY}/${PROJECT_NAME}-${service}:latest"
 
     echo -e "${YELLOW}  Pulling ${image_name}...${NC}"
-    docker pull --platform linux/amd64 "${image_name}" || {
-        echo -e "${RED}✗ Failed to pull ${image_name}${NC}"
-        return 1
+    
+    # Try pulling with platform specification if provided, otherwise let Docker choose
+    if [ -n "$PLATFORM" ]; then
+        docker pull --platform "${PLATFORM}" "${image_name}" || {
+            echo -e "${YELLOW}  Failed with platform ${PLATFORM}, trying without platform specification...${NC}"
+            docker pull "${image_name}" || {
+                echo -e "${RED}✗ Failed to pull ${image_name}${NC}"
+                return 1
+            }
+        }
+    else
+        # Try without platform first (Docker will use host platform)
+        docker pull "${image_name}" || {
+            echo -e "${YELLOW}  Failed without platform, trying common platforms...${NC}"
+            # Try common platforms as fallback
+            local pull_success=false
+            for platform in "linux/amd64" "linux/arm64" "linux/arm/v7"; do
+                echo -e "  Trying platform ${platform}..."
+                if docker pull --platform "${platform}" "${image_name}" 2>/dev/null; then
+                    pull_success=true
+                    break
+                fi
+            done
+            if [ "$pull_success" = false ]; then
+                echo -e "${RED}✗ Failed to pull ${image_name} with any platform${NC}"
+                return 1
+            fi
+        }
     }
     
     # Tag as local image for docker-compose
