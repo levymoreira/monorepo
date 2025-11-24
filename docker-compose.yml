@@ -1,4 +1,4 @@
-name: azure-sites-poc
+name: monorepo
 
 services:
   traefik:

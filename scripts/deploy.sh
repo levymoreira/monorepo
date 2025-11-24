@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 ACR_REGISTRY="monoreporegistry.azurecr.io"
-PROJECT_NAME="azure-sites-poc"
+PROJECT_NAME="monorepo"
 VERSION_FILE=".version"
 ALL_SERVICES=("next-app-one" "next-app-two" "express-api" "cron-logger")
 SERVICES=()  # Will be set based on parameter or all services
@@ -27,7 +27,7 @@ fi
 # Required variables (can be set in .deploy.env or environment)
 SERVER_HOST=${SERVER_HOST:-}
 SERVER_USER=${SERVER_USER:-}
-SERVER_PATH=${SERVER_PATH:-/opt/azure-sites-poc}
+SERVER_PATH=${SERVER_PATH:-/opt/monorepo}
 
 # Get script directory and resolve key path
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

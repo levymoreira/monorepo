@@ -1,5 +1,5 @@
 COMPOSE ?= docker compose
-PROJECT ?= azure-sites-poc
+PROJECT ?= monorepo
 
 # Local dev domain overrides so we don't have to edit .env
 DEV_TRAEFIK_ACME_EMAIL ?= dev@localhost

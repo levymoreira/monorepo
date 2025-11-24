@@ -20,7 +20,7 @@ Use these LogQL queries to view logs from your services:
 
 #### View all logs from all services:
 ```
-{compose_project="azure-sites-poc"}
+{compose_project="monorepo"}
 ```
 
 #### View logs from a specific service:
@@ -64,7 +64,7 @@ Use these LogQL queries to view logs from your services:
 ### Available Labels
 
 You can filter by these labels:
-- `compose_project` - Always "azure-sites-poc"
+- `compose_project` - Always "monorepo"
 - `compose_service` - Service name (cron-logger, next-app-one, next-app-two, express-api, etc.)
 - `container` - Container name
 - `stream` - stdout or stderr
@@ -78,7 +78,7 @@ You can filter by these labels:
 
 **Errors from any service:**
 ```
-{compose_project="azure-sites-poc"} |= "error" | json
+{compose_project="monorepo"} |= "error" | json
 ```
 
 **Next.js app logs:**

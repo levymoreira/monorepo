@@ -8,7 +8,7 @@ set -e
 # VM Configuration
 VM_USER="azureuser"
 VM_IP="98.71.75.120"
-VM_PATH="/opt/azure-sites-poc"
+VM_PATH="/opt/monorepo"
 
 # Get script directory and resolve key path
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -83,7 +83,7 @@ show_usage() {
     echo ""
     echo "Examples:"
     echo "  ./scripts/connect.sh"
-    echo "  ./scripts/connect.sh 'cd /opt/azure-sites-poc && docker compose ps'"
+    echo "  ./scripts/connect.sh 'cd /opt/monorepo && docker compose ps'"
     echo "  ./scripts/connect.sh 'docker compose logs -f'"
     echo ""
 }

@@ -18,9 +18,9 @@ This dashboard provides:
   - Cron Logger
 
 **Query Examples Used:**
-- `{compose_project="azure-sites-poc"}` - All logs
+- `{compose_project="monorepo"}` - All logs
 - `{compose_service="cron-logger"}` - Cron logger logs
-- `sum by (compose_service) (count_over_time({compose_project="azure-sites-poc"}[1m]))` - Log rate
+- `sum by (compose_service) (count_over_time({compose_project="monorepo"}[1m]))` - Log rate
 
 ## 2. HTTP Metrics & Status Codes Dashboard
 
@@ -65,9 +65,9 @@ This dashboard focuses exclusively on errors and provides:
 - **All Error Logs**: Combined error log stream from all services
 
 **Query Examples Used:**
-- `{compose_project="azure-sites-poc"} |= "error"` - All errors
+- `{compose_project="monorepo"} |= "error"` - All errors
 - `{compose_service="next-app-one"} |= "error"` - Next.js App One errors
-- `sum by (compose_service) (count_over_time({compose_project="azure-sites-poc"} |= "error" [1m]))` - Error rate
+- `sum by (compose_service) (count_over_time({compose_project="monorepo"} |= "error" [1m]))` - Error rate
 - `{compose_service="traefik"} |= "HTTP" | regexp "\" HTTP/1\.[01]\" (?P<status_code>[45]\d{2})"` - HTTP errors
 
 ## Accessing the Dashboards

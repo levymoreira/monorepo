@@ -211,7 +211,7 @@ Repeat for `next-app-two` or `express-api` whenever you ship a new Docker image.
 - Access Grafana at `https://$GRAFANA_DOMAIN` (set in `.env`) using the credentials from `.env`.
 - Start exploring logs with this basic Loki query:
   ```
-  {compose_project="azure-sites-poc"}
+  {compose_project="monorepo"}
   ```
 
 ## Cron jobs

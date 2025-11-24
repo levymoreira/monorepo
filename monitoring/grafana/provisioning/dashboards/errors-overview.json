@@ -83,7 +83,7 @@
             "uid": "poc-loki"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({compose_project=\"azure-sites-poc\"} |= \"error\" [5m]))",
+          "expr": "sum(count_over_time({compose_project=\"monorepo\"} |= \"error\" [5m]))",
           "queryType": "range",
           "refId": "A"
         }
@@ -313,7 +313,7 @@
             "uid": "poc-loki"
           },
           "editorMode": "code",
-          "expr": "sum by (compose_service) (count_over_time({compose_project=\"azure-sites-poc\"} |= \"error\" [1m]))",
+          "expr": "sum by (compose_service) (count_over_time({compose_project=\"monorepo\"} |= \"error\" [1m]))",
           "queryType": "range",
           "refId": "A"
         }
@@ -427,7 +427,7 @@
             "uid": "poc-loki"
           },
           "editorMode": "code",
-          "expr": "sum by (compose_service) (count_over_time({compose_project=\"azure-sites-poc\"} |= \"error\" [5m]))",
+          "expr": "sum by (compose_service) (count_over_time({compose_project=\"monorepo\"} |= \"error\" [5m]))",
           "queryType": "range",
           "refId": "A"
         }
@@ -612,7 +612,7 @@
             "uid": "poc-loki"
           },
           "editorMode": "code",
-          "expr": "{compose_project=\"azure-sites-poc\"} |= \"error\"",
+          "expr": "{compose_project=\"monorepo\"} |= \"error\"",
           "queryType": "range",
           "refId": "A"
         }

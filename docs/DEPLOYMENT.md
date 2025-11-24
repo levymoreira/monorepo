@@ -38,13 +38,13 @@ ACR_REGISTRY=monoreporegistry.azurecr.io
 # Server Configuration
 SERVER_HOST=your-server-ip-or-hostname
 SERVER_USER=azureuser
-SERVER_PATH=/opt/azure-sites-poc
+SERVER_PATH=/opt/monorepo
 
 # SSH Key (optional, defaults to ~/.ssh/id_rsa)
 SSH_KEY=~/.ssh/your-key.pem
 
 # Project name
-PROJECT_NAME=azure-sites-poc
+PROJECT_NAME=monorepo
 ```
 
 ### 2. Login to Azure Container Registry
@@ -86,8 +86,8 @@ make deploy
 - Version is stored in `.version` file (e.g., `0.0.1`)
 - Each deployment increments the patch version (`0.0.1` → `0.0.2`)
 - Images are tagged with both version and `latest`:
-  - `monoreporegistry.azurecr.io/azure-sites-poc-next-app-one:0.0.2`
-  - `monoreporegistry.azurecr.io/azure-sites-poc-next-app-one:latest`
+  - `monoreporegistry.azurecr.io/monorepo-next-app-one:0.0.2`
+  - `monoreporegistry.azurecr.io/monorepo-next-app-one:latest`
 
 ### Deployment Process
 
@@ -141,8 +141,8 @@ The server update script (`get-latest-docker-images.sh`) ensures zero downtime b
 
 2. **Clone repository on server:**
    ```bash
-   git clone <your-repo-url> /opt/azure-sites-poc
-   cd /opt/azure-sites-poc
+   git clone <your-repo-url> /opt/monorepo
+   cd /opt/monorepo
    ```
 
 3. **Create `.env` file:**
@@ -204,9 +204,9 @@ If you need to manually update the server:
 
 2. **Run update script:**
    ```bash
-   cd /opt/azure-sites-poc
+   cd /opt/monorepo
    ACR_REGISTRY=monoreporegistry.azurecr.io \
-   PROJECT_NAME=azure-sites-poc \
+   PROJECT_NAME=monorepo \
    bash scripts/get-latest-docker-images.sh
    ```
 
@@ -273,7 +273,7 @@ docker login monoreporegistry.azurecr.io
 
 4. **Manually pull and update:**
    ```bash
-   docker pull monoreporegistry.azurecr.io/azure-sites-poc-next-app-one:latest
+   docker pull monoreporegistry.azurecr.io/monorepo-next-app-one:latest
    docker compose up -d --scale next-app-one=2 next-app-one
    ```
 

@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 # Configuration (can be overridden via environment)
 ACR_REGISTRY=${ACR_REGISTRY:-monoreporegistry.azurecr.io}
-PROJECT_NAME=${PROJECT_NAME:-azure-sites-poc}
+PROJECT_NAME=${PROJECT_NAME:-monorepo}
 ALL_SERVICES=("next-app-one" "next-app-two" "express-api" "cron-logger")
 
 # Parse SERVICES from environment variable if provided, otherwise use all services
