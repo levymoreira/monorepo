@@ -38,25 +38,29 @@ echo ""
 login_acr() {
     echo -e "${YELLOW}🔐 Logging in to Azure Container Registry...${NC}"
     
-    # Check if Azure CLI is available
-    if ! command -v az &> /dev/null; then
-        echo -e "${RED}✗ Azure CLI not found${NC}"
-        echo -e "${YELLOW}  Please install Azure CLI:${NC}"
-        echo -e "    https://docs.microsoft.com/en-us/cli/azure/install-azure-cli"
-        exit 1
+    # Try azure cli login first
+    if command -v az &> /dev/null; then
+        echo -e "  Using Azure CLI..."
+        az acr login --name monoreporegistry || {
+            echo -e "${YELLOW}  Azure CLI login failed, trying docker login...${NC}"
+            docker login ${ACR_REGISTRY} || {
+                echo -e "${RED}✗ Failed to login to ACR${NC}"
+                echo -e "${YELLOW}  Please ensure you're authenticated:${NC}"
+                echo -e "    az acr login --name monoreporegistry"
+                echo -e "    or"
+                echo -e "    docker login ${ACR_REGISTRY}"
+                exit 1
+            }
+        }
+    else
+        echo -e "  Azure CLI not found, using docker login..."
+        docker login ${ACR_REGISTRY} || {
+            echo -e "${RED}✗ Failed to login to ACR${NC}"
+            echo -e "${YELLOW}  Please login manually:${NC}"
+            echo -e "    docker login ${ACR_REGISTRY}"
+            exit 1
+        }
     fi
-    
-    # Extract registry name from ACR_REGISTRY (e.g., monoreporegistry.azurecr.io -> monoreporegistry)
-    local registry_name=$(echo ${ACR_REGISTRY} | cut -d. -f1)
-    
-    echo -e "  Using Azure CLI to login to ${registry_name}..."
-    az acr login --name ${registry_name} || {
-        echo -e "${RED}✗ Failed to login to ACR${NC}"
-        echo -e "${YELLOW}  Please ensure you're authenticated:${NC}"
-        echo -e "    az login"
-        echo -e "    az acr login --name ${registry_name}"
-        exit 1
-    }
     
     echo -e "${GREEN}✓ Logged in to ${ACR_REGISTRY}${NC}"
 }
