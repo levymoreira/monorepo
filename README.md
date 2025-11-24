@@ -41,7 +41,7 @@ For local development on your machine (macOS/Linux), you can run the stack witho
 **On macOS**, run the automated setup script:
 
 ```bash
-sudo ./setup-dev-hosts.sh
+sudo ./scripts/setup-dev-hosts.sh
 ```
 
 Or use the Makefile target:
@@ -107,7 +107,7 @@ Once running, access your services at:
 Run the verification script to check all services:
 
 ```bash
-./verify-urls.sh
+./scripts/verify-urls.sh
 ```
 
 Or use `make verify`:
@@ -182,7 +182,7 @@ curl -k https://${EXPRESS_API_DOMAIN}
 curl -k https://${GRAFANA_DOMAIN}
 
 # Or use the verification script
-./verify-urls.sh
+./scripts/verify-urls.sh
 ```
 
 > **Note**: Let's Encrypt certificates require real domains and public DNS. For local development, use the [Local Development Setup](#local-development-setup) section above.

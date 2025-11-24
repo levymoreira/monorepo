@@ -48,8 +48,16 @@ up-dev:
 
 .PHONY: verify
 verify:
-	@./verify-urls.sh
+	@./scripts/verify-urls.sh
 
 .PHONY: setup-dev-hosts
 setup-dev-hosts:
-	@sudo ./setup-dev-hosts.sh
+	@sudo ./scripts/setup-dev-hosts.sh
+
+.PHONY: deploy
+deploy:
+	@./scripts/deploy.sh
+
+.PHONY: connect
+connect:
+	@./scripts/connect.sh

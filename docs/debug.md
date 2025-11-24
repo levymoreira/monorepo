@@ -89,7 +89,7 @@ docker compose exec loki /bin/sh -c 'wget -qO- http://127.0.0.1:3100/loki/api/v1
 ## 5. Optional: external routing checks
 If DNS records point at this VM, run the helper script for HTTPS/domain verification:
 ```bash
-./verify-urls.sh
+./scripts/verify-urls.sh
 ```
 It reports container status plus curl results against each `https://$DOMAIN` routed through Traefik.
 
