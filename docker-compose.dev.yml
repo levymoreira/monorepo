@@ -38,6 +38,15 @@ services:
       - traefik.http.routers.nexttwo.tls.certresolver=
       - traefik.http.services.nexttwo.loadbalancer.server.port=3000
 
+  levymoreira-blog:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.blog.rule=Host(`blog.localhost`)
+      - traefik.http.routers.blog.entrypoints=web
+      - traefik.http.routers.blog.tls=false
+      - traefik.http.routers.blog.tls.certresolver=
+      - traefik.http.services.blog.loadbalancer.server.port=3000
+
   express-api:
     labels:
       - traefik.enable=true

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 # Server-side script to pull latest images from ACR and update services with zero downtime
 # This script runs on the remote server
@@ -13,9 +14,12 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration (can be overridden via environment)
-ACR_REGISTRY=${ACR_REGISTRY:-monoreporegistry.azurecr.io}
+ACR_REGISTRY='monoreporegistry.azurecr.io'
+ACR_USERNAME='monoreporegistry'
+ACR_PASSWORD='4LrJVj4WpydE0AbB9LH+TvdfiJx7cGhseEXWpuTbJ0+ACRBwrhom'
 PROJECT_NAME=${PROJECT_NAME:-monorepo}
-ALL_SERVICES=("next-app-one" "next-app-two" "express-api" "cron-logger")
+PLATFORM=${PLATFORM:-}  # Empty means let Docker choose, or specify like linux/amd64, linux/arm64
+ALL_SERVICES=("next-app-one" "next-app-two" "levymoreira-blog" "express-api" "cron-logger")
 
 # Parse SERVICES from environment variable if provided, otherwise use all services
 if [ -n "$SERVICES" ]; then
@@ -41,23 +45,29 @@ login_acr() {
     # Try azure cli login first
     if command -v az &> /dev/null; then
         echo -e "  Using Azure CLI..."
-        az acr login --name monoreporegistry || {
-            echo -e "${YELLOW}  Azure CLI login failed, trying docker login...${NC}"
-            docker login ${ACR_REGISTRY} || {
+        # Capture output and error streams
+        login_output=$(az acr login --name monoreporegistry 2>&1)
+        login_exit_code=$?
+        
+        if [ $login_exit_code -ne 0 ]; then
+            echo -e "${YELLOW}  Azure CLI login failed with exit code ${login_exit_code}, trying docker login...${NC}"
+            echo -e "  Output from 'az acr login':\n${login_output}"
+            
+            echo "${ACR_PASSWORD}" | docker login --username "${ACR_USERNAME}" --password-stdin "${ACR_REGISTRY}" || {
                 echo -e "${RED}✗ Failed to login to ACR${NC}"
                 echo -e "${YELLOW}  Please ensure you're authenticated:${NC}"
                 echo -e "    az acr login --name monoreporegistry"
                 echo -e "    or"
-                echo -e "    docker login ${ACR_REGISTRY}"
+                echo -e "    echo \"\$ACR_PASSWORD\" | docker login --username \"\$ACR_USERNAME\" --password-stdin \"\$ACR_REGISTRY\""
                 exit 1
             }
-        }
+        fi
     else
         echo -e "  Azure CLI not found, using docker login..."
-        docker login ${ACR_REGISTRY} || {
+        echo "${ACR_PASSWORD}" | docker login --username "${ACR_USERNAME}" --password-stdin "${ACR_REGISTRY}" || {
             echo -e "${RED}✗ Failed to login to ACR${NC}"
             echo -e "${YELLOW}  Please login manually:${NC}"
-            echo -e "    docker login ${ACR_REGISTRY}"
+            echo -e "    echo \"\$ACR_PASSWORD\" | docker login --username \"\$ACR_USERNAME\" --password-stdin \"\$ACR_REGISTRY\""
             exit 1
         }
     fi
@@ -69,12 +79,37 @@ login_acr() {
 pull_image() {
     local service=$1
     local image_name="${ACR_REGISTRY}/${PROJECT_NAME}-${service}:latest"
+
+    echo -e "${YELLOW}  Pulling ${image_name}...${NC}"
     
-    echo -e "${YELLOW}  Pulling ${service}...${NC}"
-    docker pull "${image_name}" || {
-        echo -e "${RED}✗ Failed to pull ${image_name}${NC}"
-        return 1
-    }
+    # Try pulling with platform specification if provided, otherwise let Docker choose
+    if [ -n "$PLATFORM" ]; then
+        docker pull --platform "${PLATFORM}" "${image_name}" || {
+            echo -e "${YELLOW}  Failed with platform ${PLATFORM}, trying without platform specification...${NC}"
+            docker pull "${image_name}" || {
+                echo -e "${RED}✗ Failed to pull ${image_name}${NC}"
+                return 1
+            }
+        }
+    else
+        # Try without platform first (Docker will use host platform)
+        docker pull "${image_name}" || {
+            echo -e "${YELLOW}  Failed without platform, trying common platforms...${NC}"
+            # Try common platforms as fallback
+            local pull_success=false
+            for platform in "linux/amd64" "linux/arm64" "linux/arm/v7"; do
+                echo -e "  Trying platform ${platform}..."
+                if docker pull --platform "${platform}" "${image_name}" 2>/dev/null; then
+                    pull_success=true
+                    break
+                fi
+            done
+            if [ "$pull_success" = false ]; then
+                echo -e "${RED}✗ Failed to pull ${image_name} with any platform${NC}"
+                return 1
+            fi
+        }
+    fi
     
     # Tag as local image for docker-compose
     docker tag "${image_name}" "${PROJECT_NAME}-${service}:latest" || {
@@ -189,7 +224,7 @@ display_summary() {
     done
     echo ""
     echo -e "${BLUE}Service Status:${NC}"
-    docker compose ps --format "table {{.Service}}\t{{.Status}}\t{{.Ports}}" | grep -E "SERVICE|next-app|express-api|cron-logger" || true
+    docker compose ps --format "table {{.Service}}	{{.Status}}	{{.Ports}}" | grep -E "SERVICE|next-app|express-api|cron-logger" || true
     echo ""
 }
 
@@ -223,4 +258,4 @@ main() {
 
 # Run main function
 main
-
+set +x
