@@ -62,6 +62,10 @@ setup-dev-hosts:
 deploy:
 	@./scripts/deploy.sh $(SERVICE)
 
+.PHONY: update
+update:
+	@./scripts/get-latest-docker-images.sh $(SERVICE)
+
 .PHONY: connect
 connect:
 	@./scripts/connect.sh
