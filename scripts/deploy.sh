@@ -103,27 +103,72 @@ build_and_tag_images() {
     
     echo -e "${YELLOW}📦 Building Docker images for platform: ${build_platform}...${NC}"
     
+    # Ensure buildx is available and create builder if needed
+    if ! docker buildx version &>/dev/null; then
+        echo -e "${YELLOW}⚠ docker buildx not available, using DOCKER_DEFAULT_PLATFORM instead${NC}"
+        export DOCKER_DEFAULT_PLATFORM=${build_platform}
+    else
+        # Create and use a buildx builder if it doesn't exist
+        docker buildx create --use --name multiarch-builder 2>/dev/null || docker buildx use multiarch-builder 2>/dev/null || true
+    fi
+    
     for service in "${SERVICES[@]}"; do
         echo -e "  Building ${service}..."
         
-        # Build image with platform specification
-        docker compose build --platform ${build_platform} ${service} || {
-            echo -e "${RED}✗ Failed to build ${service}${NC}"
+        # Determine build context and dockerfile path
+        local build_context="./apps/${service}"
+        local dockerfile="${build_context}/Dockerfile"
+        
+        if [ ! -f "$dockerfile" ]; then
+            echo -e "${RED}✗ Dockerfile not found at ${dockerfile}${NC}"
             exit 1
-        }
+        fi
+        
+        local image_name="${PROJECT_NAME}-${service}"
+        local temp_tag="${image_name}:build-temp"
+        
+        # Build image with platform specification using buildx or docker build
+        if docker buildx version &>/dev/null; then
+            # Use buildx for cross-platform builds
+            docker buildx build \
+                --platform ${build_platform} \
+                --tag "${temp_tag}" \
+                --load \
+                -f "${dockerfile}" \
+                "${build_context}" || {
+                echo -e "${RED}✗ Failed to build ${service}${NC}"
+                exit 1
+            }
+        else
+            # Fallback to regular docker build with DOCKER_DEFAULT_PLATFORM
+            docker build \
+                --tag "${temp_tag}" \
+                -f "${dockerfile}" \
+                "${build_context}" || {
+                echo -e "${RED}✗ Failed to build ${service}${NC}"
+                exit 1
+            }
+        fi
         
         # Tag with version
-        local image_name="${PROJECT_NAME}-${service}"
         local versioned_tag="${ACR_REGISTRY}/${image_name}:${version}"
         local latest_tag="${ACR_REGISTRY}/${image_name}:latest"
+        local local_latest_tag="${image_name}:latest"
         
-        docker tag "${image_name}:latest" "${versioned_tag}" || {
-            echo -e "${RED}✗ Failed to tag ${service}${NC}"
+        # Tag as latest locally first
+        docker tag "${temp_tag}" "${local_latest_tag}" || {
+            echo -e "${RED}✗ Failed to tag ${service} as latest${NC}"
             exit 1
         }
         
-        docker tag "${image_name}:latest" "${latest_tag}" || {
-            echo -e "${RED}✗ Failed to tag ${service} as latest${NC}"
+        # Tag for registry
+        docker tag "${temp_tag}" "${versioned_tag}" || {
+            echo -e "${RED}✗ Failed to tag ${service} with version${NC}"
+            exit 1
+        }
+        
+        docker tag "${temp_tag}" "${latest_tag}" || {
+            echo -e "${RED}✗ Failed to tag ${service} as latest for registry${NC}"
             exit 1
         }
         
@@ -255,7 +300,7 @@ display_summary() {
     echo -e "${BLUE}Version:${NC} ${version}"
     echo -e "${BLUE}Registry:${NC} ${ACR_REGISTRY}"
     echo ""
-    echo -e "${BLUE}Deployed Services:${NC}"
+    echo -e "${BLUE}Uploaded Images:${NC}"
     for service in "${SERVICES[@]}"; do
         echo -e "  - ${PROJECT_NAME}-${service}:${version}"
         echo -e "    ${ACR_REGISTRY}/${PROJECT_NAME}-${service}:${version}"
