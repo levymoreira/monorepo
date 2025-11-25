@@ -98,13 +98,16 @@ login_acr() {
 build_and_tag_images() {
     local version=$1
     
-    echo -e "${YELLOW}📦 Building Docker images...${NC}"
+    # Default to linux/amd64 for Azure VMs (can be overridden via BUILD_PLATFORM env var)
+    local build_platform=${BUILD_PLATFORM:-linux/amd64}
+    
+    echo -e "${YELLOW}📦 Building Docker images for platform: ${build_platform}...${NC}"
     
     for service in "${SERVICES[@]}"; do
         echo -e "  Building ${service}..."
         
-        # Build image
-        docker compose build ${service} || {
+        # Build image with platform specification
+        docker compose build --platform ${build_platform} ${service} || {
             echo -e "${RED}✗ Failed to build ${service}${NC}"
             exit 1
         }

@@ -36,6 +36,16 @@ redeploy:
 	$(COMPOSE) --project-name $(PROJECT) build $(SERVICE)
 	$(COMPOSE) --project-name $(PROJECT) up -d --no-deps --scale $(SERVICE)=2 $(SERVICE)
 
+.PHONY: rebuild-server
+rebuild-server:
+	@echo "Rebuilding all services on the server (matching server architecture)..."
+	$(COMPOSE) --project-name $(PROJECT) build --no-cache
+	$(COMPOSE) --project-name $(PROJECT) up -d --build \
+		--scale next-app-one=2 \
+		--scale next-app-two=2 \
+		--scale express-api=2 \
+		--scale levymoreira-blog=2
+
 .PHONY: up-dev
 up-dev:
 	TRAEFIK_ACME_EMAIL=$(DEV_TRAEFIK_ACME_EMAIL) \

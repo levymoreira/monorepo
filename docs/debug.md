@@ -105,5 +105,6 @@ make down
 - **Loki stuck restarting**: verify `monitoring/loki-config.yml` matches the single-binary schema (uses the `common` block) and recreate the container (`docker compose up -d loki`).
 - **Promtail errors**: the config leverages the built-in `docker` pipeline stage; remove old `timestamps` stages if you customize it. Recreate with `docker compose up -d promtail` after edits.
 - **Scaling during redeploys**: use `make redeploy SERVICE=<name>` to roll a single service without downtime.
+- **"exec format error"**: This indicates an architecture mismatch (e.g., ARM64 image on AMD64 server). Rebuild images directly on the server: `make rebuild-server` or `docker compose build --no-cache && docker compose up -d`. For future deployments, ensure images are built with `--platform linux/amd64` when deploying to Azure VMs.
 
 Keep this runbook alongside `README.md` for future validation sessions.
