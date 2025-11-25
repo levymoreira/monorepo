@@ -128,19 +128,19 @@ wait_for_health() {
     
     echo -e "${YELLOW}  Waiting for ${service} to be healthy...${NC}"
     
-    while [ $attempt -lt $max_attempts ]; do
+    # while [ $attempt -lt $max_attempts ]; do
         # Check if container is running
-        if docker compose ps ${service} 2>/dev/null | grep -q "Up"; then
+        # if docker compose ps ${service} 2>/dev/null | grep -q "Up"; then
             # Try to check if container is responding
             # if docker compose exec -T ${service} sh -c "exit 0" 2>/dev/null; then
             #     echo -e "${GREEN}    ✓ ${service} is healthy${NC}"
             #     return 0
             # fi
-        fi
+        # fi
         
-        attempt=$((attempt + 1))
-        sleep 2
-    done
+        # attempt=$((attempt + 1))
+        # sleep 2
+    # done
     
     echo -e "${RED}    ✗ ${service} failed health check${NC}"
     return 1
