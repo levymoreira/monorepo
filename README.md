@@ -251,3 +251,17 @@ traefik/
 ```
 
 Feel free to iterate on the sample applications and extend the compose file to host additional domains beyond the included three. The combination of Traefik + Docker Compose keeps everything isolated while sharing the single VM.
+
+--
+
+# Update all services
+make update
+
+# Update a specific service
+make update SERVICE=levymoreira-blog
+
+# Update Traefik
+make update SERVICE=traefik
+
+# Update multiple services (pass as argument to script)
+make update SERVICE="levymoreira-blog next-app-one"
