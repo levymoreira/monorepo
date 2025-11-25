@@ -2,11 +2,6 @@
 .deploy.env
 .version
 
-# Environment files
-.env
-.env.local
-.env.*.local
-
 # Docker
 *.tar
 images/
