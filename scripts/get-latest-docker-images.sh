@@ -20,6 +20,7 @@ ACR_PASSWORD='4LrJVj4WpydE0AbB9LH+TvdfiJx7cGhseEXWpuTbJ0+ACRBwrhom'
 PROJECT_NAME=${PROJECT_NAME:-monorepo}
 PLATFORM=${PLATFORM:-}  # Empty means let Docker choose, or specify like linux/amd64, linux/arm64
 ALL_SERVICES=("next-app-one" "next-app-two" "levymoreira-blog" "express-api" "cron-logger")
+EXTERNAL_SERVICES=("traefik" "redis" "loki" "promtail" "grafana")  # Services using pre-built images from Docker Hub
 SERVICES=()  # Will be set based on parameter or all services
 
 
@@ -131,9 +132,48 @@ wait_for_health() {
     return 1
 }
 
+# Function to check if service uses external image (Docker Hub)
+is_external_service() {
+    local service=$1
+    for ext_service in "${EXTERNAL_SERVICES[@]}"; do
+        if [ "$service" = "$ext_service" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+# Function to update external service (from Docker Hub)
+update_external_service() {
+    local service=$1
+    
+    echo -e "${YELLOW}🔄 Updating ${service} (pulling latest from Docker Hub)...${NC}"
+    
+    # Pull latest image from Docker Hub using docker compose
+    docker compose pull ${service} || {
+        echo -e "${RED}✗ Failed to pull ${service}${NC}"
+        return 1
+    }
+    
+    # Restart the service with the new image
+    echo -e "${YELLOW}  Restarting ${service}...${NC}"
+    docker compose up -d --no-deps ${service} || {
+        echo -e "${RED}✗ Failed to restart ${service}${NC}"
+        return 1
+    }
+    
+    echo -e "${GREEN}✓ ${service} updated successfully${NC}"
+}
+
 # Function to update service with zero downtime
 update_service() {
     local service=$1
+    
+    # Check if it's an external service (Docker Hub)
+    if is_external_service "$service"; then
+        update_external_service "$service"
+        return $?
+    fi
     
     echo -e "${YELLOW}🔄 Updating ${service}...${NC}"
     
@@ -172,7 +212,15 @@ update_service() {
 validate_service() {
     local service=$1
     
+    # Check in ALL_SERVICES (ACR services)
     for valid_service in "${ALL_SERVICES[@]}"; do
+        if [ "$service" = "$valid_service" ]; then
+            return 0
+        fi
+    done
+    
+    # Check in EXTERNAL_SERVICES (Docker Hub services)
+    for valid_service in "${EXTERNAL_SERVICES[@]}"; do
         if [ "$service" = "$valid_service" ]; then
             return 0
         fi
@@ -190,14 +238,20 @@ show_usage() {
     echo "  SERVICE    Optional. Service name to update. If omitted, updates all services."
     echo ""
     echo "Available Services:"
+    echo "  ACR Services (from Azure Container Registry):"
     for service in "${ALL_SERVICES[@]}"; do
-        echo "  - ${service}"
+        echo "    - ${service}"
+    done
+    echo "  External Services (from Docker Hub):"
+    for service in "${EXTERNAL_SERVICES[@]}"; do
+        echo "    - ${service}"
     done
     echo ""
     echo "Examples:"
-    echo "  ./scripts/get-latest-docker-images.sh                    # Update all services"
+    echo "  ./scripts/get-latest-docker-images.sh                    # Update all ACR services"
     echo "  ./scripts/get-latest-docker-images.sh next-app-one       # Update only next-app-one"
     echo "  ./scripts/get-latest-docker-images.sh levymoreira-blog   # Update only levymoreira-blog"
+    echo "  ./scripts/get-latest-docker-images.sh traefik            # Update traefik from Docker Hub"
     echo ""
     echo "Note: You can also use the SERVICES environment variable:"
     echo "  SERVICES='next-app-one express-api' ./scripts/get-latest-docker-images.sh"
@@ -267,9 +321,11 @@ main() {
             SERVICES=("${SERVICES_ARRAY[@]}")
             echo -e "${BLUE}Using services from SERVICES environment variable${NC}"
         else
-            # No argument and no environment variable - update all services
+            # No argument and no environment variable - update all ACR services (not external services)
             SERVICES=("${ALL_SERVICES[@]}")
-            echo -e "${BLUE}No service specified, updating all services${NC}"
+            echo -e "${BLUE}No service specified, updating all ACR services${NC}"
+            echo -e "${YELLOW}Note: External services (traefik, redis, loki, promtail, grafana) are not updated by default${NC}"
+            echo -e "${YELLOW}      Specify them explicitly to update: ./scripts/get-latest-docker-images.sh traefik${NC}"
         fi
     elif [ $# -eq 1 ]; then
         # Single service specified
@@ -309,9 +365,22 @@ main() {
     echo -e "${BLUE}Project:${NC} ${PROJECT_NAME}"
     echo ""
     
-    # Login to ACR
-    login_acr
-    echo ""
+    # Login to ACR (only needed for ACR services)
+    local needs_acr=false
+    for service in "${SERVICES[@]}"; do
+        if ! is_external_service "$service"; then
+            needs_acr=true
+            break
+        fi
+    done
+    
+    if [ "$needs_acr" = true ]; then
+        login_acr
+        echo ""
+    else
+        echo -e "${BLUE}Note: All selected services are external (Docker Hub), skipping ACR login${NC}"
+        echo ""
+    fi
     
     # Update each service with zero downtime
     for service in "${SERVICES[@]}"; do
