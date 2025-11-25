@@ -235,22 +235,38 @@ trigger_server_update() {
         exit 1
     }
     
-    # Build services list for server script
+    # Build services list for server script (for backward compatibility with env var)
     local services_list=$(IFS=' '; echo "${SERVICES[*]}")
     
     # Execute update script on server
+    # If a single service was specified, pass it as argument; otherwise pass SERVICES env var
     echo -e "  Executing update script on server..."
-    ssh -i "${SSH_KEY}" -o StrictHostKeyChecking=no \
-        "${SERVER_USER}@${SERVER_HOST}" \
-        "cd ${SERVER_PATH} && \
-         chmod +x scripts/get-latest-docker-images.sh && \
-         ACR_REGISTRY=${ACR_REGISTRY} \
-         PROJECT_NAME=${PROJECT_NAME} \
-         SERVICES='${services_list}' \
-         bash scripts/get-latest-docker-images.sh" || {
-        echo -e "${RED}✗ Server update failed${NC}"
-        exit 1
-    }
+    if [ ${#SERVICES[@]} -eq 1 ]; then
+        # Single service - pass as argument
+        ssh -i "${SSH_KEY}" -o StrictHostKeyChecking=no \
+            "${SERVER_USER}@${SERVER_HOST}" \
+            "cd ${SERVER_PATH} && \
+             chmod +x scripts/get-latest-docker-images.sh && \
+             ACR_REGISTRY=${ACR_REGISTRY} \
+             PROJECT_NAME=${PROJECT_NAME} \
+             bash scripts/get-latest-docker-images.sh ${SERVICES[0]}" || {
+            echo -e "${RED}✗ Server update failed${NC}"
+            exit 1
+        }
+    else
+        # Multiple services - use SERVICES env var for backward compatibility
+        ssh -i "${SSH_KEY}" -o StrictHostKeyChecking=no \
+            "${SERVER_USER}@${SERVER_HOST}" \
+            "cd ${SERVER_PATH} && \
+             chmod +x scripts/get-latest-docker-images.sh && \
+             ACR_REGISTRY=${ACR_REGISTRY} \
+             PROJECT_NAME=${PROJECT_NAME} \
+             SERVICES='${services_list}' \
+             bash scripts/get-latest-docker-images.sh" || {
+            echo -e "${RED}✗ Server update failed${NC}"
+            exit 1
+        }
+    fi
     
     echo -e "${GREEN}✓ Server update triggered successfully${NC}"
 }

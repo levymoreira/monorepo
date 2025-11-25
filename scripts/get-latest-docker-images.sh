@@ -20,23 +20,8 @@ ACR_PASSWORD='4LrJVj4WpydE0AbB9LH+TvdfiJx7cGhseEXWpuTbJ0+ACRBwrhom'
 PROJECT_NAME=${PROJECT_NAME:-monorepo}
 PLATFORM=${PLATFORM:-}  # Empty means let Docker choose, or specify like linux/amd64, linux/arm64
 ALL_SERVICES=("next-app-one" "next-app-two" "levymoreira-blog" "express-api" "cron-logger")
+SERVICES=()  # Will be set based on parameter or all services
 
-# Parse SERVICES from environment variable if provided, otherwise use all services
-if [ -n "$SERVICES" ]; then
-    # Convert space-separated string to array
-    read -ra SERVICES_ARRAY <<< "$SERVICES"
-    SERVICES=("${SERVICES_ARRAY[@]}")
-else
-    SERVICES=("${ALL_SERVICES[@]}")
-fi
-
-echo -e "${BLUE}════════════════════════════════════════${NC}"
-echo -e "${BLUE}🔄 Starting Zero-Downtime Update${NC}"
-echo -e "${BLUE}════════════════════════════════════════${NC}"
-echo ""
-echo -e "${BLUE}Registry:${NC} ${ACR_REGISTRY}"
-echo -e "${BLUE}Project:${NC} ${PROJECT_NAME}"
-echo ""
 
 # Function to login to ACR
 login_acr() {
@@ -183,6 +168,42 @@ update_service() {
     echo -e "${GREEN}✓ ${service} updated successfully${NC}"
 }
 
+# Function to validate service name
+validate_service() {
+    local service=$1
+    
+    for valid_service in "${ALL_SERVICES[@]}"; do
+        if [ "$service" = "$valid_service" ]; then
+            return 0
+        fi
+    done
+    
+    return 1
+}
+
+# Function to show usage
+show_usage() {
+    echo "Usage:"
+    echo "  ./scripts/get-latest-docker-images.sh [SERVICE]"
+    echo ""
+    echo "Arguments:"
+    echo "  SERVICE    Optional. Service name to update. If omitted, updates all services."
+    echo ""
+    echo "Available Services:"
+    for service in "${ALL_SERVICES[@]}"; do
+        echo "  - ${service}"
+    done
+    echo ""
+    echo "Examples:"
+    echo "  ./scripts/get-latest-docker-images.sh                    # Update all services"
+    echo "  ./scripts/get-latest-docker-images.sh next-app-one       # Update only next-app-one"
+    echo "  ./scripts/get-latest-docker-images.sh levymoreira-blog   # Update only levymoreira-blog"
+    echo ""
+    echo "Note: You can also use the SERVICES environment variable:"
+    echo "  SERVICES='next-app-one express-api' ./scripts/get-latest-docker-images.sh"
+    echo ""
+}
+
 # Function to verify services
 verify_services() {
     echo -e "${YELLOW}🔍 Verifying services...${NC}"
@@ -230,6 +251,47 @@ display_summary() {
 
 # Main update flow
 main() {
+    # Parse arguments
+    if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+        show_usage
+        exit 0
+    fi
+    
+    # Determine which services to update
+    # Priority: command-line argument > environment variable > all services
+    if [ $# -eq 0 ]; then
+        # No argument - check environment variable or use all services
+        if [ -n "$SERVICES" ]; then
+            # Parse SERVICES from environment variable
+            read -ra SERVICES_ARRAY <<< "$SERVICES"
+            SERVICES=("${SERVICES_ARRAY[@]}")
+            echo -e "${BLUE}Using services from SERVICES environment variable${NC}"
+        else
+            # No argument and no environment variable - update all services
+            SERVICES=("${ALL_SERVICES[@]}")
+            echo -e "${BLUE}No service specified, updating all services${NC}"
+        fi
+    elif [ $# -eq 1 ]; then
+        # Single service specified
+        local requested_service=$1
+        
+        # Validate service name
+        if ! validate_service "$requested_service"; then
+            echo -e "${RED}Error: Invalid service name: ${requested_service}${NC}"
+            echo ""
+            show_usage
+            exit 1
+        fi
+        
+        SERVICES=("$requested_service")
+        echo -e "${BLUE}Updating single service: ${requested_service}${NC}"
+    else
+        echo -e "${RED}Error: Too many arguments${NC}"
+        echo ""
+        show_usage
+        exit 1
+    fi
+    
     # Change to project directory
     local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     local project_dir="$(dirname "$script_dir")"
@@ -237,6 +299,15 @@ main() {
         echo -e "${RED}✗ Failed to change to project directory${NC}"
         exit 1
     }
+    
+    echo ""
+    echo -e "${BLUE}════════════════════════════════════════${NC}"
+    echo -e "${BLUE}🔄 Starting Zero-Downtime Update${NC}"
+    echo -e "${BLUE}════════════════════════════════════════${NC}"
+    echo ""
+    echo -e "${BLUE}Registry:${NC} ${ACR_REGISTRY}"
+    echo -e "${BLUE}Project:${NC} ${PROJECT_NAME}"
+    echo ""
     
     # Login to ACR
     login_acr
@@ -256,6 +327,6 @@ main() {
     display_summary
 }
 
-# Run main function
-main
+# Run main function with all arguments
+main "${@}"
 set +x
