@@ -22,11 +22,11 @@ ALL_SERVICES=("next-app-one" "next-app-two" "levymoreira-blog" "express-api" "cr
 SERVICES=()  # Will be set based on parameter or all services
 
 # Load deployment configuration
-if [ -f .deploy.env ]; then
-    export $(cat .deploy.env | grep -v '^#' | xargs)
+if [ -f .env ]; then
+    export $(cat .env | grep -v '^#' | xargs)
 fi
 
-# Required variables (can be set in .deploy.env or environment)
+# Required variables (can be set in .env or environment)
 SERVER_HOST=${SERVER_HOST:-}
 SERVER_USER=${SERVER_USER:-}
 SERVER_PATH=${SERVER_PATH:-/opt/monorepo}
@@ -212,7 +212,7 @@ push_images() {
 trigger_server_update() {
     if [ -z "$SERVER_HOST" ] || [ -z "$SERVER_USER" ]; then
         echo -e "${YELLOW}⚠ SERVER_HOST or SERVER_USER not set, skipping server update${NC}"
-        echo -e "  Set SERVER_HOST and SERVER_USER in .deploy.env or environment"
+        echo -e "  Set SERVER_HOST and SERVER_USER in .env or environment"
         return 0
     fi
     
@@ -221,7 +221,7 @@ trigger_server_update() {
     # Check if SSH key exists
     if [ ! -f "$SSH_KEY" ]; then
         echo -e "${RED}✗ SSH key not found: ${SSH_KEY}${NC}"
-        echo -e "${YELLOW}  Set SSH_KEY in .deploy.env or ensure default key exists at:${NC}"
+        echo -e "${YELLOW}  Set SSH_KEY in .env or ensure default key exists at:${NC}"
         echo -e "${YELLOW}  ${DEFAULT_SSH_KEY}${NC}"
         exit 1
     fi
