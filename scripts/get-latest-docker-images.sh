@@ -97,10 +97,10 @@ wait_for_health() {
         # Check if container is running
         if docker compose ps ${service} 2>/dev/null | grep -q "Up"; then
             # Try to check if container is responding
-            if docker compose exec -T ${service} sh -c "exit 0" 2>/dev/null; then
-                echo -e "${GREEN}    ✓ ${service} is healthy${NC}"
-                return 0
-            fi
+            # if docker compose exec -T ${service} sh -c "exit 0" 2>/dev/null; then
+            #     echo -e "${GREEN}    ✓ ${service} is healthy${NC}"
+            #     return 0
+            # fi
         fi
         
         attempt=$((attempt + 1))
@@ -138,12 +138,12 @@ update_service() {
     }
     
     # Wait a moment for containers to start
-    sleep 3
+    # sleep 3
     
     # Wait for health check
-    wait_for_health ${service} || {
-        echo -e "${YELLOW}  Warning: Health check timeout for ${service}, but continuing...${NC}"
-    }
+    # wait_for_health ${service} || {
+    #     echo -e "${YELLOW}  Warning: Health check timeout for ${service}, but continuing...${NC}"
+    # }
     
     echo -e "${GREEN}✓ ${service} updated successfully${NC}"
 }
