@@ -9,7 +9,7 @@ docker compose ps
 
 docker compose restart traefik
 
-docker compose logs -f traefik
+docker compose logs -f levymoreira-blog
 
 # remove
 docker compose stop traefik

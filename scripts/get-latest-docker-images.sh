@@ -109,24 +109,24 @@ pull_image() {
 # Function to wait for service health
 wait_for_health() {
     local service=$1
-    local max_attempts=30
+    local max_attempts=10
     local attempt=0
     
     echo -e "${YELLOW}  Waiting for ${service} to be healthy...${NC}"
     
-    # while [ $attempt -lt $max_attempts ]; do
+    while [ $attempt -lt $max_attempts ]; do
         # Check if container is running
-        # if docker compose ps ${service} 2>/dev/null | grep -q "Up"; then
+        if docker compose ps ${service} 2>/dev/null | grep -q "Up"; then
             # Try to check if container is responding
-            # if docker compose exec -T ${service} sh -c "exit 0" 2>/dev/null; then
-            #     echo -e "${GREEN}    ✓ ${service} is healthy${NC}"
-            #     return 0
-            # fi
-        # fi
+            if docker compose exec -T ${service} sh -c "exit 0" 2>/dev/null; then
+                echo -e "${GREEN}    ✓ ${service} is healthy${NC}"
+                return 0
+            fi
+        fi
         
-        # attempt=$((attempt + 1))
-        # sleep 2
-    # done
+        attempt=$((attempt + 1))
+        sleep 2
+    done
     
     echo -e "${RED}    ✗ ${service} failed health check${NC}"
     return 1
@@ -201,9 +201,9 @@ update_service() {
     # sleep 3
     
     # Wait for health check
-    # wait_for_health ${service} || {
-    #     echo -e "${YELLOW}  Warning: Health check timeout for ${service}, but continuing...${NC}"
-    # }
+    wait_for_health ${service} || {
+        echo -e "${YELLOW}  Warning: Health check timeout for ${service}, but continuing...${NC}"
+    }
     
     echo -e "${GREEN}✓ ${service} updated successfully${NC}"
 }
