@@ -7,6 +7,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "remixicon/fonts/remixicon.css";
 
+// Metadata is added via layout wrapper since this is a client component
+
 export default function About() {
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -28,7 +30,7 @@ export default function About() {
                 <div className={styles.avatarPlaceholder}>
                   <Image
                     src="/static/images/avatar.jpg"
-                    alt="Levy"
+                    alt="Levy Moreira - Software Engineer at Microsoft"
                     fill
                     className={styles.avatarImage}
                     priority

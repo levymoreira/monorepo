@@ -5,6 +5,6 @@
 User-agent: *
 Allow: /
 
-# Sitemap location (if you have one)
-# Sitemap: https://levymoreira.com/sitemap.xml
+# Sitemap location
+Sitemap: https://levymoreira.com/sitemap.xml
 

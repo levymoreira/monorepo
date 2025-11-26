@@ -5,8 +5,26 @@ import styles from "./page.module.css";
 import { posts } from "../data/posts";
 
 export const metadata = {
-  title: "Blog - Levy Moreira",
-  description: "Thoughts, tutorials, and insights on software development.",
+  title: "Blog - Articles on Software Development & Tech",
+  description: "My thoughts and insights on software development and product development.",
+  keywords: ["software development blog", "web development", "founder", "tech blog"],
+  openGraph: {
+    title: "Blog - Levy Moreira",
+    description: "My thoughts and insights on software development and product development.",
+    type: "website",
+    url: "https://levymoreira.com/blog",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog - Levy Moreira",
+    description: "Thoughts and insights on software development and product development.",
+  },
+  alternates: {
+    canonical: "https://levymoreira.com/blog",
+    types: {
+      'application/rss+xml': 'https://levymoreira.com/rss.xml',
+    },
+  },
 };
 
 export default function Blog() {
@@ -34,7 +52,24 @@ export default function Blog() {
       <main className={styles.main}>
         <div className={styles.content}>
           <div>
-            <h1 className={styles.gradientHeading}>Blog</h1>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+              <h1 className={styles.gradientHeading} style={{ margin: 0 }}>Blog</h1>
+              <Link 
+                href="/rss.xml" 
+                target="_blank"
+                style={{ 
+                  color: '#888', 
+                  fontSize: '0.9rem',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
+                title="Subscribe to RSS feed"
+              >
+                RSS Feed
+              </Link>
+            </div>
             <p className={styles.subtitle}>
               Thoughts on software engineering, product development, and the tech industry.
             </p>

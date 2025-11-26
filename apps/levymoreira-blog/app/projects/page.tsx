@@ -1,6 +1,27 @@
+import { Metadata } from "next";
 import styles from "./page.module.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+
+export const metadata: Metadata = {
+  title: "Projects - Side Projects & Products",
+  description: "Explore my side projects and products including Social Scrapper, Viralize Hub, Red Heart AI, and Open Lobby. A collection of web apps, APIs, and tools I've built.",
+  keywords: ["side projects", "portfolio", "web applications", "Social Scrapper", "Viralize Hub", "Red Heart AI", "Open Lobby", "software projects"],
+  openGraph: {
+    title: "Projects - Levy Moreira",
+    description: "Side projects and products by Levy Moreira. From social media tools to AI chat apps.",
+    type: "website",
+    url: "https://levymoreira.com/projects",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Projects - Levy Moreira",
+    description: "Side projects and products I've built.",
+  },
+  alternates: {
+    canonical: "https://levymoreira.com/projects",
+  },
+};
 
 interface Project {
   name: string;

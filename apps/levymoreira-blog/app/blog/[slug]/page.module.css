@@ -43,13 +43,43 @@
   line-height: 1.2;
 }
 
-.date {
+.meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   font-size: 0.9rem;
   color: #888;
-  display: block;
   margin-bottom: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.date {
+  color: #888;
+}
+
+.readingTime {
+  color: #888;
+}
+
+.separator {
+  color: #555;
+}
+
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: #aaa;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .content {
