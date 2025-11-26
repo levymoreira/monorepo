@@ -299,7 +299,7 @@ display_summary() {
     done
     echo ""
     echo -e "${BLUE}Service Status:${NC}"
-    docker compose ps --format "table {{.Service}}	{{.Status}}	{{.Ports}}" | grep -E "SERVICE|next-app|express-api|cron-logger" || true
+    docker compose ps --format "table {{.Service}}	{{.Status}}	{{.Ports}}" | grep -E "SERVICE|next-app|express-api|cron-logger|levymoreira-blog" || true
     echo ""
 }
 
