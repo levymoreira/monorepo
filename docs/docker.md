@@ -10,3 +10,16 @@ docker compose ps
 docker compose restart traefik
 
 docker compose logs -f traefik
+
+# remove
+docker compose stop traefik
+docker compose rm -f traefik
+docker compose up -d traefik
+docker compose logs -f traefik
+
+
+-- 
+
+error:
+308 or 301
+Set SSL/TLS mode to "Full (strict)" in Cloudflare
