@@ -17,6 +17,8 @@ docker compose rm -f traefik
 docker compose up -d traefik
 docker compose logs -f traefik
 
+# verify version / data of a image
+docker images monorepo-levymoreira-blog:latest --format "{{.ID}} - {{.CreatedAt}}"
 
 -- 
 

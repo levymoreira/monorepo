@@ -23,7 +23,7 @@ export default function Home() {
                 </Link>
               </strong>
               <br />
-              Obsessed with software development and user experience
+              Obsessed with software development and and developing amazing products
             </p>
             <div></div>
           </div>

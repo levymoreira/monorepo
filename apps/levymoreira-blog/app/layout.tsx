@@ -9,11 +9,11 @@ const firaCode = Fira_Code({
 
 export const metadata: Metadata = {
   title: "Levy Moreira",
-  description: "Obsessed with software development and user experience",
+  description: "Obsessed with software development and developing amazing products",
   authors: [{ name: "Levy Moreira" }],
   openGraph: {
     title: "Levy Moreira",
-    description: "Obsessed with software development and user experience",
+    description: "Obsessed with software development and developing amazing products",
     type: "website",
   },
   twitter: {
