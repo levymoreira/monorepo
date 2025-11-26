@@ -32,15 +32,6 @@ export default function Header() {
           </li>
         </ul>
       </nav>
-      <div className={styles.commandButton}>
-        <button
-          type="button"
-          aria-label="Command"
-          className={styles.commandBtn}
-        >
-          <i className="ri-command-line"></i>
-        </button>
-      </div>
     </header>
   );
 }

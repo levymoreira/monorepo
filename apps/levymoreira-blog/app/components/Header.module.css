@@ -125,32 +125,3 @@
   opacity: 1;
 }
 
-.commandButton {
-  display: flex;
-  align-items: center;
-  padding-right: 12px;
-  margin-left: auto;
-}
-
-.commandBtn {
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-  border: none;
-  border-radius: var(--radii-borderRadius);
-  color: white;
-  cursor: pointer;
-  height: 34px;
-  padding: 0 8px;
-  transition: background var(--transitions-duration) ease-in-out;
-}
-
-.commandBtn:hover {
-  background: var(--colors-hover);
-}
-
-.commandBtn i {
-  font-size: 24px;
-  line-height: 32px;
-}
-

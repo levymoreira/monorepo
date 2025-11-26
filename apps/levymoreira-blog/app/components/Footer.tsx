@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       <a
-        href="/contact"
+        href="/about"
         className={styles.socialLink}
       >
         <span className={styles.socialText}>Email</span>
