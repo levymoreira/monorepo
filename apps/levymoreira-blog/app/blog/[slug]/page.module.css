@@ -1,0 +1,94 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 6rem 24px;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.backLink {
+  color: #888;
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #fff;
+}
+
+.article {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.date {
+  font-size: 0.9rem;
+  color: #888;
+  display: block;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.content {
+  color: #ddd;
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.content h2 {
+  color: #fff;
+  font-size: 1.8rem;
+  margin: 2rem 0 1rem;
+}
+
+.content p {
+  margin-bottom: 1.5rem;
+}
+
+.content ul, .content ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.content li {
+  margin-bottom: 0.5rem;
+}
+
+.notFound {
+  text-align: center;
+  padding: 4rem;
+}
+
+.notFound h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.notFound p {
+  color: #888;
+  margin-bottom: 2rem;
+}
+

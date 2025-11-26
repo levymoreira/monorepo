@@ -8,20 +8,22 @@
 
 .main {
   display: flex;
-  align-items: center;
-  padding: var(--space-navHeightMobile) 0;
+  align-items: flex-start;
+  padding-top: calc(var(--space-navHeightMobile) + 20px);
+  padding-bottom: var(--space-navHeightMobile);
   overflow: hidden;
   flex: 1 1;
 }
 
 @media (min-width: 760px) {
   .main {
-    padding: var(--space-navHeightDesktop) 0;
+    padding-top: calc(var(--space-navHeightDesktop) + 40px);
+    padding-bottom: var(--space-navHeightDesktop);
   }
 }
 
 .content {
-  align-items: center;
+  align-items: flex-start;
   display: flex;
   margin: 0 auto;
 }

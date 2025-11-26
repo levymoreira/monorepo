@@ -1,0 +1,10 @@
+# robots.txt for levymoreira.com
+# This file applies only to levymoreira.com and its subpages
+# Subdomains (e.g., gf.levymoreira.com) are not controlled by this file
+
+User-agent: *
+Allow: /
+
+# Sitemap location (if you have one)
+# Sitemap: https://levymoreira.com/sitemap.xml
+

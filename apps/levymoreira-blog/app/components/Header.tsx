@@ -26,8 +26,8 @@ export default function Header() {
             </Link>
           </li>
           <li>
-            <Link href="/uses" className={styles.navLink}>
-              <span className={`${styles.navText} ${pathname === "/uses" ? styles.navTextActive : ""}`}>Uses</span>
+            <Link href="/blog" className={styles.navLink}>
+              <span className={`${styles.navText} ${pathname === "/blog" || pathname.startsWith("/blog/") ? styles.navTextActive : ""}`}>Blog</span>
             </Link>
           </li>
         </ul>
