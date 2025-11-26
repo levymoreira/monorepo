@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "deploy": "cd ../.. && ./scripts/deploy.sh levymoreira-blog"
+    "deploy": "cd ../.. && ./scripts/commit.sh && ./scripts/deploy.sh levymoreira-blog"
   },
   "dependencies": {
     "next": "16.0.3",
