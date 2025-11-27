@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db as prisma } from '@/lib/db'
+import { db, users } from '@/lib/db'
+import { eq } from 'drizzle-orm'
 import { extractTokenFromRequest, verifyAccessToken } from '@/lib/auth/jwt'
 import { validateSession } from '@/lib/auth/session'
 import { clearAuthCookies } from '@/lib/auth/cookies'
@@ -36,16 +37,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Update user with onboarding data
-    const user = await prisma.user.update({
-      where: { id: userId },
-      data: {
+    await db.update(users)
+      .set({
         role,
         interests,
         maxCommentsPerDay: maxCommentsPerDay || 5,
         maxLikesPerDay: maxLikesPerDay || 10,
         onboardingCompleted: true,
-      }
-    })
+      })
+      .where(eq(users.id, userId))
 
     return NextResponse.json({ 
       success: true, 

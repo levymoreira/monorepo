@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { db, posts, postChatMessages, authProviders } from '@/lib/db'
+import { eq, and, isNull, inArray, asc } from 'drizzle-orm'
 import { verifyAccessToken, extractTokenFromRequest } from '@/lib/auth/jwt'
 
 // GET /api/posts/[id] - Get a specific post
@@ -20,25 +21,29 @@ export async function GET(
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
     }
 
-    const post = await db.post.findFirst({
-      where: {
-        id,
-        userId: payload.sub,
-        deletedAt: null
-      },
-      include: {
-        chatMessages: {
-          where: { deletedAt: null },
-          orderBy: { createdAt: 'asc' }
-        }
-      }
-    })
+    const [post] = await db.select()
+      .from(posts)
+      .where(and(
+        eq(posts.id, id),
+        eq(posts.userId, payload.sub),
+        isNull(posts.deletedAt)
+      ))
+      .limit(1)
 
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })
     }
 
-    return NextResponse.json(post)
+    // Fetch chat messages
+    const chatMessages = await db.select()
+      .from(postChatMessages)
+      .where(and(
+        eq(postChatMessages.postId, id),
+        isNull(postChatMessages.deletedAt)
+      ))
+      .orderBy(asc(postChatMessages.createdAt))
+
+    return NextResponse.json({ ...post, chatMessages })
   } catch (error) {
     console.error('Error fetching post:', error)
     return NextResponse.json({ error: 'Failed to fetch post' }, { status: 500 })
@@ -64,13 +69,14 @@ export async function PUT(
     }
 
     // Check if post exists and belongs to user
-    const existingPost = await db.post.findFirst({
-      where: {
-        id,
-        userId: payload.sub,
-        deletedAt: null
-      }
-    })
+    const [existingPost] = await db.select()
+      .from(posts)
+      .where(and(
+        eq(posts.id, id),
+        eq(posts.userId, payload.sub),
+        isNull(posts.deletedAt)
+      ))
+      .limit(1)
 
     if (!existingPost) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })
@@ -90,12 +96,12 @@ export async function PUT(
 
     // Validate auth providers if updated
     if (authProviderIds && authProviderIds.length > 0) {
-      const validProviders = await db.authProvider.findMany({
-        where: {
-          id: { in: authProviderIds },
-          userId: payload.sub
-        }
-      })
+      const validProviders = await db.select()
+        .from(authProviders)
+        .where(and(
+          inArray(authProviders.id, authProviderIds),
+          eq(authProviders.userId, payload.sub)
+        ))
 
       if (validProviders.length !== authProviderIds.length) {
         return NextResponse.json(
@@ -105,25 +111,29 @@ export async function PUT(
       }
     }
 
-    const updatedPost = await db.post.update({
-      where: { id },
-      data: {
-        ...(content !== undefined && { content }),
-        ...(firstComment !== undefined && { firstComment }),
-        ...(scheduledTo !== undefined && { scheduledTo }),
-        ...(status !== undefined && { status }),
-        ...(providers !== undefined && { providers }),
-        ...(authProviderIds !== undefined && { authProviderIds })
-      },
-      include: {
-        chatMessages: {
-          where: { deletedAt: null },
-          orderBy: { createdAt: 'asc' }
-        }
-      }
-    })
+    const updateData: any = {}
+    if (content !== undefined) updateData.content = content
+    if (firstComment !== undefined) updateData.firstComment = firstComment
+    if (scheduledTo !== undefined) updateData.scheduledTo = scheduledTo
+    if (status !== undefined) updateData.status = status
+    if (providers !== undefined) updateData.providers = providers
+    if (authProviderIds !== undefined) updateData.authProviderIds = authProviderIds
 
-    return NextResponse.json(updatedPost)
+    const [updatedPost] = await db.update(posts)
+      .set(updateData)
+      .where(eq(posts.id, id))
+      .returning()
+
+    // Fetch chat messages
+    const chatMessages = await db.select()
+      .from(postChatMessages)
+      .where(and(
+        eq(postChatMessages.postId, id),
+        isNull(postChatMessages.deletedAt)
+      ))
+      .orderBy(asc(postChatMessages.createdAt))
+
+    return NextResponse.json({ ...updatedPost, chatMessages })
   } catch (error) {
     console.error('Error updating post:', error)
     return NextResponse.json({ error: 'Failed to update post' }, { status: 500 })
@@ -149,13 +159,14 @@ export async function DELETE(
     }
 
     // Check if post exists and belongs to user
-    const existingPost = await db.post.findFirst({
-      where: {
-        id,
-        userId: payload.sub,
-        deletedAt: null
-      }
-    })
+    const [existingPost] = await db.select()
+      .from(posts)
+      .where(and(
+        eq(posts.id, id),
+        eq(posts.userId, payload.sub),
+        isNull(posts.deletedAt)
+      ))
+      .limit(1)
 
     if (!existingPost) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })
@@ -164,12 +175,9 @@ export async function DELETE(
     // Soft delete the post
     console.log(`DELETE /api/posts/${id} - Soft deleting post for user ${payload.sub}`)
     
-    await db.post.update({
-      where: { id },
-      data: {
-        deletedAt: new Date()
-      }
-    })
+    await db.update(posts)
+      .set({ deletedAt: new Date() })
+      .where(eq(posts.id, id))
 
     console.log(`DELETE /api/posts/${id} - Post successfully soft deleted`)
     return NextResponse.json({ message: 'Post deleted successfully' })

@@ -47,6 +47,15 @@ services:
       - traefik.http.routers.blog.tls.certresolver=
       - traefik.http.services.blog.loadbalancer.server.port=3000
 
+  automapost:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.automapost.rule=Host(`automapost.localhost`)
+      - traefik.http.routers.automapost.entrypoints=web
+      - traefik.http.routers.automapost.tls=false
+      - traefik.http.routers.automapost.tls.certresolver=
+      - traefik.http.services.automapost.loadbalancer.server.port=3000
+
   express-api:
     labels:
       - traefik.enable=true

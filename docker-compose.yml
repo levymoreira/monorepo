@@ -87,6 +87,25 @@ services:
       - traefik
     restart: unless-stopped
 
+  automapost:
+    build:
+      context: ./apps/automapost
+      dockerfile: Dockerfile
+    environment:
+      - PORT=3000
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.automapost.rule=Host(`${AUTOMAPOST_DOMAIN}`)
+      - traefik.http.routers.automapost.entrypoints=websecure
+      - traefik.http.routers.automapost.tls.certresolver=letsencrypt
+      - traefik.http.services.automapost.loadbalancer.server.port=3000
+    networks:
+      - proxy
+      - internal
+    depends_on:
+      - traefik
+    restart: unless-stopped
+
   express-api:
     build:
       context: ./apps/express-api

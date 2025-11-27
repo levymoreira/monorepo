@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
-import { db } from '@/lib/db';
+import { db, posts, messageQueue, postChatMessages } from '@/lib/db';
+import { eq, and, isNull, asc } from 'drizzle-orm';
 import { verifyAccessToken, extractTokenFromRequest } from '@/lib/auth/jwt';
 
 export async function GET(request: NextRequest) {
@@ -35,13 +36,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify user owns the post
-    const post = await db.post.findFirst({
-      where: {
-        id: postId,
-        userId: userId,
-        deletedAt: null
-      }
-    });
+    const [post] = await db.select()
+      .from(posts)
+      .where(and(
+        eq(posts.id, postId),
+        eq(posts.userId, userId),
+        isNull(posts.deletedAt)
+      ))
+      .limit(1);
 
     if (!post) {
       console.log('SSE: Post not found or unauthorized');
@@ -64,19 +66,28 @@ export async function GET(request: NextRequest) {
         // Check for existing messages immediately
         this.checkMessages = async () => {
           try {
-            const messages = await db.messageQueue.findMany({
-              where: {
-                userId,
-                postId,
-                delivered: false
-              },
-              include: {
-                message: true
-              },
-              orderBy: { createdAt: 'asc' }
-            });
+            const queueItems = await db.select({
+              id: messageQueue.id,
+              message: {
+                id: postChatMessages.id,
+                role: postChatMessages.role,
+                content: postChatMessages.content,
+                metadata: postChatMessages.metadata,
+                createdAt: postChatMessages.createdAt
+              }
+            })
+            .from(messageQueue)
+            .leftJoin(postChatMessages, eq(messageQueue.messageId, postChatMessages.id))
+            .where(and(
+              eq(messageQueue.userId, userId),
+              eq(messageQueue.postId, postId),
+              eq(messageQueue.delivered, false)
+            ))
+            .orderBy(asc(messageQueue.createdAt));
 
-            for (const queueItem of messages) {
+            for (const queueItem of queueItems) {
+              if (!queueItem.message) continue;
+              
               const messageData = JSON.stringify({
                 id: queueItem.message.id,
                 role: queueItem.message.role,
@@ -90,13 +101,12 @@ export async function GET(request: NextRequest) {
               console.log('SSE: Message sent:', queueItem.message.id);
 
               // Mark as delivered
-              await db.messageQueue.update({
-                where: { id: queueItem.id },
-                data: { 
+              await db.update(messageQueue)
+                .set({ 
                   delivered: true,
                   deliveredAt: new Date()
-                }
-              });
+                })
+                .where(eq(messageQueue.id, queueItem.id));
             }
           } catch (error) {
             console.error('SSE: Error checking messages:', error);

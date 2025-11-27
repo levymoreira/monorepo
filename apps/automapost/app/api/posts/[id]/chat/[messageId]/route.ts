@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { db, posts, postChatMessages } from '@/lib/db'
+import { eq, and, isNull } from 'drizzle-orm'
 import { verifyAccessToken, extractTokenFromRequest } from '@/lib/auth/jwt'
 
 // PUT /api/posts/[id]/chat/[messageId] - Update a specific chat message
@@ -21,27 +22,29 @@ export async function PUT(
     }
 
     // Verify post exists and belongs to user
-    const post = await db.post.findFirst({
-      where: {
-        id,
-        userId: payload.sub,
-        deletedAt: null
-      }
-    })
+    const [post] = await db.select()
+      .from(posts)
+      .where(and(
+        eq(posts.id, id),
+        eq(posts.userId, payload.sub),
+        isNull(posts.deletedAt)
+      ))
+      .limit(1)
 
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })
     }
 
     // Verify message exists and belongs to this post
-    const existingMessage = await db.postChatMessage.findFirst({
-      where: {
-        id: messageId,
-        postId: id,
-        userId: payload.sub,
-        deletedAt: null
-      }
-    })
+    const [existingMessage] = await db.select()
+      .from(postChatMessages)
+      .where(and(
+        eq(postChatMessages.id, messageId),
+        eq(postChatMessages.postId, id),
+        eq(postChatMessages.userId, payload.sub),
+        isNull(postChatMessages.deletedAt)
+      ))
+      .limit(1)
 
     if (!existingMessage) {
       return NextResponse.json({ error: 'Message not found' }, { status: 404 })
@@ -57,13 +60,10 @@ export async function PUT(
       )
     }
 
-    const updatedMessage = await db.postChatMessage.update({
-      where: { id: messageId },
-      data: {
-        content,
-        updatedAt: new Date()
-      }
-    })
+    const [updatedMessage] = await db.update(postChatMessages)
+      .set({ content })
+      .where(eq(postChatMessages.id, messageId))
+      .returning()
 
     return NextResponse.json(updatedMessage)
   } catch (error) {
@@ -91,39 +91,38 @@ export async function DELETE(
     }
 
     // Verify post exists and belongs to user
-    const post = await db.post.findFirst({
-      where: {
-        id,
-        userId: payload.sub,
-        deletedAt: null
-      }
-    })
+    const [post] = await db.select()
+      .from(posts)
+      .where(and(
+        eq(posts.id, id),
+        eq(posts.userId, payload.sub),
+        isNull(posts.deletedAt)
+      ))
+      .limit(1)
 
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })
     }
 
     // Verify message exists and belongs to this post
-    const existingMessage = await db.postChatMessage.findFirst({
-      where: {
-        id: messageId,
-        postId: id,
-        userId: payload.sub,
-        deletedAt: null
-      }
-    })
+    const [existingMessage] = await db.select()
+      .from(postChatMessages)
+      .where(and(
+        eq(postChatMessages.id, messageId),
+        eq(postChatMessages.postId, id),
+        eq(postChatMessages.userId, payload.sub),
+        isNull(postChatMessages.deletedAt)
+      ))
+      .limit(1)
 
     if (!existingMessage) {
       return NextResponse.json({ error: 'Message not found' }, { status: 404 })
     }
 
     // Soft delete the message
-    await db.postChatMessage.update({
-      where: { id: messageId },
-      data: {
-        deletedAt: new Date()
-      }
-    })
+    await db.update(postChatMessages)
+      .set({ deletedAt: new Date() })
+      .where(eq(postChatMessages.id, messageId))
 
     return NextResponse.json({ message: 'Chat message deleted successfully' })
   } catch (error) {

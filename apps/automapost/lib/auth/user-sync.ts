@@ -1,4 +1,5 @@
-import { db as prisma } from '@/lib/db';
+import { db, users, authProviders } from '@/lib/db';
+import { eq, and, count } from 'drizzle-orm';
 import { OAuthUserProfile, OAuthTokens } from './providers/config';
 
 interface UserSyncResult {
@@ -18,105 +19,93 @@ export async function findOrCreateUser(params: {
   const { provider, providerAccountId, email, name, avatarUrl, tokens } = params;
 
   // First, try to find existing auth provider
-  const existingAuthProvider = await prisma.authProvider.findUnique({
-    where: {
-      provider_providerAccountId: {
-        provider,
-        providerAccountId
-      }
-    },
-    include: {
-      user: true
-    }
-  });
+  const [existingAuthProvider] = await db.select()
+    .from(authProviders)
+    .leftJoin(users, eq(authProviders.userId, users.id))
+    .where(and(
+      eq(authProviders.provider, provider),
+      eq(authProviders.providerAccountId, providerAccountId)
+    ))
+    .limit(1);
 
-  if (existingAuthProvider) {
+  if (existingAuthProvider?.auth_providers) {
     // Update tokens
-    await prisma.authProvider.update({
-      where: { id: existingAuthProvider.id },
-      data: {
+    await db.update(authProviders)
+      .set({
         accessToken: tokens.access_token,
         refreshToken: tokens.refresh_token,
         expiresAt: tokens.expires_in 
           ? new Date(Date.now() + tokens.expires_in * 1000)
           : null,
         scope: tokens.scope
-      }
-    });
+      })
+      .where(eq(authProviders.id, existingAuthProvider.auth_providers.id));
 
     // Update user info if changed
-    if (existingAuthProvider.user.name !== name || existingAuthProvider.user.avatarUrl !== avatarUrl) {
-      await prisma.user.update({
-        where: { id: existingAuthProvider.user.id },
-        data: {
-          name: name || existingAuthProvider.user.name,
-          avatarUrl: avatarUrl || existingAuthProvider.user.avatarUrl
-        }
-      });
+    if (existingAuthProvider.users && (existingAuthProvider.users.name !== name || existingAuthProvider.users.avatarUrl !== avatarUrl)) {
+      await db.update(users)
+        .set({
+          name: name || existingAuthProvider.users.name,
+          avatarUrl: avatarUrl || existingAuthProvider.users.avatarUrl
+        })
+        .where(eq(users.id, existingAuthProvider.users.id));
     }
 
-    return { user: existingAuthProvider.user, isNew: false };
+    return { user: existingAuthProvider.users, isNew: false };
   }
 
   // Check if user exists with same email
-  const existingUser = await prisma.user.findUnique({
-    where: { email }
-  });
+  const [existingUser] = await db.select()
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
 
   if (existingUser) {
     // Link new provider to existing user
-    await prisma.authProvider.create({
-      data: {
-        userId: existingUser.id,
-        provider,
-        providerAccountId,
-        accessToken: tokens.access_token,
-        refreshToken: tokens.refresh_token,
-        expiresAt: tokens.expires_in 
-          ? new Date(Date.now() + tokens.expires_in * 1000)
-          : null,
-        scope: tokens.scope
-      }
+    await db.insert(authProviders).values({
+      userId: existingUser.id,
+      provider,
+      providerAccountId,
+      accessToken: tokens.access_token,
+      refreshToken: tokens.refresh_token,
+      expiresAt: tokens.expires_in 
+        ? new Date(Date.now() + tokens.expires_in * 1000)
+        : null,
+      scope: tokens.scope
     });
 
     // Update user info if missing
     if (!existingUser.name || !existingUser.avatarUrl) {
-      await prisma.user.update({
-        where: { id: existingUser.id },
-        data: {
+      await db.update(users)
+        .set({
           name: name || existingUser.name,
           avatarUrl: avatarUrl || existingUser.avatarUrl,
           emailVerified: true // OAuth providers verify emails
-        }
-      });
+        })
+        .where(eq(users.id, existingUser.id));
     }
 
     return { user: existingUser, isNew: false };
   }
 
   // Create new user and auth provider
-  const newUser = await prisma.user.create({
-    data: {
-      email,
-      name,
-      avatarUrl,
-      emailVerified: true, // OAuth providers verify emails
-      authProviders: {
-        create: {
-          provider,
-          providerAccountId,
-          accessToken: tokens.access_token,
-          refreshToken: tokens.refresh_token,
-          expiresAt: tokens.expires_in 
-            ? new Date(Date.now() + tokens.expires_in * 1000)
-            : null,
-          scope: tokens.scope
-        }
-      }
-    },
-    include: {
-      authProviders: true
-    }
+  const [newUser] = await db.insert(users).values({
+    email,
+    name,
+    avatarUrl,
+    emailVerified: true, // OAuth providers verify emails
+  }).returning();
+
+  await db.insert(authProviders).values({
+    userId: newUser.id,
+    provider,
+    providerAccountId,
+    accessToken: tokens.access_token,
+    refreshToken: tokens.refresh_token,
+    expiresAt: tokens.expires_in 
+      ? new Date(Date.now() + tokens.expires_in * 1000)
+      : null,
+    scope: tokens.scope
   });
 
   // Note: Lead creation removed - users are already added to leads 
@@ -127,27 +116,34 @@ export async function findOrCreateUser(params: {
 
 // Get user by ID with auth providers
 export async function getUserById(userId: string) {
-  return prisma.user.findUnique({
-    where: { id: userId },
-    include: {
-      authProviders: {
-        select: {
-          provider: true,
-          createdAt: true
-        }
-      }
-    }
-  });
+  const [user] = await db.select()
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+  
+  if (!user) return null;
+  
+  const providers = await db.select({
+    provider: authProviders.provider,
+    createdAt: authProviders.createdAt
+  })
+  .from(authProviders)
+  .where(eq(authProviders.userId, userId));
+  
+  return { ...user, authProviders: providers };
 }
 
 // Get user's auth provider tokens
 export async function getUserAuthProvider(userId: string, provider: string) {
-  return prisma.authProvider.findFirst({
-    where: {
-      userId,
-      provider
-    }
-  });
+  const [authProvider] = await db.select()
+    .from(authProviders)
+    .where(and(
+      eq(authProviders.userId, userId),
+      eq(authProviders.provider, provider)
+    ))
+    .limit(1);
+  
+  return authProvider || null;
 }
 
 // Update auth provider tokens
@@ -155,44 +151,42 @@ export async function updateAuthProviderTokens(
   authProviderId: string,
   tokens: Partial<OAuthTokens>
 ) {
-  return prisma.authProvider.update({
-    where: { id: authProviderId },
-    data: {
+  return db.update(authProviders)
+    .set({
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token,
       expiresAt: tokens.expires_in 
         ? new Date(Date.now() + tokens.expires_in * 1000)
         : undefined,
       scope: tokens.scope
-    }
-  });
+    })
+    .where(eq(authProviders.id, authProviderId));
 }
 
 // Disconnect auth provider
 export async function disconnectAuthProvider(userId: string, provider: string) {
   // Check if user has other auth methods
-  const authProviders = await prisma.authProvider.count({
-    where: { userId }
-  });
+  const [result] = await db.select({ count: count() })
+    .from(authProviders)
+    .where(eq(authProviders.userId, userId));
 
-  if (authProviders <= 1) {
+  if ((result?.count || 0) <= 1) {
     throw new Error('Cannot disconnect the only authentication method');
   }
 
-  return prisma.authProvider.deleteMany({
-    where: {
-      userId,
-      provider
-    }
-  });
+  return db.delete(authProviders)
+    .where(and(
+      eq(authProviders.userId, userId),
+      eq(authProviders.provider, provider)
+    ));
 }
 
 // Check if user has completed onboarding
 export async function checkUserOnboarding(userId: string): Promise<boolean> {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { onboardingCompleted: true }
-  });
+  const [user] = await db.select({ onboardingCompleted: users.onboardingCompleted })
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
 
   return user?.onboardingCompleted || false;
 }

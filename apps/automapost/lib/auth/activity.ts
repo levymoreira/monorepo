@@ -1,4 +1,5 @@
-import { db as prisma } from '@/lib/db';
+import { db, sisuActivities } from '@/lib/db';
+import { eq, gte, and, inArray, isNotNull, count, desc } from 'drizzle-orm';
 import { parseUserAgent } from './session';
 
 // Conditionally import geoip-lite only in runtime
@@ -77,12 +78,10 @@ export async function logActivity(data: ActivityData & { request?: Request }) {
     }
     
     // Create activity record
-    await prisma.sisuActivity.create({
-      data: {
-        ...activityData,
-        ...metadata,
-        createdAt: new Date()
-      }
+    await db.insert(sisuActivities).values({
+      ...activityData,
+      ...metadata,
+      createdAt: new Date()
     });
   } catch (error) {
     console.error('Failed to log activity:', error);
@@ -95,24 +94,23 @@ export async function getUserActivities(
   userId: string,
   limit: number = 10
 ) {
-  return prisma.sisuActivity.findMany({
-    where: { userId },
-    orderBy: { createdAt: 'desc' },
-    take: limit,
-    select: {
-      id: true,
-      action: true,
-      provider: true,
-      ipAddress: true,
-      browser: true,
-      os: true,
-      deviceType: true,
-      country: true,
-      city: true,
-      success: true,
-      createdAt: true
-    }
-  });
+  return db.select({
+    id: sisuActivities.id,
+    action: sisuActivities.action,
+    provider: sisuActivities.provider,
+    ipAddress: sisuActivities.ipAddress,
+    browser: sisuActivities.browser,
+    os: sisuActivities.os,
+    deviceType: sisuActivities.deviceType,
+    country: sisuActivities.country,
+    city: sisuActivities.city,
+    success: sisuActivities.success,
+    createdAt: sisuActivities.createdAt
+  })
+  .from(sisuActivities)
+  .where(eq(sisuActivities.userId, userId))
+  .orderBy(desc(sisuActivities.createdAt))
+  .limit(limit);
 }
 
 // Check for suspicious activity patterns
@@ -120,15 +118,15 @@ export async function checkSuspiciousActivity(email: string): Promise<{
   isSuspicious: boolean;
   reason?: string;
 }> {
-  const recentActivities = await prisma.sisuActivity.findMany({
-    where: {
-      email,
-      createdAt: {
-        gte: new Date(Date.now() - 15 * 60 * 1000) // Last 15 minutes
-      }
-    },
-    orderBy: { createdAt: 'desc' }
-  });
+  const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
+  
+  const recentActivities = await db.select()
+    .from(sisuActivities)
+    .where(and(
+      eq(sisuActivities.email, email),
+      gte(sisuActivities.createdAt, fifteenMinutesAgo)
+    ))
+    .orderBy(desc(sisuActivities.createdAt));
   
   // Check for multiple failed login attempts
   const failedAttempts = recentActivities.filter(a => 
@@ -178,18 +176,18 @@ export async function getFailedLoginAttempts(
   email: string,
   minutes: number = 60
 ): Promise<number> {
-  const count = await prisma.sisuActivity.count({
-    where: {
-      email,
-      action: 'failed_signin',
-      success: false,
-      createdAt: {
-        gte: new Date(Date.now() - minutes * 60 * 1000)
-      }
-    }
-  });
+  const cutoffTime = new Date(Date.now() - minutes * 60 * 1000);
   
-  return count;
+  const [result] = await db.select({ count: count() })
+    .from(sisuActivities)
+    .where(and(
+      eq(sisuActivities.email, email),
+      eq(sisuActivities.action, 'failed_signin'),
+      eq(sisuActivities.success, false),
+      gte(sisuActivities.createdAt, cutoffTime)
+    ));
+  
+  return result?.count || 0;
 }
 
 // Get activity summary for analytics
@@ -197,92 +195,91 @@ export async function getActivitySummary(days: number = 30) {
   const startDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
   
   const [
-    totalSignups,
-    totalSignins,
-    uniqueUsers,
-    failedAttempts,
-    activitiesByProvider,
-    activitiesByCountry
+    totalSignupsResult,
+    totalSigninsResult,
+    uniqueUsersResult,
+    failedAttemptsResult,
+    activitiesByProviderResult,
+    activitiesByCountryResult
   ] = await Promise.all([
     // Total signups
-    prisma.sisuActivity.count({
-      where: {
-        action: 'signup',
-        success: true,
-        createdAt: { gte: startDate }
-      }
-    }),
+    db.select({ count: count() })
+      .from(sisuActivities)
+      .where(and(
+        eq(sisuActivities.action, 'signup'),
+        eq(sisuActivities.success, true),
+        gte(sisuActivities.createdAt, startDate)
+      )),
     
     // Total signins
-    prisma.sisuActivity.count({
-      where: {
-        action: 'signin',
-        success: true,
-        createdAt: { gte: startDate }
-      }
-    }),
+    db.select({ count: count() })
+      .from(sisuActivities)
+      .where(and(
+        eq(sisuActivities.action, 'signin'),
+        eq(sisuActivities.success, true),
+        gte(sisuActivities.createdAt, startDate)
+      )),
     
     // Unique users
-    prisma.sisuActivity.findMany({
-      where: {
-        action: { in: ['signin', 'signup'] },
-        success: true,
-        createdAt: { gte: startDate }
-      },
-      distinct: ['userId'],
-      select: { userId: true }
-    }),
+    db.selectDistinct({ userId: sisuActivities.userId })
+      .from(sisuActivities)
+      .where(and(
+        inArray(sisuActivities.action, ['signin', 'signup']),
+        eq(sisuActivities.success, true),
+        gte(sisuActivities.createdAt, startDate),
+        isNotNull(sisuActivities.userId)
+      )),
     
     // Failed attempts
-    prisma.sisuActivity.count({
-      where: {
-        action: 'failed_signin',
-        createdAt: { gte: startDate }
-      }
-    }),
+    db.select({ count: count() })
+      .from(sisuActivities)
+      .where(and(
+        eq(sisuActivities.action, 'failed_signin'),
+        gte(sisuActivities.createdAt, startDate)
+      )),
     
     // Activities by provider
-    prisma.sisuActivity.groupBy({
-      by: ['provider'],
-      where: {
-        action: { in: ['signin', 'signup'] },
-        success: true,
-        createdAt: { gte: startDate }
-      },
-      _count: true
-    }),
+    db.select({
+      provider: sisuActivities.provider,
+      count: count()
+    })
+    .from(sisuActivities)
+    .where(and(
+      inArray(sisuActivities.action, ['signin', 'signup']),
+      eq(sisuActivities.success, true),
+      gte(sisuActivities.createdAt, startDate)
+    ))
+    .groupBy(sisuActivities.provider),
     
     // Activities by country
-    prisma.sisuActivity.groupBy({
-      by: ['country'],
-      where: {
-        action: { in: ['signin', 'signup'] },
-        success: true,
-        country: { not: null },
-        createdAt: { gte: startDate }
-      },
-      _count: true,
-      orderBy: {
-        _count: {
-          country: 'desc'
-        }
-      },
-      take: 10
+    db.select({
+      country: sisuActivities.country,
+      count: count()
     })
+    .from(sisuActivities)
+    .where(and(
+      inArray(sisuActivities.action, ['signin', 'signup']),
+      eq(sisuActivities.success, true),
+      isNotNull(sisuActivities.country),
+      gte(sisuActivities.createdAt, startDate)
+    ))
+    .groupBy(sisuActivities.country)
+    .orderBy(desc(count()))
+    .limit(10)
   ]);
   
   return {
-    totalSignups,
-    totalSignins,
-    uniqueUsers: uniqueUsers.length,
-    failedAttempts,
-    activitiesByProvider: activitiesByProvider.map(item => ({
+    totalSignups: totalSignupsResult[0]?.count || 0,
+    totalSignins: totalSigninsResult[0]?.count || 0,
+    uniqueUsers: uniqueUsersResult.length,
+    failedAttempts: failedAttemptsResult[0]?.count || 0,
+    activitiesByProvider: activitiesByProviderResult.map(item => ({
       provider: item.provider,
-      count: item._count
+      count: item.count
     })),
-    topCountries: activitiesByCountry.map(item => ({
+    topCountries: activitiesByCountryResult.map(item => ({
       country: item.country,
-      count: item._count
+      count: item.count
     }))
   };
 }

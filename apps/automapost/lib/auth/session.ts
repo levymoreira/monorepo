@@ -1,4 +1,5 @@
-import { db as prisma } from '@/lib/db';
+import { db, sessions, users } from '@/lib/db';
+import { eq, and, lt, or, asc } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 import crypto from 'crypto';
 import { UAParser } from 'ua-parser-js';
@@ -54,24 +55,17 @@ export async function createSession(
   refreshToken: string;
 }> {
   // Check concurrent sessions limit
-  const activeSessions = await prisma.session.count({
-    where: {
-      userId,
-      isActive: true
-    }
-  });
+  const activeSessions = await db.select()
+    .from(sessions)
+    .where(and(eq(sessions.userId, userId), eq(sessions.isActive, true)));
   
   // If limit exceeded, revoke oldest session
-  if (activeSessions >= MAX_CONCURRENT_SESSIONS) {
-    const oldestSession = await prisma.session.findFirst({
-      where: {
-        userId,
-        isActive: true
-      },
-      orderBy: {
-        lastActivityAt: 'asc'
-      }
-    });
+  if (activeSessions.length >= MAX_CONCURRENT_SESSIONS) {
+    const [oldestSession] = await db.select()
+      .from(sessions)
+      .where(and(eq(sessions.userId, userId), eq(sessions.isActive, true)))
+      .orderBy(asc(sessions.lastActivityAt))
+      .limit(1);
     
     if (oldestSession) {
       await revokeSession(oldestSession.id, 'Concurrent session limit exceeded');
@@ -95,20 +89,18 @@ export async function createSession(
   const refreshTokenExpires = new Date(Date.now() + 2592000000); // 30 days
   
   // Create session
-  const session = await prisma.session.create({
-    data: {
-      userId,
-      sessionToken,
-      refreshToken,
-      ipAddress,
-      userAgent,
-      deviceFingerprint,
-      accessTokenExpires,
-      refreshTokenExpires,
-      isActive: true,
-      lastActivityAt: new Date()
-    }
-  });
+  const [session] = await db.insert(sessions).values({
+    userId,
+    sessionToken,
+    refreshToken,
+    ipAddress,
+    userAgent,
+    deviceFingerprint,
+    accessTokenExpires,
+    refreshTokenExpires,
+    isActive: true,
+    lastActivityAt: new Date()
+  }).returning();
   
   return {
     session,
@@ -119,27 +111,44 @@ export async function createSession(
 
 // Get active session
 export async function getSession(sessionId: string) {
-  return prisma.session.findFirst({
-    where: {
-      id: sessionId,
-      isActive: true,
-      refreshTokenExpires: {
-        gt: new Date()
-      }
-    },
-    include: {
-      user: {
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          avatarUrl: true,
-          emailVerified: true,
-          onboardingCompleted: true
-        }
-      }
+  const [session] = await db.select({
+    id: sessions.id,
+    userId: sessions.userId,
+    sessionToken: sessions.sessionToken,
+    refreshToken: sessions.refreshToken,
+    ipAddress: sessions.ipAddress,
+    userAgent: sessions.userAgent,
+    deviceFingerprint: sessions.deviceFingerprint,
+    accessTokenExpires: sessions.accessTokenExpires,
+    refreshTokenExpires: sessions.refreshTokenExpires,
+    isActive: sessions.isActive,
+    revokedAt: sessions.revokedAt,
+    revokedReason: sessions.revokedReason,
+    createdAt: sessions.createdAt,
+    updatedAt: sessions.updatedAt,
+    lastActivityAt: sessions.lastActivityAt,
+    user: {
+      id: users.id,
+      email: users.email,
+      name: users.name,
+      avatarUrl: users.avatarUrl,
+      emailVerified: users.emailVerified,
+      onboardingCompleted: users.onboardingCompleted
     }
-  });
+  })
+  .from(sessions)
+  .leftJoin(users, eq(sessions.userId, users.id))
+  .where(and(
+    eq(sessions.id, sessionId),
+    eq(sessions.isActive, true)
+  ))
+  .limit(1);
+  
+  if (!session || !session.refreshTokenExpires || new Date() > session.refreshTokenExpires) {
+    return null;
+  }
+  
+  return session;
 }
 
 // Validate session
@@ -158,83 +167,65 @@ export async function validateSession(sessionId: string): Promise<boolean> {
   }
   
   // Update last activity
-  await prisma.session.update({
-    where: { id: sessionId },
-    data: { lastActivityAt: new Date() }
-  });
+  await db.update(sessions)
+    .set({ lastActivityAt: new Date() })
+    .where(eq(sessions.id, sessionId));
   
   return true;
 }
 
 // Revoke session
 export async function revokeSession(sessionId: string, reason?: string) {
-  return prisma.session.update({
-    where: { id: sessionId },
-    data: {
+  return db.update(sessions)
+    .set({
       isActive: false,
       revokedAt: new Date(),
       revokedReason: reason
-    }
-  });
+    })
+    .where(eq(sessions.id, sessionId));
 }
 
 // Revoke all user sessions
 export async function revokeAllUserSessions(userId: string, reason?: string) {
-  return prisma.session.updateMany({
-    where: {
-      userId,
-      isActive: true
-    },
-    data: {
+  return db.update(sessions)
+    .set({
       isActive: false,
       revokedAt: new Date(),
       revokedReason: reason
-    }
-  });
+    })
+    .where(and(eq(sessions.userId, userId), eq(sessions.isActive, true)));
 }
 
 // Get user's active sessions
 export async function getUserSessions(userId: string) {
-  return prisma.session.findMany({
-    where: {
-      userId,
-      isActive: true
-    },
-    orderBy: {
-      lastActivityAt: 'desc'
-    },
-    select: {
-      id: true,
-      ipAddress: true,
-      userAgent: true,
-      deviceFingerprint: true,
-      createdAt: true,
-      lastActivityAt: true
-    }
-  });
+  return db.select({
+    id: sessions.id,
+    ipAddress: sessions.ipAddress,
+    userAgent: sessions.userAgent,
+    deviceFingerprint: sessions.deviceFingerprint,
+    createdAt: sessions.createdAt,
+    lastActivityAt: sessions.lastActivityAt
+  })
+  .from(sessions)
+  .where(and(eq(sessions.userId, userId), eq(sessions.isActive, true)))
+  .orderBy(asc(sessions.lastActivityAt));
 }
 
 // Refresh session tokens
 export async function refreshSession(
-  refreshToken: string
+  refreshTokenValue: string
 ): Promise<{
   session: any;
   newRefreshToken: string;
 } | null> {
   // Allow refresh even if session became inactive due to idle timeout, as long as the refresh token is not expired
-  const session = await prisma.session.findFirst({
-    where: {
-      refreshToken,
-      refreshTokenExpires: {
-        gt: new Date()
-      }
-    },
-    include: {
-      user: true
-    }
-  });
+  const [session] = await db.select()
+    .from(sessions)
+    .leftJoin(users, eq(sessions.userId, users.id))
+    .where(eq(sessions.refreshToken, refreshTokenValue))
+    .limit(1);
   
-  if (!session) {
+  if (!session || !session.sessions.refreshTokenExpires || new Date() > session.sessions.refreshTokenExpires) {
     return null;
   }
   
@@ -242,63 +233,52 @@ export async function refreshSession(
   const newRefreshToken = nanoid(64);
   
   // Reactivate or renew the session: rotate tokens, extend expiries, and mark active
-  const updatedSession = await prisma.session.update({
-    where: { id: session.id },
-    data: {
+  const [updatedSession] = await db.update(sessions)
+    .set({
       isActive: true,
       refreshToken: newRefreshToken,
       accessTokenExpires: new Date(Date.now() + 3600000), // 1 hour
       refreshTokenExpires: new Date(Date.now() + 2592000000), // 30 days
       lastActivityAt: new Date()
-    },
-    include: {
-      user: true
-    }
-  });
+    })
+    .where(eq(sessions.id, session.sessions.id))
+    .returning();
   
   return {
-    session: updatedSession,
+    session: { ...updatedSession, user: session.users },
     newRefreshToken
   };
 }
 
 // Clean up expired sessions (to be run periodically)
 export async function cleanupExpiredSessions() {
-  const result = await prisma.session.deleteMany({
-    where: {
-      OR: [
-        {
-          refreshTokenExpires: {
-            lt: new Date()
-          }
-        },
-        {
-          isActive: false,
-          revokedAt: {
-            lt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // 7 days ago
-          }
-        }
-      ]
-    }
-  });
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
   
-  return result.count;
+  const result = await db.delete(sessions)
+    .where(or(
+      lt(sessions.refreshTokenExpires, new Date()),
+      and(
+        eq(sessions.isActive, false),
+        lt(sessions.revokedAt, sevenDaysAgo)
+      )
+    ))
+    .returning({ id: sessions.id });
+  
+  return result.length;
 }
 
 // Validate session exists in database (for middleware/API)
 export async function validateSessionInDb(sessionId: string, updateActivity: boolean = false): Promise<boolean> {
   try {
-    const session = await prisma.session.findFirst({
-      where: {
-        id: sessionId,
-        isActive: true,
-        refreshTokenExpires: {
-          gt: new Date()
-        }
-      }
-    });
+    const [session] = await db.select()
+      .from(sessions)
+      .where(and(
+        eq(sessions.id, sessionId),
+        eq(sessions.isActive, true)
+      ))
+      .limit(1);
     
-    if (!session) {
+    if (!session || !session.refreshTokenExpires || new Date() > session.refreshTokenExpires) {
       return false;
     }
     
@@ -313,10 +293,9 @@ export async function validateSessionInDb(sessionId: string, updateActivity: boo
     if (updateActivity) {
       const timeSinceLastUpdate = Date.now() - session.lastActivityAt.getTime();
       if (timeSinceLastUpdate > 60000) { // Only update if more than 1 minute has passed
-        await prisma.session.update({
-          where: { id: sessionId },
-          data: { lastActivityAt: new Date() }
-        });
+        await db.update(sessions)
+          .set({ lastActivityAt: new Date() })
+          .where(eq(sessions.id, sessionId));
       }
     }
     

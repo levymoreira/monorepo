@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, posts, postChatMessages, messageQueue } from '@/lib/db';
+import { eq, and, isNull, asc } from 'drizzle-orm';
 import { verifyAccessToken, extractTokenFromRequest } from '@/lib/auth/jwt';
 
 // GET /api/chat/messages - Load existing messages for a post
@@ -25,39 +26,39 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify user owns the post
-    const post = await db.post.findFirst({
-      where: {
-        id: postId,
-        userId: userId,
-        deletedAt: null
-      }
-    });
+    const [post] = await db.select()
+      .from(posts)
+      .where(and(
+        eq(posts.id, postId),
+        eq(posts.userId, userId),
+        isNull(posts.deletedAt)
+      ))
+      .limit(1);
 
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
     // Get all messages for this post
-    const messages = await db.postChatMessage.findMany({
-      where: { 
-        postId,
-        deletedAt: null
-      },
-      orderBy: { createdAt: 'asc' }
-    });
+    const messages = await db.select()
+      .from(postChatMessages)
+      .where(and(
+        eq(postChatMessages.postId, postId),
+        isNull(postChatMessages.deletedAt)
+      ))
+      .orderBy(asc(postChatMessages.createdAt));
 
     // Mark any undelivered messages as delivered since user is loading them
-    await db.messageQueue.updateMany({
-      where: {
-        userId,
-        postId,
-        delivered: false
-      },
-      data: {
+    await db.update(messageQueue)
+      .set({
         delivered: true,
         deliveredAt: new Date()
-      }
-    });
+      })
+      .where(and(
+        eq(messageQueue.userId, userId),
+        eq(messageQueue.postId, postId),
+        eq(messageQueue.delivered, false)
+      ));
 
     // Format messages for client
     const formattedMessages = messages.map(msg => ({

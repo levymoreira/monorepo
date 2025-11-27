@@ -1,4 +1,5 @@
-import { db } from './db'
+import { db, leads } from './db'
+import { eq, desc, asc } from 'drizzle-orm'
 import { CreateLeadInput, Lead } from './types'
 
 /**
@@ -10,14 +11,12 @@ export class LeadService {
    */
   static async createLead(input: CreateLeadInput): Promise<Lead> {
     try {
-      const lead = await db.lead.create({
-        data: {
-          name: input.name,
-          email: input.email,
-          referer: input.referer || null,
-          collectionPlace: input.collectionPlace,
-        },
-      })
+      const [lead] = await db.insert(leads).values({
+        name: input.name,
+        email: input.email,
+        referer: input.referer || null,
+        collectionPlace: input.collectionPlace,
+      }).returning()
       return lead
     } catch (error) {
       console.error('Error creating lead:', error)
@@ -30,10 +29,8 @@ export class LeadService {
    */
   static async getLeadByEmail(email: string): Promise<Lead | null> {
     try {
-      const lead = await db.lead.findUnique({
-        where: { email },
-      })
-      return lead
+      const [lead] = await db.select().from(leads).where(eq(leads.email, email))
+      return lead || null
     } catch (error) {
       console.error('Error finding lead by email:', error)
       throw new Error('Failed to find lead')
@@ -45,10 +42,8 @@ export class LeadService {
    */
   static async getAllLeads(): Promise<Lead[]> {
     try {
-      const leads = await db.lead.findMany({
-        orderBy: { createdAt: 'desc' },
-      })
-      return leads
+      const result = await db.select().from(leads).orderBy(desc(leads.createdAt))
+      return result
     } catch (error) {
       console.error('Error fetching leads:', error)
       throw new Error('Failed to fetch leads')
@@ -60,11 +55,11 @@ export class LeadService {
    */
   static async getLeadsByCollectionPlace(collectionPlace: string): Promise<Lead[]> {
     try {
-      const leads = await db.lead.findMany({
-        where: { collectionPlace },
-        orderBy: { createdAt: 'desc' },
-      })
-      return leads
+      const result = await db.select()
+        .from(leads)
+        .where(eq(leads.collectionPlace, collectionPlace))
+        .orderBy(desc(leads.createdAt))
+      return result
     } catch (error) {
       console.error('Error fetching leads by collection place:', error)
       throw new Error('Failed to fetch leads')
@@ -76,10 +71,10 @@ export class LeadService {
    */
   static async updateLead(id: string, updates: Partial<Omit<Lead, 'id' | 'createdAt' | 'updatedAt'>>): Promise<Lead> {
     try {
-      const lead = await db.lead.update({
-        where: { id },
-        data: updates,
-      })
+      const [lead] = await db.update(leads)
+        .set(updates)
+        .where(eq(leads.id, id))
+        .returning()
       return lead
     } catch (error) {
       console.error('Error updating lead:', error)
@@ -92,9 +87,7 @@ export class LeadService {
    */
   static async deleteLead(id: string): Promise<void> {
     try {
-      await db.lead.delete({
-        where: { id },
-      })
+      await db.delete(leads).where(eq(leads.id, id))
     } catch (error) {
       console.error('Error deleting lead:', error)
       throw new Error('Failed to delete lead')
@@ -107,17 +100,14 @@ export class LeadService {
   static async getLeadsCountOverTime(): Promise<Array<{ date: string; count: number; cumulative: number }>> {
     try {
       // Get all leads ordered by creation date
-      const leads = await db.lead.findMany({
-        select: {
-          createdAt: true,
-        },
-        orderBy: { createdAt: 'asc' },
-      })
+      const allLeads = await db.select({
+        createdAt: leads.createdAt,
+      }).from(leads).orderBy(asc(leads.createdAt))
 
       // Group leads by date and calculate counts
       const dateMap = new Map<string, number>()
       
-      leads.forEach(lead => {
+      allLeads.forEach(lead => {
         const date = lead.createdAt.toISOString().split('T')[0] // Get YYYY-MM-DD format
         dateMap.set(date, (dateMap.get(date) || 0) + 1)
       })

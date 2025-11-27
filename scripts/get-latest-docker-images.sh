@@ -19,7 +19,7 @@ ACR_USERNAME='monoreporegistry'
 ACR_PASSWORD='4LrJVj4WpydE0AbB9LH+TvdfiJx7cGhseEXWpuTbJ0+ACRBwrhom'
 PROJECT_NAME=${PROJECT_NAME:-monorepo}
 PLATFORM=${PLATFORM:-}  # Empty means let Docker choose, or specify like linux/amd64, linux/arm64
-ALL_SERVICES=("next-app-one" "next-app-two" "levymoreira-blog" "express-api" "cron-logger")
+ALL_SERVICES=("next-app-one" "next-app-two" "levymoreira-blog" "express-api" "cron-logger" "automapost")
 EXTERNAL_SERVICES=("traefik" "redis" "loki" "promtail" "grafana")  # Services using pre-built images from Docker Hub
 SERVICES=()  # Will be set based on parameter or all services
 

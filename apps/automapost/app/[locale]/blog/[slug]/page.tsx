@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { db } from '@/lib/db'
+import { db, blogPostTranslations, blogPosts } from '@/lib/db'
+import type { Locale } from '@/lib/db'
 import { generatePageMetadata } from '@/lib/metadata'
 import { getTranslations } from 'next-intl/server'
-import type { Locale } from '@prisma/client'
+import { eq, and, desc } from 'drizzle-orm'
 import ArticleToolbar from '@/components/blog/article-toolbar'
 import BlogPostCard from '@/components/blog/post-card'
 
@@ -14,32 +15,60 @@ interface PageProps {
 }
 
 async function getPostByLocaleAndSlug(locale: string, slug: string) {
-  const translation = await db.blogPostTranslation.findFirst({
-    where: { locale: locale as Locale, slug },
-    select: {
-      id: true,
-      title: true,
-      excerpt: true,
-      slug: true,
-      content: true,
-      metaTitle: true,
-      metaDescription: true,
-      post: {
-        select: {
-          id: true,
-          isPublished: true,
-          publishedAt: true,
-          readMinutes: true,
-          authorName: true,
-          coverImageUrl: true,
-          translations: { select: { locale: true, slug: true, title: true } }
-        }
-      }
-    }
+  // Get translation with its post
+  const translationResults = await db.select({
+    id: blogPostTranslations.id,
+    title: blogPostTranslations.title,
+    excerpt: blogPostTranslations.excerpt,
+    slug: blogPostTranslations.slug,
+    content: blogPostTranslations.content,
+    metaTitle: blogPostTranslations.metaTitle,
+    metaDescription: blogPostTranslations.metaDescription,
+    postId: blogPostTranslations.postId,
+    postIsPublished: blogPosts.isPublished,
+    postPublishedAt: blogPosts.publishedAt,
+    postReadMinutes: blogPosts.readMinutes,
+    postAuthorName: blogPosts.authorName,
+    postCoverImageUrl: blogPosts.coverImageUrl,
   })
+    .from(blogPostTranslations)
+    .innerJoin(blogPosts, eq(blogPostTranslations.postId, blogPosts.id))
+    .where(and(
+      eq(blogPostTranslations.locale, locale as Locale),
+      eq(blogPostTranslations.slug, slug)
+    ))
+    .limit(1)
 
-  if (!translation || !translation.post.isPublished) return null
-  return translation
+  const row = translationResults[0]
+  if (!row || !row.postIsPublished) return null
+
+  // Get all translations for this post
+  const allTranslations = await db.select({
+    locale: blogPostTranslations.locale,
+    slug: blogPostTranslations.slug,
+    title: blogPostTranslations.title,
+  })
+    .from(blogPostTranslations)
+    .where(eq(blogPostTranslations.postId, row.postId))
+
+  return {
+    id: row.id,
+    title: row.title,
+    excerpt: row.excerpt,
+    slug: row.slug,
+    content: row.content,
+    metaTitle: row.metaTitle,
+    metaDescription: row.metaDescription,
+    post: {
+      id: row.postId,
+      isPublished: row.postIsPublished,
+      publishedAt: row.postPublishedAt,
+      readMinutes: row.postReadMinutes,
+      authorName: row.postAuthorName,
+      coverImageUrl: row.postCoverImageUrl,
+      translations: allTranslations,
+    }
+  }
 }
 
 export async function generateMetadata({ params }: PageProps) {
@@ -68,18 +97,37 @@ export default async function BlogArticlePage({ params }: PageProps) {
   if (!tr) notFound()
 
   // Fetch 3 previous posts for recommendations (excluding current)
-  const morePosts = await db.blogPost.findMany({
-    where: { isPublished: true, translations: { some: { locale: locale as any } } },
-    orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
-    take: 9,
-    select: {
-      id: true,
-      authorName: true,
-      coverImageUrl: true,
-      publishedAt: true,
-      translations: { where: { locale: locale as any }, select: { title: true, slug: true, excerpt: true, category: true } }
-    }
+  const morePostsResults = await db.select({
+    id: blogPosts.id,
+    authorName: blogPosts.authorName,
+    coverImageUrl: blogPosts.coverImageUrl,
+    publishedAt: blogPosts.publishedAt,
+    translationTitle: blogPostTranslations.title,
+    translationSlug: blogPostTranslations.slug,
+    translationExcerpt: blogPostTranslations.excerpt,
+    translationCategory: blogPostTranslations.category,
   })
+    .from(blogPosts)
+    .innerJoin(blogPostTranslations, and(
+      eq(blogPostTranslations.postId, blogPosts.id),
+      eq(blogPostTranslations.locale, locale as Locale)
+    ))
+    .where(eq(blogPosts.isPublished, true))
+    .orderBy(desc(blogPosts.publishedAt), desc(blogPosts.createdAt))
+    .limit(9)
+
+  const morePosts = morePostsResults.map(row => ({
+    id: row.id,
+    authorName: row.authorName,
+    coverImageUrl: row.coverImageUrl,
+    publishedAt: row.publishedAt,
+    translations: [{
+      title: row.translationTitle,
+      slug: row.translationSlug,
+      excerpt: row.translationExcerpt,
+      category: row.translationCategory,
+    }]
+  }))
   const recommendations = morePosts
     .filter(p => p.id !== tr.post.id)
     .slice(0, 3)

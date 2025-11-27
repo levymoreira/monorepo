@@ -18,7 +18,7 @@ ACR_USERNAME=${ACR_USERNAME}
 ACR_PASSWORD=${ACR_PASSWORD}
 PROJECT_NAME="monorepo"
 VERSION_FILE=".version"
-ALL_SERVICES=("next-app-one" "next-app-two" "levymoreira-blog" "express-api" "cron-logger")
+ALL_SERVICES=("next-app-one" "next-app-two" "levymoreira-blog" "express-api" "cron-logger" "automapost")
 SERVICES=()  # Will be set based on parameter or all services
 
 # Load deployment configuration

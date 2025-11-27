@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { db as prisma } from '@/lib/db'
+import { db, users, authProviders } from '@/lib/db'
+import { eq } from 'drizzle-orm'
 import { verifyAccessToken } from '@/lib/auth/jwt'
 
 interface OnboardingWrapperProps {
@@ -35,16 +36,29 @@ export async function OnboardingWrapper({ step, locale, searchParams, children }
 
   // User is authenticated, check their status
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        linkedinId: true,
-        onboardingCompleted: true,
-        authProviders: {
-          select: { id: true, provider: true }
-        }
-      }
+    const userResults = await db.select({
+      linkedinId: users.linkedinId,
+      onboardingCompleted: users.onboardingCompleted,
     })
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1)
+    
+    const userRow = userResults[0]
+    
+    // Get auth providers for this user
+    const userAuthProviders = await db.select({
+      id: authProviders.id,
+      provider: authProviders.provider,
+    })
+      .from(authProviders)
+      .where(eq(authProviders.userId, userId))
+    
+    const user = userRow ? {
+      linkedinId: userRow.linkedinId,
+      onboardingCompleted: userRow.onboardingCompleted,
+      authProviders: userAuthProviders,
+    } : null
 
     if (!user) {
       // User not found – redirect user to start onboarding step without modifying cookies here

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, posts, postChatMessages, messageQueue } from '@/lib/db';
+import { eq, and, isNull, asc } from 'drizzle-orm';
 import { verifyAccessToken, extractTokenFromRequest } from '@/lib/auth/jwt';
 import { generateFollowUpMessage, type ChatMessage } from '@/lib/ai-service';
 
@@ -29,13 +30,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify user owns the post
-    const post = await db.post.findFirst({
-      where: {
-        id: postId,
-        userId: userId,
-        deletedAt: null
-      }
-    });
+    const [post] = await db.select()
+      .from(posts)
+      .where(and(
+        eq(posts.id, postId),
+        eq(posts.userId, userId),
+        isNull(posts.deletedAt)
+      ))
+      .limit(1);
 
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
@@ -59,14 +61,14 @@ export async function POST(request: NextRequest) {
 async function processFollowUpMessage(postId: string, postContent: string, userId: string, trigger: string) {
   try {
     // Get conversation context
-    const previousMessages = await db.postChatMessage.findMany({
-      where: { 
-        postId,
-        deletedAt: null
-      },
-      orderBy: { createdAt: 'asc' },
-      take: 10
-    });
+    const previousMessages = await db.select()
+      .from(postChatMessages)
+      .where(and(
+        eq(postChatMessages.postId, postId),
+        isNull(postChatMessages.deletedAt)
+      ))
+      .orderBy(asc(postChatMessages.createdAt))
+      .limit(10);
 
     // Convert to format expected by AI service
     const chatMessages: ChatMessage[] = previousMessages.map(msg => ({
@@ -91,28 +93,24 @@ async function processFollowUpMessage(postId: string, postContent: string, userI
     }
 
     // Save AI follow-up message
-    const followUpMessage = await db.postChatMessage.create({
-      data: {
-        postId,
-        userId,
-        role: 'assistant',
-        content: aiResponse.content,
-        metadata: {
-          ...aiResponse.metadata,
-          trigger,
-          generatedAt: new Date()
-        },
-        status: 'sent'
-      }
-    });
+    const [followUpMessage] = await db.insert(postChatMessages).values({
+      postId,
+      userId,
+      role: 'assistant',
+      content: aiResponse.content,
+      metadata: {
+        ...aiResponse.metadata,
+        trigger,
+        generatedAt: new Date()
+      },
+      status: 'sent'
+    }).returning();
 
     // Queue for delivery
-    await db.messageQueue.create({
-      data: {
-        userId,
-        postId,
-        messageId: followUpMessage.id
-      }
+    await db.insert(messageQueue).values({
+      userId,
+      postId,
+      messageId: followUpMessage.id
     });
   } catch (error) {
     console.error('Follow-up processing error:', error);

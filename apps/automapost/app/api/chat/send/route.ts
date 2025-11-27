@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, posts, postChatMessages, messageQueue } from '@/lib/db';
+import { eq, and, isNull, asc } from 'drizzle-orm';
 import { verifyAccessToken, extractTokenFromRequest } from '@/lib/auth/jwt';
 import { generateAIResponse, type ChatMessage } from '@/lib/ai-service';
 
@@ -29,36 +30,33 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify user owns the post
-    const post = await db.post.findFirst({
-      where: {
-        id: postId,
-        userId: userId,
-        deletedAt: null
-      }
-    });
+    const [post] = await db.select()
+      .from(posts)
+      .where(and(
+        eq(posts.id, postId),
+        eq(posts.userId, userId),
+        isNull(posts.deletedAt)
+      ))
+      .limit(1);
 
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
     // Save user message
-    const userMessage = await db.postChatMessage.create({
-      data: {
-        postId,
-        userId,
-        role: 'user',
-        content: content.trim(),
-        status: 'sent'
-      }
-    });
+    const [userMessage] = await db.insert(postChatMessages).values({
+      postId,
+      userId,
+      role: 'user',
+      content: content.trim(),
+      status: 'sent'
+    }).returning();
 
     // Queue user message for delivery (for consistency with SSE stream)
-    await db.messageQueue.create({
-      data: {
-        userId,
-        postId,
-        messageId: userMessage.id
-      }
+    await db.insert(messageQueue).values({
+      userId,
+      postId,
+      messageId: userMessage.id
     });
 
     // Process AI response asynchronously
@@ -79,14 +77,14 @@ export async function POST(request: NextRequest) {
 async function processAIResponse(postId: string, userContent: string, userId: string) {
   try {
     // Get conversation context
-    const previousMessages = await db.postChatMessage.findMany({
-      where: { 
-        postId,
-        deletedAt: null
-      },
-      orderBy: { createdAt: 'asc' },
-      take: 10
-    });
+    const previousMessages = await db.select()
+      .from(postChatMessages)
+      .where(and(
+        eq(postChatMessages.postId, postId),
+        isNull(postChatMessages.deletedAt)
+      ))
+      .orderBy(asc(postChatMessages.createdAt))
+      .limit(10);
 
     // Convert to format expected by AI service
     const chatMessages: ChatMessage[] = previousMessages.map(msg => ({
@@ -104,46 +102,38 @@ async function processAIResponse(postId: string, userContent: string, userId: st
     });
 
     // Save AI response
-    const assistantMessage = await db.postChatMessage.create({
-      data: {
-        postId,
-        userId,
-        role: 'assistant',
-        content: aiResponse.content,
-        metadata: aiResponse.metadata,
-        status: 'sent'
-      }
-    });
+    const [assistantMessage] = await db.insert(postChatMessages).values({
+      postId,
+      userId,
+      role: 'assistant',
+      content: aiResponse.content,
+      metadata: aiResponse.metadata,
+      status: 'sent'
+    }).returning();
 
     // Queue for delivery
-    await db.messageQueue.create({
-      data: {
-        userId,
-        postId,
-        messageId: assistantMessage.id
-      }
+    await db.insert(messageQueue).values({
+      userId,
+      postId,
+      messageId: assistantMessage.id
     });
   } catch (error) {
     console.error('AI processing error:', error);
     
     // Send error message
     try {
-      const errorMessage = await db.postChatMessage.create({
-        data: {
-          postId,
-          userId,
-          role: 'system',
-          content: 'Sorry, I encountered an error processing your request. Please try again.',
-          status: 'sent'
-        }
-      });
+      const [errorMessage] = await db.insert(postChatMessages).values({
+        postId,
+        userId,
+        role: 'system',
+        content: 'Sorry, I encountered an error processing your request. Please try again.',
+        status: 'sent'
+      }).returning();
 
-      await db.messageQueue.create({
-        data: {
-          userId,
-          postId,
-          messageId: errorMessage.id
-        }
+      await db.insert(messageQueue).values({
+        userId,
+        postId,
+        messageId: errorMessage.id
       });
     } catch (errorSavingError) {
       console.error('Error saving error message:', errorSavingError);
