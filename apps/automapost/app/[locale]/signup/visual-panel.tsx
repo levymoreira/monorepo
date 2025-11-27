@@ -1,19 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Lottie from 'lottie-react'
+import Image from 'next/image'
 
 export default function VisualPanel() {
-  const [linkedinAnimation, setLinkedinAnimation] = useState<any>(null)
-
-  useEffect(() => {
-    // Load LinkedIn animation
-    fetch('/linkedin-animation.json')
-      .then(response => response.json())
-      .then(data => setLinkedinAnimation(data))
-      .catch(error => console.error('Error loading LinkedIn animation:', error))
-  }, [])
-  
   return (
     <div className="hidden lg:block relative w-full lg:w-[70%] h-screen overflow-hidden bg-gradient-to-br from-slate-100 via-gray-50 to-gray-100">
       {/* Subtle pattern background */}
@@ -44,20 +33,17 @@ export default function VisualPanel() {
             </p>
           </div>
 
-          {/* LinkedIn Animation */}
+          {/* Product Animation */}
           <div className="flex items-center justify-center">
-            <div className="w-full max-w-sm">
-              {linkedinAnimation ? (
-                <Lottie 
-                  animationData={linkedinAnimation} 
-                  loop={true}
-                  className="w-full h-auto"
-                />
-              ) : (
-                <div className="flex items-center justify-center h-64">
-                  <div className="w-16 h-16 border-4 border-blue-200 border-t-[#0078D4] rounded-full animate-spin"></div>
-                </div>
-              )}
+            <div className="w-full max-w-sm rounded-3xl shadow-2xl shadow-blue-100 overflow-hidden">
+              <Image
+                src="/annimation.gif"
+                alt="AutomaPost onboarding preview"
+                width={640}
+                height={640}
+                priority
+                className="w-full h-auto"
+              />
             </div>
           </div>
         </div>
