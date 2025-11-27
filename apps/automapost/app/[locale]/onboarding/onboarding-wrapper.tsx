@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { db, users, authProviders } from '@/lib/db'
+import { db, users } from '@/lib/db'
 import { eq } from 'drizzle-orm'
 import { verifyAccessToken } from '@/lib/auth/jwt'
 
@@ -25,80 +25,33 @@ export async function OnboardingWrapper({ step, locale, searchParams, children }
     }
   }
 
-  // If user is not authenticated, they can proceed with step 1 (never show error=invalid_state)
+  // If user is not authenticated, redirect to signup
   if (!userId) {
-    // If trying to access step 2 without auth, restart at step 1 without preserving error query
-    if (step === '2') {
-      redirect(`/${locale}/onboarding?step=1`)
-    }
-    return <>{children}</>
+    redirect(`/${locale}/signup`)
   }
 
   // User is authenticated, check their status
   try {
     const userResults = await db.select({
-      linkedinId: users.linkedinId,
       onboardingCompleted: users.onboardingCompleted,
     })
       .from(users)
       .where(eq(users.id, userId))
       .limit(1)
     
-    const userRow = userResults[0]
-    
-    // Get auth providers for this user
-    const userAuthProviders = await db.select({
-      id: authProviders.id,
-      provider: authProviders.provider,
-    })
-      .from(authProviders)
-      .where(eq(authProviders.userId, userId))
-    
-    const user = userRow ? {
-      linkedinId: userRow.linkedinId,
-      onboardingCompleted: userRow.onboardingCompleted,
-      authProviders: userAuthProviders,
-    } : null
+    const user = userResults[0]
 
     if (!user) {
-      // User not found – redirect user to start onboarding step without modifying cookies here
-      redirect(`/${locale}/onboarding?step=1`)
+      // User not found – redirect to signup
+      redirect(`/${locale}/signup`)
     }
 
-    // Check if user has LinkedIn connected (either old or new system)
-    const hasLinkedIn = Boolean(
-      user.linkedinId || user.authProviders.some(p => (p.provider || '').toLowerCase() === 'linkedin')
-    )
-
-    console.log('[OnboardingWrapper] user status', {
-      userId,
-      linkedinId: !!user.linkedinId,
-      providers: user.authProviders,
-      hasLinkedIn
-    })
-
-    // Check if force parameter is set to bypass auto-redirects
-    const forceStep = searchParams?.force === 'true' || searchParams?.force === '1'
-    
-    // Check onboarding status based on current step
-    if (step === '1') {
-      // User is on step 1
-      if (hasLinkedIn && !forceStep) {
-        // LinkedIn already connected, go to step 2 (unless force is set)
-        redirect(`/${locale}/onboarding?step=2`)
-      }
-    } else if (step === '2') {
-      // User is on step 2
-      if (!hasLinkedIn) {
-        // No LinkedIn connection, go back to step 1
-        redirect(`/${locale}/onboarding?step=1`)
-      } else if (user.onboardingCompleted) {
-        // Onboarding already completed, go to portal
-        redirect(`/${locale}/portal/posts`)
-      }
+    // If onboarding already completed, go to portal
+    if (user.onboardingCompleted) {
+      redirect(`/${locale}/portal/posts`)
     }
 
-    // All checks passed, render children
+    // All checks passed, render children (always show step 2 - preferences form)
     return <>{children}</>
   } catch (error: any) {
     // Allow Next.js redirect exceptions to bubble without logging as errors
@@ -107,7 +60,7 @@ export async function OnboardingWrapper({ step, locale, searchParams, children }
       throw error
     }
     console.error('Error checking user status (non-redirect):', error)
-    // On non-redirect error, let them proceed with current step
+    // On non-redirect error, let them proceed
     return <>{children}</>
   }
 }

@@ -8,7 +8,7 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "node server.js",
-    "deploy": "./scripts/deploy.sh",
+    "deploy": "cd ../.. && ./scripts/commit.sh && ./scripts/deploy.sh automapost",
     "grok": "node poc/grok.js",
     "pm2:start": "pm2 start ecosystem.config.js",
     "pm2:stop": "pm2 stop automapost",
@@ -41,7 +41,9 @@
     "performance:report": "yarn test:performance && yarn lighthouse:mobile",
     "performance:ci": "yarn test:performance && yarn lighthouse:mobile --assert",
     "kill": "pkill -f \"next\"",
-    "delete:levy": "node tests/deleteLevyUser.js"
+    "delete:levy": "node tests/deleteLevyUser.js",
+    "test:auth": "playwright test tests/auth/auth.spec.ts --project=\"Desktop Chrome Performance\"",
+    "test:auth:headed": "playwright test tests/auth/auth.spec.ts --project=\"Desktop Chrome Performance\" --headed"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

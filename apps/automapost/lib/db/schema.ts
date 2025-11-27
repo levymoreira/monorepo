@@ -33,6 +33,7 @@ export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
   email: text('email').notNull().unique(),
   name: text('name'),
+  password: text('password'), // hashed password for email/password auth
   avatarUrl: text('avatarUrl'),
   emailVerified: boolean('emailVerified').default(false).notNull(),
   onboardingCompleted: boolean('onboardingCompleted').default(false).notNull(),

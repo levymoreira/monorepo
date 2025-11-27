@@ -1,8 +1,6 @@
-import HomePageWrapper from '@/components/landing/home-page-wrapper'
-import { generatePageMetadata } from '@/lib/metadata'
+import { redirect } from 'next/navigation'
 
-export const generateMetadata = () => generatePageMetadata('en')
-
+// Redirect root to default locale for proper i18n support
 export default function RootPage() {
-  return <HomePageWrapper />
+  redirect('/en')
 }
