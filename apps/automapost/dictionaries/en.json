@@ -7,11 +7,11 @@
     "blog": "Blog"
   },
   "hero": {
-    "title": "Generate & Schedule",
-    "titleHighlight": "LinkedIn Posts",
+    "title": "Generate SEO-Optimized",
+    "titleHighlight": "Blog Posts",
     "titleSuffix": "with AI",
-    "subtitle": "Automate Content Creation, Scheduling, and Analytics to Grow Your Professional Network Effortlessly",
-    "description": "Tired of inconsistent posting? AutomaPost uses AI to help you generate engaging posts (text, images and videos), schedule them seamlessly, and track performance. Save hours weekly and boost engagement by 3x.",
+    "subtitle": "Automate Article Creation, SEO Optimization, and Publishing to Grow Your Organic Traffic Effortlessly",
+    "description": "Tired of writer's block? AutomaPost uses AI to help you generate high-ranking blog posts, optimize them for SEO, and schedule them seamlessly. Save hours weekly and boost organic traffic by 3x.",
     "ctaPrimary": "Get Started Free",
     "ctaSubtext": "No Credit Card Required!",
     "formSubtext": "Limited spots for early access, join 500+ pros today",
@@ -26,56 +26,64 @@
     },
     "linkedinPost": {
       "author": "Sarah Johnson",
-      "role": "Marketing Specialist at AutomaPost",
-      "content1": "🚀 Just launched new features to our AI-powered solution that's already helping 500+ companies boost their LinkedIn engagement by 3x!",
-      "content2": "Key insights from our latest case study: • 47% increase in profile views • 3.2x higher engagement rates • 89% time savings on content creation",
-      "content3": "What's your biggest LinkedIn challenge? Drop a comment below! 👇",
-      "hashtags": "#LinkedInMarketing #AITools #Growth",
+      "role": "Content Manager at AutomaPost",
+      "content1": "🚀 Just published a new guide on 'The Future of AI in Content Marketing'. It's already ranking on the first page of Google!",
+      "content2": "Key wins from our latest SEO campaign: • 150% increase in organic traffic • 5 new featured snippets • 40% reduction in content costs",
+      "content3": "What's your biggest SEO challenge? Drop a comment below! 👇",
+      "hashtags": "#SEO #ContentMarketing #AITools",
       "timeAgo": "2 hours ago"
+    },
+    "blogPost": {
+      "category": "SEO Strategy",
+      "readTime": "5 min read",
+      "title": "The Future of AI in Content Marketing",
+      "excerpt": "Discover how artificial intelligence is revolutionizing the way we create, optimize, and distribute content for better organic reach.",
+      "author": "Sarah Johnson",
+      "seoScore": "98/100 SEO Score"
     }
   },
   "problem": {
-    "title": "Struggling to Stay Consistent on LinkedIn?",
-    "description": "As a busy professional, you know LinkedIn is key for leads and authority, but manual posting wastes time, ideas run dry, and analytics are scattered. Result? Missed opportunities and stagnant growth.",
+    "title": "Struggling to Rank on Google?",
+    "description": "As a business owner, you know content is king for SEO, but writing high-quality articles takes hours, keyword research is tedious, and consistency is hard. Result? Low traffic and missed leads.",
     "problems": [
-      "Spending hours writing posts that get no engagement",
-      "Inconsistent posting schedule hurting your reach",
-      "No clear data on what content actually works"
+      "Spending hours writing articles that don't rank",
+      "Inconsistent publishing schedule hurting your SEO",
+      "Difficulty finding the right keywords to target"
     ]
   },
   "solution": {
     "title": "AutomaPost Changes That Forever",
-    "description": "Our AI-powered tool generates on-brand posts (including custom images), schedules them optimally, and delivers deep analytics.",
+    "description": "Our AI-powered tool generates SEO-optimized articles, integrates keywords naturally, and schedules them to your blog.",
     "benefits": [
       {
-        "title": "AI generates posts in seconds from your prompts",
-        "description": "No more writer's block or generic content"
+        "title": "AI generates full articles in minutes",
+        "description": "High-quality, long-form content ready to rank"
       },
       {
-        "title": "Schedule weeks ahead for consistency",
-        "description": "Never miss a post with smart scheduling"
+        "title": "Built-in SEO Optimization",
+        "description": "Automatic keyword integration and meta tag generation"
       },
       {
-        "title": "Track engagement, clicks, and growth with easy dashboards",
-        "description": "Data-driven insights to optimize your strategy"
+        "title": "Schedule and Publish Automatically",
+        "description": "Keep your blog active with consistent updates"
       }
     ]
   },
   "features": {
-    "title": "Powerful Features Built for LinkedIn Growth",
-    "subtitle": "Everything you need to dominate LinkedIn, from AI-powered content creation to advanced analytics",
+    "title": "Powerful Features Built for SEO Growth",
+    "subtitle": "Everything you need to dominate search results, from AI-powered article writing to keyword optimization",
     "items": [
       {
-        "title": "AI Post Generation",
-        "description": "Create engaging text + images instantly. Our AI understands you and generates professional content that resonates with your audience."
+        "title": "AI Article Writer",
+        "description": "Generate comprehensive, well-structured articles. Our AI researches topics and writes content that provides value to your readers."
       },
       {
-        "title": "Smart Scheduling",
-        "description": "Queue posts, auto-optimize times, and maintain consistency. Our algorithm finds the best posting times for maximum engagement."
+        "title": "SEO & Keyword Tools",
+        "description": "Target the right keywords. Our tool suggests keywords and ensures they are naturally integrated into your content for maximum visibility."
       },
       {
-        "title": "Advanced Analytics",
-        "description": "Track performance with detailed metrics on impressions, engagements, and growth. Export reports and optimize your strategy with data-driven insights."
+        "title": "CMS Integration",
+        "description": "Publish directly to WordPress, Webflow, and other platforms. Schedule your content calendar in advance and let us handle the rest."
       }
     ]
   },
@@ -83,30 +91,30 @@
     "badge": "Simple 3-Step Process",
     "title": "Get Started in",
     "titleHighlight": "Minutes",
-    "subtitle": "Transform your LinkedIn presence with our streamlined process. No complexity, just results.",
+    "subtitle": "Transform your blog with our streamlined process. No complexity, just results.",
     "steps": [
       {
-        "title": "Connect Your LinkedIn",
-        "description": "Secure OAuth login with no passwords stored. Connect in seconds with one click. We'll analyze your LinkedIn profile and previous posts to understand your style and audience.",
+        "title": "Define Your Topic",
+        "description": "Enter a topic or keyword you want to rank for. Our AI analyzes the competition and suggests the best angle for your article.",
         "features": [
-          "One-click OAuth connection",
-          "Profile analysis included"
+          "Keyword research included",
+          "Topic analysis"
         ]
       },
       {
-        "title": "Generate Content",
-        "description": "Answer a few questions about your audience and preferences. Our AI creates engaging, human-like posts that resonate with your professional network.",
+        "title": "Generate Article",
+        "description": "Our AI writes a full-length, SEO-optimized article. Review, edit, and refine the content to match your brand voice perfectly.",
         "features": [
-          "AI-powered content creation",
-          "Human-like, engaging posts"
+          "Long-form content generation",
+          "SEO-optimized structure"
         ]
       },
       {
-        "title": "Schedule & Analyze",
-        "description": "Set optimal posting times and monitor real-time performance metrics. Get WhatsApp and email alerts to stay informed about your content's performance.",
+        "title": "Publish & Rank",
+        "description": "Publish directly to your blog or schedule it for later. Watch your organic traffic grow as your content starts ranking on search engines.",
         "features": [
-          "Smart scheduling optimization",
-          "Real-time analytics & alerts"
+          "Direct CMS publishing",
+          "Traffic growth tracking"
         ]
       }
     ],
@@ -118,10 +126,10 @@
     "title": "What Our",
     "titleHighlight": "Amazing Users",
     "titleSuffix": "Say",
-    "subtitle": "Join hundreds of professionals who've transformed their LinkedIn presence and achieved remarkable growth",
+    "subtitle": "Join hundreds of professionals who've transformed their SEO strategy and achieved remarkable growth",
     "items": [
       {
-        "quote": "AutomaPost transformed our LinkedIn strategy. The AI-generated content is incredibly authentic and our engagement increased by 340% in just 2 months. The scheduling feature alone saves our team 8 hours every week.",
+        "quote": "AutomaPost transformed our content strategy. The AI-generated articles are incredibly detailed and our organic traffic increased by 340% in just 2 months. The scheduling feature alone saves our team 8 hours every week.",
         "author": "Sarah Chen",
         "role": "VP of Marketing",
         "company": "InnovateTech Solutions",
@@ -129,7 +137,7 @@
         "image": "/linkedin-profile-1.webp"
       },
       {
-        "quote": "As a solo founder, I was spending way too much time on social media. AutomaPost's AI understands my voice perfectly and creates posts that actually sound like me. My network engagement doubled within weeks.",
+        "quote": "As a solo founder, I was spending way too much time writing blog posts. AutomaPost's AI understands my niche perfectly and creates content that actually ranks. My site traffic doubled within weeks.",
         "author": "Marcus Rodriguez",
         "role": "CEO & Founder",
         "company": "CloudFlow Analytics",
@@ -137,7 +145,7 @@
         "image": "/linkedin-profile-2.webp"
       },
       {
-        "quote": "The analytics insights are gold. I can see exactly what content performs best and optimize accordingly. Plus, the WhatsApp notifications keep me updated without being overwhelming. Game-changer for our agency.",
+        "quote": "The SEO insights are gold. I can see exactly which keywords to target and optimize accordingly. Plus, the automated publishing keeps my blog active without me lifting a finger. Game-changer for our agency.",
         "author": "Dr. Emily Watson",
         "role": "Digital Marketing Director",
         "company": "GrowthFirst Agency",
@@ -171,12 +179,12 @@
         "description": "Essentials",
         "features": [
           "Unlimited scheduling across all supported platforms",
-          "Limited AI generation: 10 posts per month without video generation",
-          "Basic analytics and post history",
+          "Limited AI generation: 2 articles per month",
+          "Basic SEO optimization",
           "Community support via forums",
-          "One linked account",
+          "One blog connected",
           "Bulk scheduling",
-          "Accounts analytics"
+          "Basic analytics"
         ],
         "cta": "Free Forever - No Credit Card Required",
         "popular": false
@@ -185,15 +193,15 @@
         "name": "Growth",
         "price": "€20",
         "period": "per month",
-        "description": "For serious professionals",
+        "description": "For serious bloggers",
         "features": [
           "Everything in Free Tier",
-          "Unlimited AI generation: 1 post per day",
-          "Up to 50 AI-generated comments per day",
-          "Advanced analytics with engagement insights",
+          "Unlimited AI generation: 1 article per day",
+          "Advanced SEO tools & keyword research",
+          "Advanced analytics with traffic insights",
           "Priority email support",
-          "Custom templates for posts",
-          "Up to 3 linked accounts"
+          "Custom templates for articles",
+          "Up to 3 blogs connected"
         ],
         "cta": "Start Free Trial",
         "popular": true
@@ -205,8 +213,8 @@
         "description": "For teams & agencies",
         "features": [
           "Everything in Paid Tier",
-          "Custom number of linked accounts",
-          "Custom number of AI generations and comments",
+          "Custom number of connected blogs",
+          "Custom number of AI generations",
           "Dedicated account manager",
           "Custom integrations and API access",
           "Team collaboration features (e.g., approval workflows)",
@@ -224,12 +232,12 @@
     "subtitle": "Everything you need to know about us",
     "items": [
       {
-        "question": "How does AI post generation work?",
-        "answer": "We analyze publicly available trends and, if enabled, your past posts to match your voice. Provide a topic, audience, and tone and we generate on-brand content with relevant hashtags and calls-to-action. Your private data isn't used to train models without your consent."
+        "question": "How does AI article generation work?",
+        "answer": "We analyze top-ranking content for your topic and use advanced AI to generate unique, comprehensive articles. Provide a topic and keywords, and we handle the structure, writing, and optimization."
       },
       {
-        "question": "Is my LinkedIn account safe?",
-        "answer": "Yes. We use LinkedIn's official APIs and follow platform guidelines. We do not automate prohibited actions such as auto‑DMs, auto‑connects, scraping, or auto‑comments. Your account stays compliant."
+        "question": "Is the content SEO-friendly?",
+        "answer": "Yes. Our AI is trained on SEO best practices. It naturally integrates keywords, structures content with proper headings (H1, H2, H3), and generates meta descriptions to help you rank higher."
       },
       {
         "question": "Do you use my data to train AI?",
@@ -237,7 +245,7 @@
       },
       {
         "question": "What analytics do I get?",
-        "answer": "Engagement, impressions, clicks, comments, and follower growth. Metrics come directly from LinkedIn's APIs and can be enriched with UTM tracking for click attribution."
+        "answer": "Page views, time on page, bounce rate, and keyword rankings. Metrics can be integrated from Google Analytics and Search Console."
       },
       {
         "question": "What if a scheduled post fails?",
@@ -245,23 +253,23 @@
       },
       {
         "question": "Can I customize the AI‑generated content?",
-        "answer": "Yes. Edit anything before scheduling text, tone, hashtags, and images. The AI is a starting point; your voice leads."
+        "answer": "Yes. Edit anything before publishing: text, tone, headings, and images. The AI is a starting point; your voice leads."
       },
       {
-        "question": "How many posts can I schedule?",
-        "answer": "Starter plan: unlimited scheduled posts for one LinkedIn profile (with a queue cap). Growth: unlimited scheduling plus bulk scheduling, recurring posts, and multi‑account support."
+        "question": "How many articles can I schedule?",
+        "answer": "Starter plan: unlimited scheduled posts for one blog. Growth: unlimited scheduling plus bulk scheduling, recurring posts, and multi‑blog support."
       },
       {
         "question": "Do you offer team collaboration and approvals?",
         "answer": "Yes. Role‑based permissions, draft, review, approve workflows, version history, and an audit trail (Enterprise)."
       },
       {
-        "question": "Which post types are supported?",
-        "answer": "LinkedIn Profiles and Pages with text, image, carousel, and link posts. UTM parameters supported."
+        "question": "Which platforms are supported?",
+        "answer": "WordPress, Webflow, Ghost, Medium, and custom CMS via API."
       },
       {
-        "question": "Do you suggest the best time to post?",
-        "answer": "Yes. Per‑profile time zones and AI‑suggested posting windows based on engagement patterns."
+        "question": "Do you suggest keywords?",
+        "answer": "Yes. We provide keyword suggestions based on search volume and competition to help you target the right topics."
       },
       {
         "question": "Do you integrate with other tools?",
@@ -288,8 +296,8 @@
         "answer": "Email and WhatsApp support. Priority response on Pro/Enterprise."
       },
       {
-        "question": "Do you support LinkedIn Pages and Profiles?",
-        "answer": "Yes. Manage LinkedIn Profiles and Pages, including multiple accounts on higher plans."
+        "question": "Do you support multiple blogs?",
+        "answer": "Yes. Manage multiple blogs and websites on higher plans."
       },
       {
         "question": "Who owns the content I generate?",
@@ -298,15 +306,15 @@
     ]
   },
   "cta": {
-    "title": "Ready to Transform Your LinkedIn Presence?",
-    "subtitle": "Join 500+ professionals who've already boosted their engagement by 3x. Start for free today.",
+    "title": "Ready to Transform Your SEO Strategy?",
+    "subtitle": "Join 500+ professionals who've already boosted their traffic by 3x. Start for free today.",
     "button": "Get Started Free - No Credit Card Required",
     "urgency": "Limited time: Launch pricing ends soon!"
   },
   "footer": {
     "company": "AutomaPost",
-    "tagline": "AI-Powered LinkedIn Growth",
-    "copyright": "© 2024 AutomaPost. All rights reserved."
+    "tagline": "AI-Powered SEO Growth",
+    "copyright": "© {year} AutomaPost. All rights reserved."
   },
   "blog": {
     "title": "Blog",

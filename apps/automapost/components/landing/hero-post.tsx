@@ -7,86 +7,81 @@ import { ScaleIn, RotateInOnScroll } from '@/components/scroll-animations'
 export default function HeroPost() {
   const t = useTranslations()
 
+  const BlogPostCard = () => (
+    <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-w-md mx-auto border border-gray-100">
+      {/* Featured Image Area */}
+      <div className="h-48 bg-gradient-to-br from-primary/5 to-accent/10 relative flex items-center justify-center overflow-hidden group">
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]" />
+        <div className="text-6xl transform group-hover:scale-110 transition-transform duration-500">✍️</div>
+        
+        {/* SEO Score Badge Overlay */}
+        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm border border-gray-100 flex items-center gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+          <span className="text-xs font-bold text-green-700">SEO Optimized</span>
+        </div>
+      </div>
+      
+      <div className="p-6 text-left">
+        <div className="flex items-center space-x-2 mb-3">
+          <span className="bg-primary/10 text-primary text-xs font-semibold px-2.5 py-0.5 rounded-full">
+            {t('hero.blogPost.category')}
+          </span>
+          <span className="text-neutral-gray text-xs flex items-center">
+            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {t('hero.blogPost.readTime')}
+          </span>
+        </div>
+        
+        <h3 className="text-xl font-bold text-neutral-dark mb-2 leading-tight group-hover:text-primary transition-colors">
+          {t('hero.blogPost.title')}
+        </h3>
+        
+        <p className="text-neutral-gray text-sm mb-4 line-clamp-2">
+          {t('hero.blogPost.excerpt')}
+        </p>
+        
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 rounded-full bg-gray-100 overflow-hidden relative border border-gray-200">
+               <Image 
+                  src="/linkedin-user1.png" 
+                  alt={t('hero.blogPost.author')}
+                  fill
+                  className="object-cover"
+                />
+            </div>
+            <span className="text-sm font-medium text-neutral-dark">
+              {t('hero.blogPost.author')}
+            </span>
+          </div>
+          
+          <div className="flex items-center text-green-600 text-sm font-bold bg-green-50 px-2 py-1 rounded border border-green-100">
+            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {t('hero.blogPost.seoScore')}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
   return (
     <>
       <ScaleIn className="relative mt-8 lg:mt-0 z-20">
         {/* Mobile version with scroll-triggered rotation */}
         <div className="block lg:hidden">
           <RotateInOnScroll initialRotation={3} finalRotation={0} threshold={0.3}>
-            <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-6">
-              <div className="bg-gradient-to-r from-primary to-accent rounded-lg mb-4">
-                <div className="flex items-center space-x-3 text-neutral-dark">
-                  <Image 
-                    src="/linkedin-user1.png" 
-                    alt={`Profile photo of ${t('hero.linkedinPost.author')}, ${t('hero.linkedinPost.role')}`}
-                    width={44}
-                    height={40}
-                    className="rounded-full object-cover"
-                    loading="eager"
-                    priority
-                  />
-                  <div>
-                    <div className="font-semibold">{t('hero.linkedinPost.author')}</div>
-                    <div className="text-sm opacity-90">{t('hero.linkedinPost.role')}</div>
-                  </div>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <p className="text-neutral-dark">
-                  {t('hero.linkedinPost.content1')}
-                </p>
-                <p className="text-neutral-dark whitespace-pre-line">
-                  {t('hero.linkedinPost.content2')}
-                </p>
-                <p className="text-neutral-dark">
-                  {t('hero.linkedinPost.content3')}
-                </p>
-                <div className="flex items-center justify-between text-sm text-neutral-gray">
-                  <span>{t('hero.linkedinPost.hashtags')}</span>
-                  <span>{t('hero.linkedinPost.timeAgo')}</span>
-                </div>
-              </div>
-            </div>
+            <BlogPostCard />
           </RotateInOnScroll>
         </div>
         
         {/* Desktop version with hover rotation */}
         <div className="hidden lg:block">
-          <div 
-            className="bg-white rounded-2xl shadow-2xl p-8 transform rotate-3 hover:rotate-0 transition-transform duration-300"
-          >
-            <div className="bg-gradient-to-r from-primary to-accent rounded-lg mb-4">
-              <div className="flex items-center space-x-3 text-neutral-dark">
-                <Image 
-                  src="/linkedin-user1.png" 
-                  alt={`Profile photo of ${t('hero.linkedinPost.author')}, ${t('hero.linkedinPost.role')}`}
-                  width={44}
-                  height={40}
-                  className="rounded-full object-cover"
-                  loading="eager"
-                  priority
-                />
-                <div>
-                  <div className="font-semibold">{t('hero.linkedinPost.author')}</div>
-                  <div className="text-sm opacity-90">{t('hero.linkedinPost.role')}</div>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <p className="text-neutral-dark">
-                {t('hero.linkedinPost.content1')}
-              </p>
-              <p className="text-neutral-dark whitespace-pre-line">
-                {t('hero.linkedinPost.content2')}
-              </p>
-              <p className="text-neutral-dark">
-                {t('hero.linkedinPost.content3')}
-              </p>
-              <div className="flex items-center justify-between text-sm text-neutral-gray">
-                <span>{t('hero.linkedinPost.hashtags')}</span>
-                <span>{t('hero.linkedinPost.timeAgo')}</span>
-              </div>
-            </div>
+          <div className="transform rotate-3 hover:rotate-0 transition-transform duration-300 hover:scale-[1.02]">
+            <BlogPostCard />
           </div>
         </div>
       </ScaleIn>

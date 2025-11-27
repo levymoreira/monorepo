@@ -77,7 +77,7 @@ export default function Stats() {
     {
       icon: <TrendingUp className="w-6 h-6" />,
       value: "3200",
-      label: "Posts Scheduled",
+      label: "Articles Published",
       delay: 200
     },
     {
@@ -121,7 +121,7 @@ export default function Stats() {
             Trusted by Professionals Worldwide
           </h2>
           <p className="text-lg text-neutral-gray">
-            Join hundreds of professionals who've transformed their LinkedIn presence
+            Join hundreds of professionals who've transformed their SEO strategy
           </p>
         </div>
         

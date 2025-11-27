@@ -46,8 +46,8 @@ export default function LazyLoadedSections() {
       <PricingSection />
       <FAQSection />
       <CTABanner
-        title="Ready to Transform Your Social Media?"
-        subtitle="Join thousands of professionals already using AutomaPost"
+        title="Ready to Transform Your SEO Strategy?"
+        subtitle="Join thousands of professionals already using AutomaPost to rank higher"
         ctaText="Start Free Trial"
         urgency="Limited time offer - 50% off for the first 100 users!"
         variant="primary"

@@ -42,8 +42,8 @@ export async function generatePageMetadata(
   const metadata = dictionary.metadata || {}
   
   // Use overrides or fallback to defaults
-  const title = overrides.title || metadata.title || 'AutomaPost - AI-Powered LinkedIn Post Generator & Scheduler | Boost Engagement 3x'
-  const description = overrides.description || metadata.description || 'Generate engaging LinkedIn posts with AI, schedule them automatically, and track performance.'
+  const title = overrides.title || metadata.title || 'AutomaPost - AI-Powered Blog Post Generator & SEO Scheduler | Boost Organic Traffic'
+  const description = overrides.description || metadata.description || 'Generate SEO-optimized blog posts with AI, schedule them automatically, and track rankings.'
   const ogTitle = overrides.ogTitle || title
   const ogDescription = overrides.ogDescription || description
   const path = overrides.path || ''
@@ -73,7 +73,7 @@ export async function generatePageMetadata(
   return {
     title,
     description,
-    keywords: overrides.keywords || metadata.keywords || 'LinkedIn automation, AI post generator, social media scheduler, LinkedIn marketing, content automation, LinkedIn engagement, AI content creation, social media management',
+    keywords: overrides.keywords || metadata.keywords || 'SEO automation, AI blog post generator, content scheduler, SEO marketing, content automation, organic traffic, AI content creation, blog management',
     authors: [{ name: metadata.author || 'AutomaPost Team' }],
     creator: metadata.creator || 'AutomaPost',
     publisher: metadata.publisher || 'AutomaPost',
@@ -94,7 +94,7 @@ export async function generatePageMetadata(
           url: '/og-image.svg',
           width: 1200,
           height: 630,
-          alt: overrides.ogImageAlt || metadata.ogImageAlt || 'AutomaPost - AI-Powered LinkedIn Automation',
+          alt: overrides.ogImageAlt || metadata.ogImageAlt || 'AutomaPost - AI-Powered SEO Automation',
         },
       ],
     },
