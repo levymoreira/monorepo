@@ -1,0 +1,347 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Lead model - stores leads captured from landing page
+model Lead {
+  id              String   @id @default(uuid())
+  name            String
+  email           String   @unique
+  referer         String?  // where the user came from (instagram, google search, etc)
+  collectionPlace String   // currently only landing page and landing page dialog
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("leads")
+}
+
+// User model - stores registered users
+model User {
+  id                   String   @id @default(uuid())
+  email                String   @unique
+  name                 String?
+  avatarUrl            String?
+  emailVerified        Boolean  @default(false)
+  onboardingCompleted  Boolean  @default(false)
+  
+  // Legacy LinkedIn fields (to be migrated)
+  linkedinId           String?  @unique
+  linkedinAccessToken  String?
+  linkedinRefreshToken String?
+  
+  // Onboarding preferences
+  role                 String?
+  interests            String[] @default([])
+  maxCommentsPerDay    Int      @default(5)
+  maxLikesPerDay       Int      @default(10)
+  
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  // Relations
+  authProviders        AuthProvider[]
+  sessions             Session[]
+  sisuActivities       SisuActivity[]
+  posts                Post[]
+  postChatMessages     PostChatMessage[]
+  messageQueue         MessageQueue[]
+  clientErrors         ClientError[]
+
+  @@map("users")
+}
+
+// OAuth Provider Information
+model AuthProvider {
+  id                   String   @id @default(uuid())
+  userId               String
+  provider             String   // 'linkedin', 'google', 'instagram', 'tiktok'
+  providerAccountId    String   // Provider's user ID
+  
+  // OAuth tokens
+  accessToken          String?  @db.Text
+  refreshToken         String?  @db.Text
+  expiresAt            DateTime?
+  scope                String?
+  
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  
+  // Relations
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("auth_providers")
+}
+
+// Session Management
+model Session {
+  id                   String   @id @default(uuid())
+  userId               String
+  sessionToken         String   @unique
+  refreshToken         String   @unique
+  
+  // Session metadata
+  ipAddress            String?
+  userAgent            String?
+  deviceFingerprint    String?
+  
+  // Expiration
+  accessTokenExpires   DateTime
+  refreshTokenExpires  DateTime
+  
+  // Status
+  isActive             Boolean  @default(true)
+  revokedAt            DateTime?
+  revokedReason        String?
+  
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  lastActivityAt       DateTime @default(now())
+  
+  // Relations
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([sessionToken])
+  @@index([refreshToken])
+  @@index([isActive])
+  @@map("sessions")
+}
+
+// Sign-in/Sign-up Activity Tracking
+model SisuActivity {
+  id                   String   @id @default(uuid())
+  userId               String?
+  email                String
+  action               String   // 'signup', 'signin', 'signout', 'failed_signin', 'token_refresh', 'session_revoked'
+  provider             String   // 'linkedin', 'google', etc.
+  
+  // Browser/Device Info
+  ipAddress            String?
+  userAgent            String?
+  browser              String?
+  browserVersion       String?
+  os                   String?
+  osVersion            String?
+  device               String?
+  deviceType           String?  // 'desktop', 'mobile', 'tablet'
+  deviceFingerprint    String?
+  
+  // Location/Language Info
+  country              String?
+  city                 String?
+  language             String?
+  timezone             String?
+  
+  // Additional Context
+  referer              String?
+  success              Boolean  @default(true)
+  errorMessage         String?
+  sessionId            String?  // Our session ID
+  
+  createdAt            DateTime @default(now())
+  
+  // Relations
+  user                 User?    @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([email])
+  @@index([createdAt])
+  @@index([action])
+  @@map("sisu_activities")
+}
+
+// Supported locales for content translations
+enum Locale {
+  en
+  es
+  pt
+  br
+  fr
+}
+
+// Blog post base entity
+model BlogPost {
+  id          String                  @id @default(uuid())
+  isPublished Boolean                 @default(true)
+  publishedAt DateTime?
+  authorName  String                  @default("AutomaPost Team")
+  coverImageUrl String?
+  readMinutes Int?
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+
+  // Relations
+  translations BlogPostTranslation[]
+
+  @@map("blog_posts")
+}
+
+// Per-locale blog post content
+model BlogPostTranslation {
+  id              String   @id @default(uuid())
+  postId          String
+  locale          Locale
+  title           String
+  slug            String
+  category        String?
+  excerpt         String?
+  content         String
+  metaTitle       String?
+  metaDescription String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  post BlogPost @relation(fields: [postId], references: [id])
+
+  // Constraints & Indexes
+  @@unique([postId, locale])
+  @@unique([locale, slug])
+  @@index([locale, slug])
+
+  @@map("blog_post_translations")
+}
+
+// Post Status Enum
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PENDING_APPROVAL
+  SENT
+}
+
+// Social Media Post model
+model Post {
+  id                   String    @id @default(uuid())
+  userId               String
+  
+  // Post content
+  content              String    @db.Text
+  firstComment         String?   @db.Text  // Optional first comment to add to the post
+  
+  // Scheduling
+  scheduledTo          DateTime? // When the post should go live
+  publishedAt          DateTime? // When the post was actually published
+  
+  // Status
+  status               PostStatus @default(DRAFT)
+  
+  // Linked auth providers - stores provider names and IDs
+  providers            String[]  // e.g., ["linkedin", "twitter", "facebook"]
+  authProviderIds      String[]  // Array of auth_providers.id references
+  
+  // Soft delete
+  deletedAt            DateTime?
+  
+  // Timestamps
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  
+  // Relations
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatMessages         PostChatMessage[]
+  messageQueue         MessageQueue[]
+  
+  @@index([userId])
+  @@index([scheduledTo])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("posts")
+}
+
+// Post Chat Messages
+model PostChatMessage {
+  id                   String    @id @default(uuid())
+  postId               String
+  userId               String?   // Optional - for user messages, null for AI/system messages
+  
+  // Message details
+  role                 String    @default("user") // 'user', 'assistant', 'system'
+  content              String    @db.Text
+  metadata             Json?     // For storing actions, suggestions, etc.
+  status               String    @default("sent") // 'sending', 'sent', 'failed'
+  
+  // Soft delete
+  deletedAt            DateTime?
+  
+  // Timestamps
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  
+  // Relations
+  post                 Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user                 User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messageQueue         MessageQueue[]
+  
+  @@index([postId, createdAt])
+  @@index([userId])
+  @@index([deletedAt])
+  @@map("post_chat_messages")
+}
+
+// Message queue for SSE delivery
+model MessageQueue {
+  id                   String    @id @default(uuid())
+  userId               String
+  postId               String
+  messageId            String
+  
+  // Delivery tracking
+  delivered            Boolean   @default(false)
+  deliveredAt          DateTime?
+  
+  // Timestamps
+  createdAt            DateTime  @default(now())
+  
+  // Relations
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post                 Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  message              PostChatMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  
+  @@index([userId, postId, delivered, createdAt])
+  @@map("message_queue")
+}
+
+// Client-side error tracking
+model ClientError {
+  id                   String    @id @default(uuid())
+  
+  // Core error information
+  error                String    @db.Text  // Error message or stack trace
+  errorType            String    @default("javascript")  // 'javascript', 'react', 'network', 'api'
+  severity             String    @default("error")  // 'error', 'warning', 'info'
+  
+  // Context information
+  url                  String?   // Page URL where error occurred
+  userAgent            String?   // Browser information
+  userId               String?   // Associated user if logged in
+  sessionId            String?   // Session identifier
+  
+  // Additional metadata
+  metadata             Json?     // Additional context (component name, props, etc.)
+  
+  // Timestamps
+  createdAt            DateTime  @default(now())
+  
+  // Relations
+  user                 User?     @relation(fields: [userId], references: [id])
+  
+  @@index([createdAt])
+  @@index([errorType])
+  @@index([severity])
+  @@index([userId])
+  @@map("client_errors")
+}

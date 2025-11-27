@@ -1,0 +1,423 @@
+{
+  "navigation": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "getStarted": "Get Started",
+    "blog": "Blog"
+  },
+  "hero": {
+    "title": "Generate & Schedule",
+    "titleHighlight": "LinkedIn Posts",
+    "titleSuffix": "with AI",
+    "subtitle": "Automate Content Creation, Scheduling, and Analytics to Grow Your Professional Network Effortlessly",
+    "description": "Tired of inconsistent posting? AutomaPost uses AI to help you generate engaging posts (text, images and videos), schedule them seamlessly, and track performance. Save hours weekly and boost engagement by 3x.",
+    "ctaPrimary": "Get Started Free",
+    "ctaSubtext": "No Credit Card Required!",
+    "formSubtext": "Limited spots for early access, join 500+ pros today",
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "Your email",
+    "signUpButton": "Sign Up",
+    "signingUp": "Signing Up...",
+    "alreadySignedUp": {
+      "title": "You're on the list!",
+      "description": "Due to high demand, we're currently onboarding at full capacity.",
+      "subtitle": "We'll email you as soon as we get more seats."
+    },
+    "linkedinPost": {
+      "author": "Sarah Johnson",
+      "role": "Marketing Specialist at AutomaPost",
+      "content1": "🚀 Just launched new features to our AI-powered solution that's already helping 500+ companies boost their LinkedIn engagement by 3x!",
+      "content2": "Key insights from our latest case study: • 47% increase in profile views • 3.2x higher engagement rates • 89% time savings on content creation",
+      "content3": "What's your biggest LinkedIn challenge? Drop a comment below! 👇",
+      "hashtags": "#LinkedInMarketing #AITools #Growth",
+      "timeAgo": "2 hours ago"
+    }
+  },
+  "problem": {
+    "title": "Struggling to Stay Consistent on LinkedIn?",
+    "description": "As a busy professional, you know LinkedIn is key for leads and authority, but manual posting wastes time, ideas run dry, and analytics are scattered. Result? Missed opportunities and stagnant growth.",
+    "problems": [
+      "Spending hours writing posts that get no engagement",
+      "Inconsistent posting schedule hurting your reach",
+      "No clear data on what content actually works"
+    ]
+  },
+  "solution": {
+    "title": "AutomaPost Changes That Forever",
+    "description": "Our AI-powered tool generates on-brand posts (including custom images), schedules them optimally, and delivers deep analytics.",
+    "benefits": [
+      {
+        "title": "AI generates posts in seconds from your prompts",
+        "description": "No more writer's block or generic content"
+      },
+      {
+        "title": "Schedule weeks ahead for consistency",
+        "description": "Never miss a post with smart scheduling"
+      },
+      {
+        "title": "Track engagement, clicks, and growth with easy dashboards",
+        "description": "Data-driven insights to optimize your strategy"
+      }
+    ]
+  },
+  "features": {
+    "title": "Powerful Features Built for LinkedIn Growth",
+    "subtitle": "Everything you need to dominate LinkedIn, from AI-powered content creation to advanced analytics",
+    "items": [
+      {
+        "title": "AI Post Generation",
+        "description": "Create engaging text + images instantly. Our AI understands you and generates professional content that resonates with your audience."
+      },
+      {
+        "title": "Smart Scheduling",
+        "description": "Queue posts, auto-optimize times, and maintain consistency. Our algorithm finds the best posting times for maximum engagement."
+      },
+      {
+        "title": "Advanced Analytics",
+        "description": "Track performance with detailed metrics on impressions, engagements, and growth. Export reports and optimize your strategy with data-driven insights."
+      }
+    ]
+  },
+  "howItWorks": {
+    "badge": "Simple 3-Step Process",
+    "title": "Get Started in",
+    "titleHighlight": "Minutes",
+    "subtitle": "Transform your LinkedIn presence with our streamlined process. No complexity, just results.",
+    "steps": [
+      {
+        "title": "Connect Your LinkedIn",
+        "description": "Secure OAuth login with no passwords stored. Connect in seconds with one click. We'll analyze your LinkedIn profile and previous posts to understand your style and audience.",
+        "features": [
+          "One-click OAuth connection",
+          "Profile analysis included"
+        ]
+      },
+      {
+        "title": "Generate Content",
+        "description": "Answer a few questions about your audience and preferences. Our AI creates engaging, human-like posts that resonate with your professional network.",
+        "features": [
+          "AI-powered content creation",
+          "Human-like, engaging posts"
+        ]
+      },
+      {
+        "title": "Schedule & Analyze",
+        "description": "Set optimal posting times and monitor real-time performance metrics. Get WhatsApp and email alerts to stay informed about your content's performance.",
+        "features": [
+          "Smart scheduling optimization",
+          "Real-time analytics & alerts"
+        ]
+      }
+    ],
+    "cta": "Try It Free Now",
+    "ctaSubtext": "No credit card required • Start in 2 minutes"
+  },
+  "testimonials": {
+    "badge": "500+ Happy Customers",
+    "title": "What Our",
+    "titleHighlight": "Amazing Users",
+    "titleSuffix": "Say",
+    "subtitle": "Join hundreds of professionals who've transformed their LinkedIn presence and achieved remarkable growth",
+    "items": [
+      {
+        "quote": "AutomaPost transformed our LinkedIn strategy. The AI-generated content is incredibly authentic and our engagement increased by 340% in just 2 months. The scheduling feature alone saves our team 8 hours every week.",
+        "author": "Sarah Chen",
+        "role": "VP of Marketing",
+        "company": "InnovateTech Solutions",
+        "rating": 5,
+        "image": "/linkedin-profile-1.webp"
+      },
+      {
+        "quote": "As a solo founder, I was spending way too much time on social media. AutomaPost's AI understands my voice perfectly and creates posts that actually sound like me. My network engagement doubled within weeks.",
+        "author": "Marcus Rodriguez",
+        "role": "CEO & Founder",
+        "company": "CloudFlow Analytics",
+        "rating": 5,
+        "image": "/linkedin-profile-2.webp"
+      },
+      {
+        "quote": "The analytics insights are gold. I can see exactly what content performs best and optimize accordingly. Plus, the WhatsApp notifications keep me updated without being overwhelming. Game-changer for our agency.",
+        "author": "Dr. Emily Watson",
+        "role": "Digital Marketing Director",
+        "company": "GrowthFirst Agency",
+        "rating": 5,
+        "image": "/linkedin-profile-3.webp"
+      }
+    ],
+    "trustBadges": [
+      {
+        "title": "Bank-Level Security",
+        "description": "SSL encrypted & secure"
+      },
+      {
+        "title": "GDPR Compliant",
+        "description": "Data protection guaranteed"
+      },
+      {
+        "title": "24/7 Expert Support",
+        "description": "Via WhatsApp & Email"
+      }
+    ]
+  },
+  "pricing": {
+    "title": "Simple Pricing for Serious Growth",
+    "subtitle": "All plans include 30-days money back guarantee, no questions asked. Cancel anytime.",
+    "plans": [
+      {
+        "name": "Starter",
+        "price": "€0",
+        "period": "forever",
+        "description": "Essentials",
+        "features": [
+          "Unlimited scheduling across all supported platforms",
+          "Limited AI generation: 10 posts per month without video generation",
+          "Basic analytics and post history",
+          "Community support via forums",
+          "One linked account",
+          "Bulk scheduling",
+          "Accounts analytics"
+        ],
+        "cta": "Free Forever - No Credit Card Required",
+        "popular": false
+      },
+      {
+        "name": "Growth",
+        "price": "€20",
+        "period": "per month",
+        "description": "For serious professionals",
+        "features": [
+          "Everything in Free Tier",
+          "Unlimited AI generation: 1 post per day",
+          "Up to 50 AI-generated comments per day",
+          "Advanced analytics with engagement insights",
+          "Priority email support",
+          "Custom templates for posts",
+          "Up to 3 linked accounts"
+        ],
+        "cta": "Start Free Trial",
+        "popular": true
+      },
+      {
+        "name": "Enterprise",
+        "price": "Custom",
+        "period": "pricing",
+        "description": "For teams & agencies",
+        "features": [
+          "Everything in Paid Tier",
+          "Custom number of linked accounts",
+          "Custom number of AI generations and comments",
+          "Dedicated account manager",
+          "Custom integrations and API access",
+          "Team collaboration features (e.g., approval workflows)",
+          "Advanced automation"
+        ],
+        "cta": "Contact us for custom pricing",
+        "popular": false
+      }
+    ],
+    "additionalInfo": "Sign up today and lock in launch pricing. Rising soon!",
+    "guarantee": "30-Day Money-Back Guarantee"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Everything you need to know about us",
+    "items": [
+      {
+        "question": "How does AI post generation work?",
+        "answer": "We analyze publicly available trends and, if enabled, your past posts to match your voice. Provide a topic, audience, and tone and we generate on-brand content with relevant hashtags and calls-to-action. Your private data isn't used to train models without your consent."
+      },
+      {
+        "question": "Is my LinkedIn account safe?",
+        "answer": "Yes. We use LinkedIn's official APIs and follow platform guidelines. We do not automate prohibited actions such as auto‑DMs, auto‑connects, scraping, or auto‑comments. Your account stays compliant."
+      },
+      {
+        "question": "Do you use my data to train AI?",
+        "answer": "No. You own your content. Your private data is not used to train our models without explicit consent. Data is encrypted in transit and at rest, and you can request deletion at any time."
+      },
+      {
+        "question": "What analytics do I get?",
+        "answer": "Engagement, impressions, clicks, comments, and follower growth. Metrics come directly from LinkedIn's APIs and can be enriched with UTM tracking for click attribution."
+      },
+      {
+        "question": "What if a scheduled post fails?",
+        "answer": "We automatically retry with exponential backoff and notify you by email/WhatsApp. You can reschedule in one click and see clear error reasons."
+      },
+      {
+        "question": "Can I customize the AI‑generated content?",
+        "answer": "Yes. Edit anything before scheduling text, tone, hashtags, and images. The AI is a starting point; your voice leads."
+      },
+      {
+        "question": "How many posts can I schedule?",
+        "answer": "Starter plan: unlimited scheduled posts for one LinkedIn profile (with a queue cap). Growth: unlimited scheduling plus bulk scheduling, recurring posts, and multi‑account support."
+      },
+      {
+        "question": "Do you offer team collaboration and approvals?",
+        "answer": "Yes. Role‑based permissions, draft, review, approve workflows, version history, and an audit trail (Enterprise)."
+      },
+      {
+        "question": "Which post types are supported?",
+        "answer": "LinkedIn Profiles and Pages with text, image, carousel, and link posts. UTM parameters supported."
+      },
+      {
+        "question": "Do you suggest the best time to post?",
+        "answer": "Yes. Per‑profile time zones and AI‑suggested posting windows based on engagement patterns."
+      },
+      {
+        "question": "Do you integrate with other tools?",
+        "answer": "CSV/Sheets export is included. Webhooks and API are available on Enterprise. Optional Slack/Teams notifications."
+      },
+      {
+        "question": "What uptime and reliability can I expect?",
+        "answer": "99.9% uptime target with zero‑downtime deployments and monitoring/auto‑recovery."
+      },
+      {
+        "question": "Can I import or migrate my content?",
+        "answer": "Yes. CSV import and calendar migration from popular tools are supported."
+      },
+      {
+        "question": "Can I cancel anytime? Any hidden fees?",
+        "answer": "Yes, no lock‑in or hidden fees. Cancel in two clicks. 30‑day money‑back guarantee."
+      },
+      {
+        "question": "Are you GDPR compliant?",
+        "answer": "Yes. We are GDPR compliant and can provide a Data Processing Addendum (DPA) upon request."
+      },
+      {
+        "question": "What are your support response times?",
+        "answer": "Email and WhatsApp support. Priority response on Pro/Enterprise."
+      },
+      {
+        "question": "Do you support LinkedIn Pages and Profiles?",
+        "answer": "Yes. Manage LinkedIn Profiles and Pages, including multiple accounts on higher plans."
+      },
+      {
+        "question": "Who owns the content I generate?",
+        "answer": "You do. You retain rights to your generated text and images, with commercial use licensing included."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Ready to Transform Your LinkedIn Presence?",
+    "subtitle": "Join 500+ professionals who've already boosted their engagement by 3x. Start for free today.",
+    "button": "Get Started Free - No Credit Card Required",
+    "urgency": "Limited time: Launch pricing ends soon!"
+  },
+  "footer": {
+    "company": "AutomaPost",
+    "tagline": "AI-Powered LinkedIn Growth",
+    "copyright": "© 2024 AutomaPost. All rights reserved."
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Latest articles and product updates from AutomaPost.",
+    "readMore": "Read more"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try again",
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "mostPopular": "Most Popular"
+  },
+  "validation": {
+    "nameRequired": "Please enter your name",
+    "emailRequired": "Please enter your email",
+    "emailInvalid": "Enter a valid email address",
+    "emailExists": "This email is already registered",
+    "genericError": "Something went wrong. Please try again."
+  },
+  "dialog": {
+    "title": "Get Early Access",
+    "description": "Join 500+ pros and lock unlimited free scheduling.",
+    "joinedMessage": "500+ professionals already joined",
+    "benefits": [
+      "Unlimited free scheduling",
+      "No credit card required",
+      "Cancel anytime • GDPR compliant"
+    ],
+    "rating": "4.8/5 from early users",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name or alias",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "signUpButton": "Sign Up Now",
+    "agreementText": "By signing up, you agree to our Terms and Privacy Policy."
+  },
+  "metadata": {
+    "title": "AutomaPost - AI-Powered LinkedIn Post Generator & Scheduler | Boost Engagement 3x",
+    "titleTemplate": "%s | AutomaPost",
+    "description": "Generate engaging LinkedIn posts with AI, schedule them automatically, and track performance. Save hours weekly and boost engagement by 3x. Start free today!",
+    "keywords": "LinkedIn automation, AI post generator, social media scheduler, LinkedIn marketing, content automation, LinkedIn engagement, AI content creation, social media management",
+    "applicationName": "AutomaPost",
+    "author": "AutomaPost Team",
+    "creator": "AutomaPost",
+    "publisher": "AutomaPost",
+    "ogImageAlt": "AutomaPost - AI-Powered LinkedIn Automation",
+    "twitterCreator": "@automapost"
+  },
+  "onboarding": {
+    "visual": {
+      "step1Badge": "Step 1 of 2",
+      "step1TitleLine1": "Connect Your",
+      "step1TitleHighlight": "Professional Network",
+      "step1Subtitle": "We'll analyze your LinkedIn profile to create AI-powered content that matches your unique voice and industry expertise.",
+      "step2Badge": "Step 2 of 2",
+      "step2TitleLine1": "Personalizing Your",
+      "step2TitleHighlight": "AI Content Engine",
+      "step2Subtitle": "We're combining your preferences, LinkedIn insights, and our AI models to create posts that resonate with your audience."
+    },
+    "connect": {
+      "title": "Connect Your LinkedIn",
+      "subtitle": "We'll use your professional profile to create AI-powered content that sounds like you.",
+      "button": "Continue with LinkedIn",
+      "securityNote": "Secured with OAuth 2.0 • We never store passwords"
+    },
+    "form": {
+      "headerTitle": "Customize Your Experience",
+      "headerSubtitle": "Help us personalize your AI to match your goals",
+      "note": "You can change these settings anytime later",
+      "errorGeneric": "Something went wrong. Please try again.",
+      "errorNetwork": "Network error. Please check your connection and try again.",
+      "errorMinInterests": "Please add at least 3 interests to continue",
+      "labels": {
+        "role": "Your Role",
+        "rolePlaceholder": "e.g., Marketing Manager, Software Engineer, CEO",
+        "interests": "Your Interests",
+        "interestsPlaceholder": "e.g., AI, Marketing, Technology",
+        "interestsMinimum": "minimum"
+      },
+      "engagementSettings": "Auto-Engagement Settings",
+      "maxComments": "Max Comments per Day",
+      "maxLikes": "Max Likes per Day",
+      "submit": "Finish",
+      "submitting": "Setting up your workspace...",
+      "finalStep": "Final step",
+      "interestsOptions": {
+        "ai": "Artificial Intelligence",
+        "ml": "Machine Learning",
+        "cloud": "Cloud Computing",
+        "devops": "DevOps",
+        "security": "Cybersecurity",
+        "webdev": "Web Development",
+        "datasci": "Data Science",
+        "blockchain": "Blockchain",
+        "architecture": "Software Architecture",
+        "oss": "Open Source"
+      }
+    },
+    "loading": "Loading your experience...",
+    "metadata": {
+      "title": "Get Started - AutomaPost | LinkedIn Automation Setup",
+      "description": "Complete your AutomaPost onboarding process. Connect your LinkedIn account, configure automation settings, and start growing your professional network.",
+      "keywords": "automapost onboarding, linkedin setup, automation configuration, get started, account setup",
+      "ogTitle": "Get Started - AutomaPost",
+      "ogDescription": "Complete your AutomaPost onboarding and start automating your LinkedIn growth.",
+      "ogImageAlt": "AutomaPost - Onboarding Setup"
+    }
+  }
+}

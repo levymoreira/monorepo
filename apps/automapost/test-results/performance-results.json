@@ -1,0 +1,224 @@
+{
+  "config": {
+    "configFile": "/Users/levy/w/automapost/playwright.config.ts",
+    "rootDir": "/Users/levy/w/automapost/tests/performance",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/performance-results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/performance-results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/levy/w/automapost/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Chrome Performance",
+        "name": "Mobile Chrome Performance",
+        "testDir": "/Users/levy/w/automapost/tests/performance",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/levy/w/automapost/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Safari Performance",
+        "name": "Mobile Safari Performance",
+        "testDir": "/Users/levy/w/automapost/tests/performance",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/levy/w/automapost/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Desktop Chrome Performance",
+        "name": "Desktop Chrome Performance",
+        "testDir": "/Users/levy/w/automapost/tests/performance",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 5,
+    "webServer": {
+      "command": "yarn dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "regression.spec.ts",
+      "file": "regression.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Performance Regression Suite",
+          "file": "regression.spec.ts",
+          "line": 87,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Performance consistency across multiple runs",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome Performance",
+                  "projectName": "Mobile Chrome Performance",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 14380,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m60\u001b[39m\nReceived:   \u001b[31mNaN\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m60\u001b[39m\nReceived:   \u001b[31mNaN\u001b[39m\n    at /Users/levy/w/automapost/tests/performance/regression.spec.ts:261:28",
+                        "location": {
+                          "file": "/Users/levy/w/automapost/tests/performance/regression.spec.ts",
+                          "column": 28,
+                          "line": 261
+                        },
+                        "snippet": "  259 |     // Assert reasonable consistency (coefficient of variation - more lenient for test environment)\n  260 |     expect(lcpConsistency).toBeLessThan(50); // 50% variation acceptable in test environment\n> 261 |     expect(inpConsistency).toBeLessThan(60); // More lenient for INP due to its volatile nature\n      |                            ^\n  262 |   });\n  263 |\n  264 |   test('Performance degradation over time simulation', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/levy/w/automapost/tests/performance/regression.spec.ts",
+                            "column": 28,
+                            "line": 261
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m60\u001b[39m\nReceived:   \u001b[31mNaN\u001b[39m\n\n  259 |     // Assert reasonable consistency (coefficient of variation - more lenient for test environment)\n  260 |     expect(lcpConsistency).toBeLessThan(50); // 50% variation acceptable in test environment\n> 261 |     expect(inpConsistency).toBeLessThan(60); // More lenient for INP due to its volatile nature\n      |                            ^\n  262 |   });\n  263 |\n  264 |   test('Performance degradation over time simulation', async ({ page }) => {\n    at /Users/levy/w/automapost/tests/performance/regression.spec.ts:261:28"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔄 Testing performance consistency...\n"
+                        },
+                        {
+                          "text": "\n📊 Performance Consistency Analysis:\n"
+                        },
+                        {
+                          "text": "   LCP Coefficient of Variation: 13.2%\n"
+                        },
+                        {
+                          "text": "   INP Coefficient of Variation: NaN%\n"
+                        },
+                        {
+                          "text": "   LCP Range: 0ms - 0ms\n"
+                        },
+                        {
+                          "text": "   INP Range: 0ms - 0ms\n"
+                        },
+                        {
+                          "text": "🎯 Performance regression testing completed\n"
+                        },
+                        {
+                          "text": "📄 Results and baseline stored in /Users/levy/w/automapost/test-results/performance-baseline.json\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-27T15:29:45.053Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/levy/w/automapost/test-results/regression-Performance-Reg-2b9ee-stency-across-multiple-runs-Mobile-Chrome-Performance/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/levy/w/automapost/test-results/regression-Performance-Reg-2b9ee-stency-across-multiple-runs-Mobile-Chrome-Performance/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/levy/w/automapost/tests/performance/regression.spec.ts",
+                        "column": 28,
+                        "line": 261
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "9dc370239c4a30f174fb-ffdf2dfba1ee12cb6997",
+              "file": "regression.spec.ts",
+              "line": 234,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-08-27T15:29:44.481Z",
+    "duration": 15144.414,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

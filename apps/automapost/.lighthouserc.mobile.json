@@ -1,0 +1,82 @@
+{
+  "ci": {
+    "collect": {
+      "url": [
+        "http://localhost:3000/en"
+      ],
+      "startServerCommand": "yarn dev",
+      "startServerReadyPattern": "ready",
+      "startServerReadyTimeout": 120000,
+      "numberOfRuns": 5,
+      "settings": {
+        "preset": "mobile",
+        "chromeFlags": [
+          "--no-sandbox",
+          "--disable-dev-shm-usage",
+          "--disable-extensions",
+          "--disable-gpu",
+          "--disable-background-timer-throttling",
+          "--disable-backgrounding-occluded-windows",
+          "--disable-renderer-backgrounding"
+        ],
+        "emulatedFormFactor": "mobile",
+        "throttling": {
+          "rttMs": 40,
+          "throughputKbps": 1536,
+          "cpuSlowdownMultiplier": 4,
+          "requestLatencyMs": 0,
+          "downloadThroughputKbps": 1536,
+          "uploadThroughputKbps": 750
+        },
+        "screenEmulation": {
+          "mobile": true,
+          "width": 412,
+          "height": 823,
+          "deviceScaleFactor": 2.625,
+          "disabled": false
+        },
+        "formFactor": "mobile",
+        "onlyCategories": ["performance"],
+        "onlyAudits": [
+          "largest-contentful-paint",
+          "interactive", 
+          "first-contentful-paint",
+          "speed-index",
+          "total-blocking-time",
+          "cumulative-layout-shift",
+          "uses-optimized-images",
+          "uses-webp-images",
+          "render-blocking-resources",
+          "unused-css-rules",
+          "unused-javascript",
+          "preload-lcp-image",
+          "prioritize-lcp-image"
+        ]
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["error", {"minScore": 0.85}],
+        
+        "largest-contentful-paint": ["error", {"maxNumericValue": 1800}],
+        "interactive": ["error", {"maxNumericValue": 2500}],
+        "first-contentful-paint": ["error", {"maxNumericValue": 1200}],
+        "speed-index": ["error", {"maxNumericValue": 1800}],
+        "total-blocking-time": ["error", {"maxNumericValue": 150}],
+        "cumulative-layout-shift": ["error", {"maxNumericValue": 0.1}],
+        
+        "uses-optimized-images": "error",
+        "uses-webp-images": "error",
+        "render-blocking-resources": "warn",
+        "unused-css-rules": "warn",
+        "unused-javascript": "warn",
+        "preload-lcp-image": "warn",
+        "prioritize-lcp-image": "warn"
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": "./lighthouse-reports/mobile"
+    }
+  }
+}

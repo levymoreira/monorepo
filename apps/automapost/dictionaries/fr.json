@@ -1,0 +1,423 @@
+{
+  "navigation": {
+    "features": "Fonctionnalités",
+    "pricing": "Tarifs",
+    "faq": "FAQ",
+    "getStarted": "Commencer",
+    "blog": "Blog"
+  },
+  "hero": {
+    "title": "Générez et Planifiez",
+    "titleHighlight": "des Publications LinkedIn",
+    "titleSuffix": "avec l'IA",
+    "subtitle": "Automatisez la Création de Contenu, la Planification et l'Analyse pour Développer Votre Réseau Professionnel sans Effort",
+    "description": "Fatigué de publications incohérentes ? AutomaPost utilise l'IA pour vous aider à générer des publications engageantes (texte, images et vidéos), les planifier facilement et suivre les performances. Économisez des heures chaque semaine et augmentez l'engagement de 3x.",
+    "ctaPrimary": "Commencer Gratuitement",
+    "ctaSubtext": "Aucune Carte de Crédit Requise !",
+    "formSubtext": "Places limitées pour l'accès anticipé, rejoignez plus de 500 professionnels aujourd'hui",
+    "namePlaceholder": "Votre nom",
+    "emailPlaceholder": "Votre email",
+    "signUpButton": "S'inscrire",
+    "signingUp": "Inscription...",
+    "alreadySignedUp": {
+      "title": "Vous êtes sur la liste !",
+      "description": "En raison de la forte demande, nous intégrons actuellement à pleine capacité.",
+      "subtitle": "Nous vous enverrons un email dès que nous aurons plus de places."
+    },
+    "linkedinPost": {
+      "author": "Sarah Johnson",
+      "role": "Spécialiste Marketing chez AutomaPost",
+      "content1": "🚀 Nous venons de lancer de nouvelles fonctionnalités pour notre solution alimentée par l'IA qui aide déjà plus de 500 entreprises à augmenter leur engagement LinkedIn de 3x !",
+      "content2": "Principales insights de notre dernière étude de cas :\n• 47% d'augmentation des vues de profil\n• 3,2x plus de taux d'engagement\n• 89% d'économie de temps sur la création de contenu",
+      "content3": "Quel est votre plus grand défi sur LinkedIn ? Laissez un commentaire ci-dessous ! 👇",
+      "hashtags": "#MarketingLinkedIn #OutilsIA #Croissance",
+      "timeAgo": "il y a 2 heures"
+    }
+  },
+  "problem": {
+    "title": "Vous Luttez pour Maintenir la Cohérence sur LinkedIn ?",
+    "description": "En tant que professionnel occupé, vous savez que LinkedIn est essentiel pour générer des leads et de l'autorité, mais publier manuellement fait perdre du temps, les idées s'épuisent et les analyses sont dispersées. Résultat ? Opportunités manquées et croissance stagnante.",
+    "problems": [
+      "Passer des heures à écrire des publications qui n'obtiennent aucun engagement",
+      "Calendrier de publication incohérent nuisant à votre portée",
+      "Aucune donnée claire sur le contenu qui fonctionne vraiment"
+    ]
+  },
+  "solution": {
+    "title": "AutomaPost Change Cela Pour Toujours",
+    "description": "Notre outil alimenté par l'IA génère des publications de marque (incluant des images personnalisées), les planifie de manière optimale et fournit des analyses approfondies.",
+    "benefits": [
+      {
+        "title": "L'IA génère des publications en secondes à partir de vos instructions",
+        "description": "Fini le blocage de l'écrivain ou le contenu générique"
+      },
+      {
+        "title": "Planifiez des semaines à l'avance pour la cohérence",
+        "description": "Ne manquez jamais une publication avec la planification intelligente"
+      },
+      {
+        "title": "Suivez l'engagement, les clics et la croissance avec des tableaux de bord faciles",
+        "description": "Insights basés sur les données pour optimiser votre stratégie"
+      }
+    ]
+  },
+  "features": {
+    "title": "Fonctionnalités Puissantes Construites pour la Croissance LinkedIn",
+    "subtitle": "Tout ce dont vous avez besoin pour dominer LinkedIn, de la création de contenu alimentée par l'IA aux analyses avancées",
+    "items": [
+      {
+        "title": "Génération de Publications par IA",
+        "description": "Créez du texte et des images engageants instantanément. Notre IA vous comprend et génère du contenu professionnel qui résonne avec votre audience."
+      },
+      {
+        "title": "Planification Intelligente",
+        "description": "Mettez en file d'attente les publications, optimisez automatiquement les horaires et maintenez la cohérence. Notre algorithme trouve les meilleurs moments de publication pour un engagement maximal."
+      },
+      {
+        "title": "Analyses Avancées",
+        "description": "Suivez les performances avec des métriques détaillées sur les impressions, l'engagement et la croissance. Exportez des rapports et optimisez votre stratégie avec des insights basés sur les données."
+      }
+    ]
+  },
+  "howItWorks": {
+    "badge": "Processus Simple en 3 Étapes",
+    "title": "Commencez en",
+    "titleHighlight": "Minutes",
+    "subtitle": "Transformez votre présence LinkedIn avec notre processus optimisé. Pas de complexité, que des résultats.",
+    "steps": [
+      {
+        "title": "Connectez Votre LinkedIn",
+        "description": "Connexion OAuth sécurisée sans mots de passe stockés. Connectez-vous en secondes d'un clic. Nous analyserons votre profil LinkedIn et vos publications précédentes pour comprendre votre style et votre audience.",
+        "features": [
+          "Connexion OAuth en un clic",
+          "Analyse de profil incluse"
+        ]
+      },
+      {
+        "title": "Générez du Contenu",
+        "description": "Répondez à quelques questions sur votre audience et vos préférences. Notre IA crée des publications engageantes et humaines qui résonnent avec votre réseau professionnel.",
+        "features": [
+          "Création de contenu alimentée par l'IA",
+          "Publications humaines et engageantes"
+        ]
+      },
+      {
+        "title": "Planifiez et Analysez",
+        "description": "Définissez des horaires de publication optimaux et surveillez les métriques de performance en temps réel. Recevez des alertes par WhatsApp et email pour rester informé des performances de votre contenu.",
+        "features": [
+          "Optimisation de planification intelligente",
+          "Analyses et alertes en temps réel"
+        ]
+      }
+    ],
+    "cta": "Essayez Gratuitement Maintenant",
+    "ctaSubtext": "Aucune carte de crédit requise • Commencez en 2 minutes"
+  },
+  "testimonials": {
+    "badge": "Plus de 500 Clients Satisfaits",
+    "title": "Ce Que Nos",
+    "titleHighlight": "Utilisateurs Incroyables",
+    "titleSuffix": "Disent",
+    "subtitle": "Rejoignez des centaines de professionnels qui ont transformé leur présence LinkedIn et atteint une croissance remarquable",
+    "items": [
+      {
+        "quote": "AutomaPost a transformé notre stratégie LinkedIn. Le contenu généré par l'IA est incroyablement authentique et notre engagement a augmenté de 340% en seulement 2 mois. La fonction de planification seule fait économiser 8 heures par semaine à notre équipe.",
+        "author": "Sarah Chen",
+        "role": "VP Marketing",
+        "company": "InnovateTech Solutions",
+        "rating": 5,
+        "image": "/linkedin-profile-1.webp"
+      },
+      {
+        "quote": "En tant que fondateur solo, je passais trop de temps sur les réseaux sociaux. L'IA d'AutomaPost comprend parfaitement ma voix et crée des publications qui sonnent vraiment comme moi. L'engagement de mon réseau a doublé en quelques semaines.",
+        "author": "Marcus Rodriguez",
+        "role": "PDG et Fondateur",
+        "company": "CloudFlow Analytics",
+        "rating": 5,
+        "image": "/linkedin-profile-2.webp"
+      },
+      {
+        "quote": "Les insights d'analyse sont de l'or. Je peux voir exactement quel contenu fonctionne le mieux et optimiser en conséquence. De plus, les notifications WhatsApp me tiennent informée sans être écrasantes. Révolutionnaire pour notre agence.",
+        "author": "Dr. Emily Watson",
+        "role": "Directrice Marketing Digital",
+        "company": "GrowthFirst Agency",
+        "rating": 5,
+        "image": "/linkedin-profile-3.webp"
+      }
+    ],
+    "trustBadges": [
+      {
+        "title": "Sécurité Niveau Bancaire",
+        "description": "SSL chiffré et sécurisé"
+      },
+      {
+        "title": "Conforme RGPD",
+        "description": "Protection des données garantie"
+      },
+      {
+        "title": "Support Expert 24/7",
+        "description": "Via WhatsApp et Email"
+      }
+    ]
+  },
+  "pricing": {
+    "title": "Tarification Simple pour une Croissance Sérieuse",
+    "subtitle": "Tous les plans incluent une garantie de remboursement de 30 jours, sans questions posées. Annulez à tout moment.",
+    "plans": [
+      {
+        "name": "Débutant",
+        "price": "€0",
+        "period": "pour toujours",
+        "description": "L'essentiel",
+        "features": [
+          "Planification illimitée sur toutes les plateformes supportées",
+          "Génération IA limitée : 10 publications par mois sans génération vidéo",
+          "Analyses de base et historique des publications",
+          "Support communautaire via forums",
+          "Un compte lié",
+          "Planification en lot",
+          "Analyses des comptes"
+        ],
+        "cta": "Gratuit Pour Toujours - Aucune Carte de Crédit Requise",
+        "popular": false
+      },
+      {
+        "name": "Croissance",
+        "price": "€20",
+        "period": "par mois",
+        "description": "Pour les professionnels sérieux",
+        "features": [
+          "Tout dans le Niveau Gratuit",
+          "Génération IA illimitée : 1 publication par jour",
+          "Jusqu'à 50 commentaires générés par IA par jour",
+          "Analyses avancées avec insights d'engagement",
+          "Support email prioritaire",
+          "Modèles personnalisés pour publications",
+          "Jusqu'à 3 comptes liés"
+        ],
+        "cta": "Commencer l'Essai Gratuit",
+        "popular": true
+      },
+      {
+        "name": "Entreprise",
+        "price": "Personnalisé",
+        "period": "tarifs",
+        "description": "Pour équipes et agences",
+        "features": [
+          "Tout dans le Niveau Payant",
+          "Nombre personnalisé de comptes liés",
+          "Nombre personnalisé de générations IA et commentaires",
+          "Gestionnaire de compte dédié",
+          "Intégrations personnalisées et accès API",
+          "Fonctionnalités de collaboration d'équipe (ex. workflows d'approbation)",
+          "Automatisation avancée"
+        ],
+        "cta": "Contactez-nous pour tarifs personnalisés",
+        "popular": false
+      }
+    ],
+    "additionalInfo": "Inscrivez-vous aujourd'hui et verrouillez les prix de lancement. Augmentation bientôt !",
+    "guarantee": "Garantie de Remboursement de 30 Jours"
+  },
+  "faq": {
+    "title": "Questions Fréquemment Posées",
+    "subtitle": "Tout ce que vous devez savoir sur nous",
+    "items": [
+      {
+        "question": "Comment fonctionne la génération de publications par IA ?",
+        "answer": "Nous analysons les tendances disponibles publiquement et, si activé, vos publications passées pour correspondre à votre voix. Fournissez un sujet, une audience et un ton et nous générons du contenu de marque avec hashtags pertinents et appels à l'action. Vos données privées ne sont pas utilisées pour entraîner les modèles sans votre consentement."
+      },
+      {
+        "question": "Mon compte LinkedIn est-il sécurisé ?",
+        "answer": "Oui. Nous utilisons les APIs officielles de LinkedIn et suivons les directives de la plateforme. Nous n'automatisons pas d'actions interdites comme auto-DMs, auto-connexions, scraping ou auto-commentaires. Votre compte reste conforme."
+      },
+      {
+        "question": "Utilisez-vous mes données pour entraîner l'IA ?",
+        "answer": "Non. Vous possédez votre contenu. Vos données privées ne sont pas utilisées pour entraîner nos modèles sans consentement explicite. Les données sont chiffrées en transit et au repos, et vous pouvez demander la suppression à tout moment."
+      },
+      {
+        "question": "Quelles analyses je reçois ?",
+        "answer": "Engagement, impressions, clics, commentaires et croissance des followers. Les métriques proviennent directement des APIs de LinkedIn et peuvent être enrichies avec le suivi UTM pour l'attribution des clics."
+      },
+      {
+        "question": "Que se passe-t-il si une publication planifiée échoue ?",
+        "answer": "Nous réessayons automatiquement avec backoff exponentiel et vous notifions par email/WhatsApp. Vous pouvez reprogrammer en un clic et voir les raisons d'erreur claires."
+      },
+      {
+        "question": "Puis-je personnaliser le contenu généré par l'IA ?",
+        "answer": "Oui. Modifiez tout avant de planifier : texte, ton, hashtags et images. L'IA est un point de départ ; votre voix guide."
+      },
+      {
+        "question": "Combien de publications puis-je planifier ?",
+        "answer": "Plan Débutant : publications planifiées illimitées pour un profil LinkedIn (avec limite de file d'attente). Croissance : planification illimitée plus planification en lot, publications récurrentes et support multi-compte."
+      },
+      {
+        "question": "Offrez-vous la collaboration d'équipe et les approbations ?",
+        "answer": "Oui. Permissions basées sur les rôles, workflows de brouillon, révision, approbation, historique des versions et piste d'audit (Entreprise)."
+      },
+      {
+        "question": "Quels types de publication sont supportés ?",
+        "answer": "Profils et Pages LinkedIn avec publications texte, image, carrousel et lien. Paramètres UTM supportés."
+      },
+      {
+        "question": "Suggérez-vous le meilleur moment pour publier ?",
+        "answer": "Oui. Fuseaux horaires par profil et fenêtres de publication suggérées par IA basées sur les patterns d'engagement."
+      },
+      {
+        "question": "Vous intégrez-vous avec d'autres outils ?",
+        "answer": "Export CSV/Sheets inclus. Webhooks et API disponibles en Entreprise. Notifications optionnelles Slack/Teams."
+      },
+      {
+        "question": "Quel uptime et fiabilité puis-je attendre ?",
+        "answer": "Objectif de 99,9% d'uptime avec déploiements sans downtime et monitoring/auto-récupération."
+      },
+      {
+        "question": "Puis-je importer ou migrer mon contenu ?",
+        "answer": "Oui. Import CSV et migration de calendrier depuis des outils populaires sont supportés."
+      },
+      {
+        "question": "Puis-je annuler à tout moment ? Des frais cachés ?",
+        "answer": "Oui, pas d'engagement ni de frais cachés. Annulez en deux clics. Garantie de remboursement de 30 jours."
+      },
+      {
+        "question": "Êtes-vous conforme RGPD ?",
+        "answer": "Oui. Nous sommes conformes RGPD et pouvons fournir un Addendum de Traitement des Données (DPA) sur demande."
+      },
+      {
+        "question": "Quels sont vos temps de réponse support ?",
+        "answer": "Support email et WhatsApp. Réponse prioritaire sur Pro/Entreprise."
+      },
+      {
+        "question": "Supportez-vous les Pages et Profils LinkedIn ?",
+        "answer": "Oui. Gérez Profils et Pages LinkedIn, incluant comptes multiples sur plans supérieurs."
+      },
+      {
+        "question": "Qui possède le contenu que je génère ?",
+        "answer": "Vous. Vous conservez les droits sur vos textes et images générés, avec licence d'usage commercial incluse."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Prêt à Transformer Votre Présence LinkedIn ?",
+    "subtitle": "Rejoignez plus de 500 professionnels qui ont déjà augmenté leur engagement de 3x. Commencez gratuitement aujourd'hui.",
+    "button": "Commencer Gratuitement - Aucune Carte de Crédit Requise",
+    "urgency": "Temps limité : Les prix de lancement se terminent bientôt !"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Derniers articles et mises à jour produit d'AutomaPost.",
+    "readMore": "Lire la suite"
+  },
+  "footer": {
+    "company": "AutomaPost",
+    "tagline": "Croissance LinkedIn Alimentée par l'IA",
+    "copyright": "© 2024 AutomaPost. Tous droits réservés."
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Quelque chose s'est mal passé",
+    "retry": "Réessayer",
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "save": "Sauvegarder",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "mostPopular": "Le Plus Populaire"
+  },
+  "validation": {
+    "nameRequired": "Veuillez saisir votre nom",
+    "emailRequired": "Veuillez saisir votre email",
+    "emailInvalid": "Saisissez une adresse email valide",
+    "emailExists": "Cet email est déjà enregistré",
+    "genericError": "Quelque chose s'est mal passé. Veuillez réessayer."
+  },
+  "dialog": {
+    "title": "Obtenir l'Accès Anticipé",
+    "description": "Rejoignez plus de 500 professionnels et verrouillez la planification gratuite illimitée.",
+    "joinedMessage": "Plus de 500 professionnels ont déjà rejoint",
+    "benefits": [
+      "Planification gratuite illimitée",
+      "Aucune carte de crédit requise",
+      "Annulez à tout moment • Conforme RGPD"
+    ],
+    "rating": "4,8/5 des utilisateurs précoces",
+    "nameLabel": "Nom",
+    "namePlaceholder": "Votre nom ou pseudonyme",
+    "emailLabel": "Email",
+    "emailPlaceholder": "vous@exemple.com",
+    "signUpButton": "S'inscrire Maintenant",
+    "agreementText": "En vous inscrivant, vous acceptez nos Conditions et Politique de Confidentialité."
+  },
+  "metadata": {
+    "title": "AutomaPost - Générateur et Planificateur de Posts LinkedIn par IA | Boostez l'Engagement 3x",
+    "titleTemplate": "%s | AutomaPost",
+    "description": "Générez des posts LinkedIn engageants avec l'IA, planifiez-les automatiquement et suivez les performances. Économisez des heures et boostez l'engagement 3x. Commencez gratuitement!",
+    "keywords": "automatisation LinkedIn, générateur de posts IA, planificateur réseaux sociaux, marketing LinkedIn, automatisation contenu, engagement LinkedIn, création contenu IA, gestion réseaux sociaux",
+    "applicationName": "AutomaPost",
+    "author": "Équipe AutomaPost",
+    "creator": "AutomaPost",
+    "publisher": "AutomaPost",
+    "ogImageAlt": "AutomaPost - Automatisation LinkedIn par IA",
+    "twitterCreator": "@automapost"
+  },
+  "onboarding": {
+    "visual": {
+      "step1Badge": "Étape 1 sur 2",
+      "step1TitleLine1": "Connectez Votre",
+      "step1TitleHighlight": "Réseau Professionnel",
+      "step1Subtitle": "Nous analyserons votre profil LinkedIn pour créer un contenu alimenté par l'IA qui correspond à votre voix et à votre expertise sectorielle.",
+      "step2Badge": "Étape 2 sur 2",
+      "step2TitleLine1": "Personnaliser Votre",
+      "step2TitleHighlight": "Moteur de Contenu IA",
+      "step2Subtitle": "Nous combinons vos préférences, les insights LinkedIn et nos modèles d'IA pour créer des publications qui résonnent avec votre audience."
+    },
+    "connect": {
+      "title": "Connectez Votre LinkedIn",
+      "subtitle": "Nous utiliserons votre profil professionnel pour créer un contenu IA qui vous ressemble.",
+      "button": "Continuer avec LinkedIn",
+      "securityNote": "Sécurisé avec OAuth 2.0 • Nous ne stockons jamais de mots de passe"
+    },
+    "form": {
+      "headerTitle": "Personnalisez Votre Expérience",
+      "headerSubtitle": "Aidez‑nous à personnaliser votre IA pour correspondre à vos objectifs",
+      "note": "Vous pouvez modifier ces paramètres à tout moment",
+      "errorGeneric": "Quelque chose s'est mal passé. Veuillez réessayer.",
+      "errorNetwork": "Erreur réseau. Vérifiez votre connexion et réessayez.",
+      "errorMinInterests": "Veuillez ajouter au moins 3 intérêts pour continuer",
+      "labels": {
+        "role": "Votre Rôle",
+        "rolePlaceholder": "p. ex., Responsable Marketing, Ingénieur Logiciel, CEO",
+        "interests": "Vos Intérêts",
+        "interestsPlaceholder": "p. ex., IA, Marketing, Technologie",
+        "interestsMinimum": "minimum"
+      },
+      "engagementSettings": "Paramètres d'Auto‑Engagement",
+      "maxComments": "Commentaires max par jour",
+      "maxLikes": "J'aime max par jour",
+      "submit": "Terminer",
+      "submitting": "Configuration de votre espace de travail...",
+      "finalStep": "Dernière étape",
+      "interestsOptions": {
+        "ai": "Intelligence Artificielle",
+        "ml": "Apprentissage Automatique",
+        "cloud": "Informatique en Nuage",
+        "devops": "DevOps",
+        "security": "Cybersécurité",
+        "webdev": "Développement Web",
+        "datasci": "Science des Données",
+        "blockchain": "Blockchain",
+        "architecture": "Architecture Logicielle",
+        "oss": "Open Source"
+      }
+    },
+    "loading": "Chargement de votre expérience...",
+    "metadata": {
+      "title": "Commencer - AutomaPost | Configuration de l'Automatisation LinkedIn",
+      "description": "Terminez votre processus d'onboarding AutomaPost. Connectez votre compte LinkedIn, configurez l'automatisation et commencez à développer votre réseau professionnel.",
+      "keywords": "onboarding automapost, configuration linkedin, configuration automatisation, commencer, configuration du compte",
+      "ogTitle": "Commencer - AutomaPost",
+      "ogDescription": "Terminez votre onboarding AutomaPost et commencez à automatiser votre croissance sur LinkedIn.",
+      "ogImageAlt": "AutomaPost - Configuration de l'Onboarding"
+    }
+  }
+}

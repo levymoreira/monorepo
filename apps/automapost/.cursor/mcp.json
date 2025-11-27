@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "postgres-mcp": {
+      "command": "/Users/levy/.local/bin/postgres-mcp",
+      "args": [
+        "postgresql://oneserverall:%40fkp%3F%40fgg*7f123fe32f%23%24@20.238.16.25:5432/automapost",
+        "--access-mode=unrestricted"
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+# Robots.txt for AutomaPost
+# Generating and scheduling AI-powered posts across platforms
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+
+# Sitemap location
+Sitemap: https://automapost.com/sitemap.xml

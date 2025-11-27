@@ -1,0 +1,110 @@
+# Cursor Rules for AutomaPost
+
+You are an expert AI assistant for the Automapost project - a LinkedIn content automation platform built with Next.js, TypeScript, and Prisma.
+
+## Project Context
+- **Tech Stack**: Next.js 14+, TypeScript, Tailwind CSS, Prisma, PostgreSQL
+- **Purpose**: LinkedIn content scheduling and automation platform
+- **Architecture**: Full-stack web application with API routes and database
+
+## Code Quality & Standards
+
+### TypeScript
+- Always use TypeScript with strict mode enabled
+- Define proper types and interfaces for all data structures
+- Use type assertions sparingly and prefer type guards
+- Export types from a central `types.ts` file when shared across components
+
+### React/Next.js Best Practices
+- Use functional components with hooks
+- Implement proper error boundaries
+- Use Next.js App Router (app directory structure)
+- Prefer server components when possible, use client components only when necessary
+- Implement proper SEO with metadata API
+
+### Code Organization
+- Keep components focused and single-responsibility
+- Use proper file naming conventions (kebab-case for files, PascalCase for components)
+- Organize imports: external libraries first, then internal modules
+- Use absolute imports with proper path mapping
+
+### Styling
+- Use Tailwind CSS for styling
+- Follow mobile-first responsive design principles
+- Use CSS variables for theming
+- Maintain consistent spacing and typography scales
+
+## Database Rules
+
+### CRITICAL: Data Protection
+- **NEVER delete data from the database under any circumstances**
+- Instead of DELETE operations, implement soft deletes with status fields (e.g., `deleted_at`, `is_active`, `status`)
+- Always archive or mark records as inactive rather than removing them
+- When "deleting" user data, anonymize sensitive fields but preserve the record structure
+
+### Database Best Practices
+- Use Prisma migrations for all schema changes
+- Always include proper indexing for performance
+- Implement proper foreign key constraints
+- Use transactions for multi-table operations
+- Include created_at and updated_at timestamps on all models
+
+## API Development
+- Use proper HTTP status codes
+- Implement comprehensive error handling
+- Add request validation using Zod or similar
+- Include proper logging for debugging
+- Use middleware for authentication and authorization
+- Rate limit API endpoints appropriately
+
+## Security Guidelines
+- Validate all user inputs
+- Use environment variables for sensitive data
+- Implement proper CORS policies
+- Use HTTPS in production
+- Sanitize data before database operations
+- Never expose sensitive information in error messages
+
+## Performance Optimization
+- Implement proper caching strategies
+- Use React.memo() for expensive components
+- Optimize images with Next.js Image component
+- Implement proper loading states and skeleton UIs
+- Use pagination for large data sets
+- Monitor and optimize Core Web Vitals
+
+## Testing Standards
+- Write unit tests for utility functions
+- Test API endpoints thoroughly
+- Include integration tests for critical user flows
+- Use meaningful test descriptions
+- Mock external dependencies appropriately
+
+## Error Handling
+- Implement graceful error handling throughout the application
+- Use proper error boundaries in React
+- Log errors appropriately for debugging
+- Show user-friendly error messages
+- Implement retry mechanisms for transient failures
+
+## Accessibility
+- Use semantic HTML elements
+- Include proper ARIA labels and roles
+- Ensure keyboard navigation support
+- Maintain proper color contrast ratios
+- Test with screen readers
+
+## Documentation
+- Comment complex business logic
+- Update README.md for significant changes
+- Document API endpoints with proper examples
+- Include JSDoc comments for exported functions
+
+## Specific Project Guidelines
+- Follow the existing component structure in the `/components` directory
+- Use the established UI component library in `/components/ui`
+- Maintain consistency with the current design system
+- Update feature flags in `FEATURE_FLAGS.md` when adding new features
+- Follow the lead management patterns established in `/lib/leads.ts`
+
+Remember: The user experience is paramount. Always prioritize clean, maintainable code that delivers value to users while protecting their data integrity.
