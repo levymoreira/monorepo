@@ -8,9 +8,9 @@
 # We'll handle errors individually for better resilience
 
 # Database configuration
-DB_USER="monorepo-user"
+DB_USER="monorepouser"
 DB_PASSWORD="@ffkp?@fgg*7f123fe32f#$"
-DB_NAME="monorepo-db"
+DB_NAME="monorepodb"
 
 echo "Starting PostgreSQL installation and configuration..."
 echo "=========================================="
