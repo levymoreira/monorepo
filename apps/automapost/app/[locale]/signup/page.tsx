@@ -1,3 +1,4 @@
+import { SignupWrapper } from './signup-wrapper'
 import SignupPageClient from './client'
 
 interface SignupPageProps {
@@ -7,5 +8,9 @@ interface SignupPageProps {
 export default async function SignupPage({ params }: SignupPageProps) {
   const { locale } = await params
 
-  return <SignupPageClient />
+  return (
+    <SignupWrapper locale={locale}>
+      <SignupPageClient />
+    </SignupWrapper>
+  )
 }

@@ -10,4 +10,5 @@ export type Locale = typeof locales[number]['code'];
 
 export const defaultLocale: Locale = 'en';
 
-export const localePrefix = 'as-needed';
+// Changed from 'as-needed' to 'always' to ensure locale is always in URL
+export const localePrefix = 'always';

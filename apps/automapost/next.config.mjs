@@ -11,6 +11,20 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  onDemandEntries: {
+    maxInactiveAge: 60 * 1000,
+    pagesBufferLength: 5,
+  },
+  webpack: (config, { isServer }) => {
+    if (process.platform === 'win32') {
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+        ignored: ['**/node_modules', '**/.next', '**/dist', '**/.git'],
+      };
+    }
+    return config;
+  },
   images: {
     domains: ['automapost.com'],
     deviceSizes: [640, 750, 828, 1080, 1200],
