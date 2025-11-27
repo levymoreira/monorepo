@@ -143,7 +143,7 @@ export default function Footer() {
                 onClick={() => trackEvent('link_click', 'Footer', 'Cookie Policy')}
               >Cookie Policy</Link></li>
             </ul>
-            <p className="text-white/60 text-sm">{t('copyright')}</p>
+            <p className="text-white/60 text-sm">{t('copyright', { year: new Date().getFullYear() })}</p>
           </div>
         </div>
       </div>
