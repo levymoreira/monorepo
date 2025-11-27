@@ -60,12 +60,6 @@ export default function SignupPageClient() {
     <div className="w-full min-h-screen flex items-center justify-center p-8 bg-white">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center space-y-6">
-          {/* Logo/Icon */}
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-blue-200 transform hover:scale-105 transition-transform duration-300">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-            </svg>
-          </div>
           
           <div className="space-y-2">
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Create account</h1>
@@ -152,7 +146,7 @@ export default function SignupPageClient() {
                 </button>
               </div>
               <p className="text-xs text-gray-500 flex items-center gap-1">
-                <div className="w-1 h-1 rounded-full bg-gray-400" />
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-gray-400" aria-hidden="true" />
                 Must be at least 6 characters
               </p>
             </div>

@@ -71,12 +71,6 @@ export default function LoginPageClient() {
     <div className="w-full min-h-screen flex items-center justify-center p-8 bg-white">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center space-y-6">
-          {/* Logo/Icon */}
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-blue-200 transform hover:scale-105 transition-transform duration-300">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-            </svg>
-          </div>
           
           <div className="space-y-2">
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Welcome back</h1>
