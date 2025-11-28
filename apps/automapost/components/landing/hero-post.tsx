@@ -4,10 +4,10 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { ScaleIn, RotateInOnScroll } from '@/components/scroll-animations'
 
-export default function HeroPost() {
+function BlogPostCard() {
   const t = useTranslations()
 
-  const BlogPostCard = () => (
+  return (
     <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-w-md mx-auto border border-gray-100">
       {/* Featured Image Area */}
  
@@ -65,7 +65,9 @@ export default function HeroPost() {
       </div>
     </div>
   )
+}
 
+export default function HeroPost() {
   return (
     <>
       <ScaleIn className="relative mt-8 lg:mt-0 z-20">
