@@ -13,9 +13,9 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-ACR_REGISTRY="monoreporegistry.azurecr.io"
-ACR_USERNAME=${ACR_USERNAME}
-ACR_PASSWORD=${ACR_PASSWORD}
+ACR_REGISTRY='monoreporegistry.azurecr.io'
+ACR_USERNAME='monoreporegistry'
+ACR_PASSWORD='4LrJVj4WpydE0AbB9LH+TvdfiJx7cGhseEXWpuTbJ0+ACRBwrhom'
 PROJECT_NAME="monorepo"
 VERSION_FILE=".version"
 ALL_SERVICES=("next-app-one" "next-app-two" "levymoreira-blog" "express-api" "cron-logger" "automapost")
