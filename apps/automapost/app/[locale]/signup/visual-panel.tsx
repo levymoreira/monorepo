@@ -29,7 +29,7 @@ export default function VisualPanel() {
               </span>
             </h1>
             <p className="text-xl text-gray-600 max-w-xl mx-auto">
-              Join thousands of professionals using AI to create engaging LinkedIn content effortlessly.
+              Join thousands of professionals using AI to create engaging posts content effortlessly.
             </p>
           </div>
 
