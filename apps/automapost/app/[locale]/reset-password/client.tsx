@@ -3,8 +3,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Lock, Eye, EyeOff, CheckCircle2, ArrowRight } from 'lucide-react'
 
@@ -93,8 +91,8 @@ export default function ResetPasswordClient() {
 
   if (success) {
     return (
-      <div className="w-full min-h-screen flex items-center justify-center p-8 bg-white">
-        <div className="w-full max-w-md space-y-8">
+      <div className="w-full min-h-screen flex items-center justify-center p-8 hero-grid-bg">
+        <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
           <div className="text-center space-y-6">
             <div className="flex justify-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
@@ -103,20 +101,20 @@ export default function ResetPasswordClient() {
             </div>
             
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Password reset successful!</h1>
-              <p className="text-gray-500">
+              <h1 className="text-3xl font-bold text-neutral-dark tracking-tight">Password reset successful!</h1>
+              <p className="text-neutral-gray">
                 Your password has been changed successfully.
               </p>
             </div>
 
-            <div className="bg-blue-50 border border-blue-100 text-blue-800 px-4 py-3 rounded-xl text-sm">
+            <div className="bg-gray-50 border border-gray-100 text-neutral-dark px-4 py-3 rounded-xl text-sm">
               <p>Redirecting you to login...</p>
             </div>
 
             <div className="pt-4">
               <Link 
                 href={`/${locale}/login`}
-                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium hover:underline"
+                className="inline-flex items-center gap-2 text-neutral-dark hover:text-primary font-medium hover:underline"
               >
                 Go to login now
                 <ArrowRight className="w-4 h-4" />
@@ -129,12 +127,12 @@ export default function ResetPasswordClient() {
   }
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center p-8 bg-white">
-      <div className="w-full max-w-md space-y-8">
+    <div className="w-full min-h-screen flex items-center justify-center p-8 hero-grid-bg">
+      <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
         <div className="text-center space-y-6">
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Set new password</h1>
-            <p className="text-gray-500">
+            <h1 className="text-3xl font-bold text-neutral-dark tracking-tight">Set new password</h1>
+            <p className="text-neutral-gray">
               Your new password must be different from previously used passwords.
             </p>
           </div>
@@ -148,12 +146,12 @@ export default function ResetPasswordClient() {
 
           <form onSubmit={handleSubmit} className="space-y-5 text-left">
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-700 font-medium">New Password</Label>
+              <Label htmlFor="password" className="text-neutral-dark font-medium">New Password</Label>
               <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
                   <Lock className="w-5 h-5" />
                 </div>
-                <Input
+                <input
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
@@ -162,7 +160,7 @@ export default function ResetPasswordClient() {
                   onChange={handleChange}
                   required
                   disabled={loading || !token}
-                  className="h-12 pl-10 pr-10 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 transition-all duration-200"
+                  className="input w-full h-12 !pl-12 pr-10 bg-white border-gray-200 focus:border-primary transition-all duration-200"
                 />
                 <button
                   type="button"
@@ -173,16 +171,16 @@ export default function ResetPasswordClient() {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-              <p className="text-xs text-gray-500">Must be at least 6 characters</p>
+              <p className="text-xs text-neutral-gray">Must be at least 6 characters</p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-gray-700 font-medium">Confirm Password</Label>
+              <Label htmlFor="confirmPassword" className="text-neutral-dark font-medium">Confirm Password</Label>
               <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
                   <Lock className="w-5 h-5" />
                 </div>
-                <Input
+                <input
                   id="confirmPassword"
                   name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
@@ -191,7 +189,7 @@ export default function ResetPasswordClient() {
                   onChange={handleChange}
                   required
                   disabled={loading || !token}
-                  className="h-12 pl-10 pr-10 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 transition-all duration-200"
+                  className="input w-full h-12 !pl-12 pr-10 bg-white border-gray-200 focus:border-primary transition-all duration-200"
                 />
                 <button
                   type="button"
@@ -204,26 +202,26 @@ export default function ResetPasswordClient() {
               </div>
             </div>
 
-            <Button
+            <button
               type="submit"
               disabled={loading || !token}
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white h-12 rounded-xl font-medium transition-all duration-200 hover:shadow-lg hover:shadow-blue-200 hover:-translate-y-0.5"
+              className="btn btn-primary w-full h-12 rounded-xl font-medium transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
             >
               {loading ? (
                 <div className="flex items-center justify-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-neutral-dark/30 border-t-neutral-dark rounded-full animate-spin" />
                   <span>Resetting password...</span>
                 </div>
               ) : (
                 'Reset password'
               )}
-            </Button>
+            </button>
           </form>
 
           <div className="pt-4 text-center">
             <Link 
               href={`/${locale}/login`}
-              className="text-sm text-gray-600 hover:text-gray-900 font-medium hover:underline"
+              className="text-sm text-neutral-gray hover:text-neutral-dark font-medium hover:underline"
             >
               Back to login
             </Link>

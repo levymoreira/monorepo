@@ -3,8 +3,6 @@
 import { useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { User, Mail, Lock, Eye, EyeOff, ArrowRight, Check } from 'lucide-react'
 
@@ -57,13 +55,13 @@ export default function SignupPageClient() {
   }
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center p-8 bg-white">
-      <div className="w-full max-w-md space-y-8">
+    <div className="w-full min-h-screen flex items-center justify-center p-8 hero-grid-bg">
+      <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
         <div className="text-center space-y-6">
           
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Create account</h1>
-            <p className="text-gray-500">Start creating AI-powered LinkedIn content</p>
+            <h1 className="text-3xl font-bold text-neutral-dark tracking-tight">Create account</h1>
+            <p className="text-neutral-gray">Start creating AI-powered LinkedIn content</p>
           </div>
 
           {/* Error Message */}
@@ -77,12 +75,12 @@ export default function SignupPageClient() {
           {/* Signup Form */}
           <form onSubmit={handleSubmit} className="space-y-5 text-left">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-gray-700 font-medium">Full Name</Label>
+              <Label htmlFor="name" className="text-neutral-dark font-medium">Full Name</Label>
               <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
                   <User className="w-5 h-5" />
                 </div>
-                <Input
+                <input
                   id="name"
                   name="name"
                   type="text"
@@ -91,19 +89,19 @@ export default function SignupPageClient() {
                   onChange={handleChange}
                   required
                   disabled={loading}
-                  className="h-12 pl-10 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 transition-all duration-200"
+                  className="input w-full h-12 !pl-12 bg-white border-gray-200 focus:border-primary transition-all duration-200"
                   data-testid="signup-name"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-700 font-medium">Email address</Label>
+              <Label htmlFor="email" className="text-neutral-dark font-medium">Email address</Label>
               <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
                   <Mail className="w-5 h-5" />
                 </div>
-                <Input
+                <input
                   id="email"
                   name="email"
                   type="email"
@@ -112,19 +110,19 @@ export default function SignupPageClient() {
                   onChange={handleChange}
                   required
                   disabled={loading}
-                  className="h-12 pl-10 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 transition-all duration-200"
+                  className="input w-full h-12 !pl-12 bg-white border-gray-200 focus:border-primary transition-all duration-200"
                   data-testid="signup-email"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-700 font-medium">Password</Label>
+              <Label htmlFor="password" className="text-neutral-dark font-medium">Password</Label>
               <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
                   <Lock className="w-5 h-5" />
                 </div>
-                <Input
+                <input
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
@@ -134,7 +132,7 @@ export default function SignupPageClient() {
                   required
                   disabled={loading}
                   minLength={6}
-                  className="h-12 pl-10 pr-10 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 transition-all duration-200"
+                  className="input w-full h-12 !pl-12 pr-10 bg-white border-gray-200 focus:border-primary transition-all duration-200"
                   data-testid="signup-password"
                 />
                 <button
@@ -145,21 +143,21 @@ export default function SignupPageClient() {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-              <p className="text-xs text-gray-500 flex items-center gap-1">
+              <p className="text-xs text-neutral-gray flex items-center gap-1">
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-gray-400" aria-hidden="true" />
                 Must be at least 6 characters
               </p>
             </div>
 
-            <Button
+            <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white h-12 rounded-xl font-medium transition-all duration-200 hover:shadow-lg hover:shadow-blue-200 hover:-translate-y-0.5 cursor-pointer"
+              className="btn btn-primary w-full h-12 rounded-xl font-medium transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
               data-testid="signup-submit"
             >
               {loading ? (
                 <div className="flex items-center justify-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-neutral-dark/30 border-t-neutral-dark rounded-full animate-spin" />
                   <span>Creating account...</span>
                 </div>
               ) : (
@@ -168,21 +166,21 @@ export default function SignupPageClient() {
                   <ArrowRight className="w-4 h-4" />
                 </div>
               )}
-            </Button>
+            </button>
             
-            <p className="text-xs text-center text-gray-500">
+            <p className="text-xs text-center text-neutral-gray">
               By creating an account, you agree to our{' '}
-              <Link href={`/${locale}/terms`} className="text-blue-600 hover:underline">Terms of Service</Link>
+              <Link href={`/${locale}/terms`} className="text-neutral-dark hover:text-primary hover:underline">Terms of Service</Link>
               {' '}and{' '}
-              <Link href={`/${locale}/privacy`} className="text-blue-600 hover:underline">Privacy Policy</Link>.
+              <Link href={`/${locale}/privacy`} className="text-neutral-dark hover:text-primary hover:underline">Privacy Policy</Link>.
             </p>
           </form>
 
           {/* Login Link */}
           <div className="pt-4 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-neutral-gray">
               Already have an account?{' '}
-              <Link href={`/${locale}/login`} className="text-blue-600 hover:text-blue-700 font-semibold hover:underline">
+              <Link href={`/${locale}/login`} className="text-neutral-dark hover:text-primary font-semibold hover:underline">
                 Sign in
               </Link>
             </p>

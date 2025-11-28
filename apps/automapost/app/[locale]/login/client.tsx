@@ -3,10 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Mail, Lock, Eye, EyeOff, Check, ArrowRight } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
 
 export default function LoginPageClient() {
   const router = useRouter()
@@ -68,13 +66,13 @@ export default function LoginPageClient() {
   }
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center p-8 bg-white">
-      <div className="w-full max-w-md space-y-8">
+    <div className="w-full min-h-screen flex items-center justify-center p-8 hero-grid-bg">
+      <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
         <div className="text-center space-y-6">
           
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Welcome back</h1>
-            <p className="text-gray-500">Sign in to your AutomaPost account</p>
+            <h1 className="text-3xl font-bold text-neutral-dark tracking-tight">Welcome back</h1>
+            <p className="text-neutral-gray">Sign in to your AutomaPost account</p>
           </div>
 
           {/* Error Message */}
@@ -88,12 +86,12 @@ export default function LoginPageClient() {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5 text-left">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-700 font-medium">Email address</Label>
+              <Label htmlFor="email" className="text-neutral-dark font-medium">Email address</Label>
               <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
                   <Mail className="w-5 h-5" />
                 </div>
-                <Input
+                <input
                   id="email"
                   name="email"
                   type="email"
@@ -102,7 +100,7 @@ export default function LoginPageClient() {
                   onChange={handleChange}
                   required
                   disabled={loading}
-                  className="h-12 pl-10 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 transition-all duration-200"
+                  className="input w-full h-12 !pl-12 bg-white border-gray-200 focus:border-primary transition-all duration-200"
                   data-testid="login-email"
                 />
               </div>
@@ -110,19 +108,19 @@ export default function LoginPageClient() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-gray-700 font-medium">Password</Label>
+                <Label htmlFor="password" className="text-neutral-dark font-medium">Password</Label>
                 <Link 
                   href={`/${locale}/forgot-password`}
-                  className="text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline"
+                  className="text-sm text-neutral-gray hover:text-primary font-medium hover:underline"
                 >
                   Forgot password?
                 </Link>
               </div>
               <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
                   <Lock className="w-5 h-5" />
                 </div>
-                <Input
+                <input
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
@@ -131,7 +129,7 @@ export default function LoginPageClient() {
                   onChange={handleChange}
                   required
                   disabled={loading}
-                  className="h-12 pl-10 pr-10 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 transition-all duration-200"
+                  className="input w-full h-12 !pl-12 pr-10 bg-white border-gray-200 focus:border-primary transition-all duration-200"
                   data-testid="login-password"
                 />
                 <button
@@ -152,23 +150,23 @@ export default function LoginPageClient() {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded cursor-pointer accent-[rgb(176,236,156)]"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-600 cursor-pointer select-none">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-neutral-gray cursor-pointer select-none">
                   Remember me for 30 days
                 </label>
               </div>
             </div>
 
-            <Button
+            <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white h-12 rounded-xl font-medium transition-all duration-200 hover:shadow-lg hover:shadow-blue-200 hover:-translate-y-0.5 cursor-pointer"
+              className="btn btn-primary w-full h-12 rounded-xl font-medium transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
               data-testid="login-submit"
             >
               {loading ? (
                 <div className="flex items-center justify-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-neutral-dark/30 border-t-neutral-dark rounded-full animate-spin" />
                   <span>Signing in...</span>
                 </div>
               ) : (
@@ -177,14 +175,14 @@ export default function LoginPageClient() {
                   <ArrowRight className="w-4 h-4" />
                 </div>
               )}
-            </Button>
+            </button>
           </form>
 
           {/* Signup Link */}
           <div className="pt-4 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-neutral-gray">
               Don't have an account?{' '}
-              <Link href={`/${locale}/signup`} className="text-blue-600 hover:text-blue-700 font-semibold hover:underline">
+              <Link href={`/${locale}/signup`} className="text-neutral-dark hover:text-primary font-semibold hover:underline">
                 Create an account
               </Link>
             </p>
