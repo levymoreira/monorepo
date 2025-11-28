@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db, users } from '@/lib/db';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
-import { generateTokenPair } from '@/lib/auth/jwt';
+import { generateAccessToken } from '@/lib/auth/jwt';
 import { createSession } from '@/lib/auth/session';
 import { setAuthCookies } from '@/lib/auth/cookies';
 
@@ -75,16 +75,19 @@ export async function POST(request: NextRequest) {
                       request.headers.get('x-real-ip') || 
                       undefined;
 
-    const session = await createSession(newUser.id, {
+    const sessionResult = await createSession(newUser.id, {
       userAgent,
       ipAddress,
     });
 
-    // Generate JWT tokens
-    const { accessToken, refreshToken } = await generateTokenPair(
+    // Generate JWT access token
+    const accessToken = await generateAccessToken(
       { id: newUser.id, email: newUser.email, name: newUser.name || undefined },
-      session.id
+      sessionResult.session.id
     );
+
+    // Use opaque refresh token from session
+    const refreshToken = sessionResult.refreshToken;
 
     // Create response with auth cookies
     const response = NextResponse.json({

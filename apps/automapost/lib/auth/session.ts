@@ -48,7 +48,7 @@ export function parseUserAgent(userAgent: string) {
 // Create a new session
 export async function createSession(
   userId: string,
-  request: Request
+  requestOrMetadata: Request | { userAgent?: string; ipAddress?: string }
 ): Promise<{
   session: any;
   sessionToken: string;
@@ -73,10 +73,20 @@ export async function createSession(
   }
   
   // Extract request metadata
-  const userAgent = request.headers.get('user-agent') || '';
-  const ipAddress = request.headers.get('x-forwarded-for')?.split(',')[0] || 
-                    request.headers.get('x-real-ip') || 
-                    null;
+  let userAgent = '';
+  let ipAddress: string | null = null;
+
+  if ('headers' in requestOrMetadata && typeof (requestOrMetadata as any).headers?.get === 'function') {
+    const request = requestOrMetadata as Request;
+    userAgent = request.headers.get('user-agent') || '';
+    ipAddress = request.headers.get('x-forwarded-for')?.split(',')[0] || 
+                request.headers.get('x-real-ip') || 
+                null;
+  } else {
+    const metadata = requestOrMetadata as { userAgent?: string; ipAddress?: string };
+    userAgent = metadata.userAgent || '';
+    ipAddress = metadata.ipAddress || null;
+  }
   
   const deviceFingerprint = generateDeviceFingerprint(userAgent, ipAddress || undefined);
   

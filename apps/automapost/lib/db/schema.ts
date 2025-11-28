@@ -38,6 +38,10 @@ export const users = pgTable('users', {
   emailVerified: boolean('emailVerified').default(false).notNull(),
   onboardingCompleted: boolean('onboardingCompleted').default(false).notNull(),
   
+  // Password reset
+  resetPasswordToken: text('resetPasswordToken'),
+  resetPasswordExpires: timestamp('resetPasswordExpires', { withTimezone: true }),
+  
   // Legacy LinkedIn fields
   linkedinId: text('linkedinId').unique(),
   linkedinAccessToken: text('linkedinAccessToken'),

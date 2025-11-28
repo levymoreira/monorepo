@@ -11,9 +11,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { locale } = await params
   
   return generatePageMetadata(locale, {
-    title: 'Privacy Policy - AutomaPost | Data Protection & User Rights',
-    description: 'Read AutomaPost\'s Privacy Policy to understand how we collect, use, and protect your personal data. Transparent data practices for LinkedIn automation users.',
-    keywords: 'automapost privacy policy, data protection, user rights, gdpr compliance, data security, linkedin automation privacy',
+    title: 'Privacy Policy - AutomaPost | Data Protection & SEO Content Security',
+    description: 'Read AutomaPost\'s Privacy Policy to understand how we collect, use, and protect your personal data. Transparent data practices for AI blog post generation and SEO automation users.',
+    keywords: 'automapost privacy policy, data protection, user rights, gdpr compliance, data security, seo automation privacy, blog content security',
     ogTitle: 'Privacy Policy - AutomaPost',
     ogDescription: 'Read AutomaPost\'s Privacy Policy to understand how we collect, use, and protect your personal data.',
     ogImageAlt: 'AutomaPost - Privacy Policy',
@@ -27,7 +27,7 @@ export default async function PrivacyPage({ params }: PageProps) {
       <Navigation />
       <main className="container pt-24 pb-16 max-w-3xl prose prose-neutral dark:prose-invert">
         <h1 className="text-3xl font-bold mb-2">Privacy Policy</h1>
-        <p className="text-sm text-gray-500 mb-8">Last updated: August 8, 2025</p>
+        <p className="text-sm text-gray-500 mb-8">Last updated: November 27, 2025</p>
 
         <p>
           This Privacy Policy explains how AutomaPost ("AutomaPost", "we", "us") collects, uses, and
@@ -37,7 +37,7 @@ export default async function PrivacyPage({ params }: PageProps) {
 
         <h2 id="who-we-are" className="mt-10">Who we are and how to contact us</h2>
         <p>
-          AutomaPost is a software service that helps professionals draft and schedule content.
+          AutomaPost is a software service that helps professionals generate, optimize, and schedule SEO-friendly blog content.
           If you have questions or would like to exercise your privacy rights, contact us at
           <a className="underline ml-1" href="mailto:contact@automapost.com">contact@automapost.com</a>.
         </p>
@@ -55,7 +55,7 @@ export default async function PrivacyPage({ params }: PageProps) {
             details you provide when creating an account.
           </li>
           <li>
-            Content you provide: posts, captions, media, schedules, and settings you create inside the
+            Content you provide: blog posts, articles, keywords, SEO metadata, schedules, and settings you create inside the
             product.
           </li>
           <li>
@@ -66,7 +66,7 @@ export default async function PrivacyPage({ params }: PageProps) {
             Cookies and similar technologies: see our <a className="underline" href="/cookies">Cookie Policy</a>.
           </li>
           <li>
-            Third‑party data: if you connect third‑party accounts (for example, a social network), we
+            Third‑party data: if you connect third‑party accounts (for example, a CMS like WordPress or Webflow), we
             may receive data from that provider according to their terms and your settings.
           </li>
         </ul>
