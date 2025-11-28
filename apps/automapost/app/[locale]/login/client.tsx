@@ -161,7 +161,7 @@ export default function LoginPageClient() {
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary w-full h-12 rounded-xl font-medium transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
+              className="btn btn-primary w-full h-12 rounded-xl font-medium transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:shadow-none"
               data-testid="login-submit"
             >
               {loading ? (
