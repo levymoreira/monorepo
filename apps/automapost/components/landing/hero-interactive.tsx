@@ -137,8 +137,10 @@ export default function HeroInteractive() {
         value: 1
       })
     }
-    setShowDialog(true)
-  }, [])
+    if (typeof window !== 'undefined') {
+      window.location.href = `/${locale}/signup`
+    }
+  }, [locale])
 
   // Listen for focus-signup events from other components to open dialog
   useEffect(() => {
@@ -264,10 +266,12 @@ export default function HeroInteractive() {
                       value: 1
                     })
                   }
-                  handleSignupSubmit('hero')
+                  if (typeof window !== 'undefined') {
+                    window.location.href = `/${locale}/signup`
+                  }
                 }}
               >
-                {isSubmitting ? t('hero.signingUp') : t('hero.signUpButton')}
+                {t('hero.signUpButton')}
               </button>
             </div>
           </>

@@ -501,8 +501,10 @@ export default function HomePage() {
                           value: 1
                         })
                       }
-                      // Open dialog instead of redirecting
-                      setShowDialog(true)
+                      // Redirect to signup
+                      if (typeof window !== 'undefined') {
+                        window.location.href = `/${locale}/signup`
+                      }
                     }}
                   >
                     {t('hero.ctaPrimary')}
@@ -604,10 +606,13 @@ export default function HomePage() {
                                 value: 1
                               })
                             }
-                            handleSignupSubmit('hero')
+                            // Redirect to signup
+                            if (typeof window !== 'undefined') {
+                              window.location.href = `/${locale}/signup`
+                            }
                           }}
                         >
-                          {isSubmitting ? t('hero.signingUp') : t('hero.signUpButton')}
+                          {t('hero.signUpButton')}
                         </button>
                       </div>
                     </>
@@ -840,8 +845,10 @@ export default function HomePage() {
                     value: 1
                   })
                 }
-                // Open dialog instead of redirecting
-                setShowDialog(true)
+                // Redirect to signup
+                if (typeof window !== 'undefined') {
+                  window.location.href = `/${locale}/signup`
+                }
               }}
             >
               <span className="relative z-10">{t('howItWorks.cta')}</span>
@@ -933,8 +940,10 @@ export default function HomePage() {
                       value: 1
                     })
                   }
-                  // Open dialog instead of redirecting
-                  setShowDialog(true)
+                  // Redirect to signup
+                  if (typeof window !== 'undefined') {
+                    window.location.href = `/${locale}/signup`
+                  }
                 }}
               />
             ))}

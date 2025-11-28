@@ -111,7 +111,7 @@ export default function LoginPageClient() {
                 <Label htmlFor="password" className="text-neutral-dark font-medium">Password</Label>
                 <Link 
                   href={`/${locale}/forgot-password`}
-                  className="text-sm text-neutral-gray hover:text-primary font-medium hover:underline"
+                  className="text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline"
                 >
                   Forgot password?
                 </Link>
@@ -182,7 +182,7 @@ export default function LoginPageClient() {
           <div className="pt-4 text-center">
             <p className="text-sm text-neutral-gray">
               Don't have an account?{' '}
-              <Link href={`/${locale}/signup`} className="text-neutral-dark hover:text-primary font-semibold hover:underline">
+              <Link href={`/${locale}/signup`} className="text-blue-600 hover:text-blue-700 font-semibold hover:underline">
                 Create an account
               </Link>
             </p>

@@ -170,9 +170,9 @@ export default function SignupPageClient() {
             
             <p className="text-xs text-center text-neutral-gray">
               By creating an account, you agree to our{' '}
-              <Link href={`/${locale}/terms`} className="text-neutral-dark hover:text-primary hover:underline">Terms of Service</Link>
+              <Link href={`/${locale}/terms`} className="text-blue-600 hover:text-blue-700 hover:underline">Terms of Service</Link>
               {' '}and{' '}
-              <Link href={`/${locale}/privacy`} className="text-neutral-dark hover:text-primary hover:underline">Privacy Policy</Link>.
+              <Link href={`/${locale}/privacy`} className="text-blue-600 hover:text-blue-700 hover:underline">Privacy Policy</Link>.
             </p>
           </form>
 
@@ -180,7 +180,7 @@ export default function SignupPageClient() {
           <div className="pt-4 text-center">
             <p className="text-sm text-neutral-gray">
               Already have an account?{' '}
-              <Link href={`/${locale}/login`} className="text-neutral-dark hover:text-primary font-semibold hover:underline">
+              <Link href={`/${locale}/login`} className="text-blue-600 hover:text-blue-700 font-semibold hover:underline">
                 Sign in
               </Link>
             </p>

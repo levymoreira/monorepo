@@ -1,6 +1,7 @@
 'use client'
 
 import { ArrowRight, Clock, Star } from 'lucide-react'
+import { useLocale } from 'next-intl'
 
 // Declare gtag as a global function
 declare global {
@@ -24,6 +25,8 @@ export default function CTABanner({
   urgency,
   variant = 'primary' 
 }: CTABannerProps) {
+  const locale = useLocale()
+
   return (
     <section data-section="final_cta" className="py-16 bg-neutral-light">
       <div className="container mx-auto px-4">
@@ -60,9 +63,9 @@ export default function CTABanner({
                     value: 1
                   })
                 }
-                // Trigger the focus-signup event to open dialog
+                // Redirect to signup
                 if (typeof window !== 'undefined') {
-                  window.dispatchEvent(new CustomEvent('focus-signup', { detail: { scroll: true } }))
+                  window.location.href = `/${locale}/signup`
                 }
               }}
             >

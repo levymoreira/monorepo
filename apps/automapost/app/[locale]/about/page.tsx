@@ -119,7 +119,7 @@ export default async function AboutPage({ params }: PageProps) {
         {/* CTA */}
         <section className="flex flex-wrap items-center gap-3">
           <a href="/careers" className="btn btn-outline">See open roles</a>
-          <a href="/#features" className="btn btn-primary">Get started free</a>
+          <a href={`/${(await params).locale}/signup`} className="btn btn-primary">Get started free</a>
         </section>
       </main>
       <Footer />

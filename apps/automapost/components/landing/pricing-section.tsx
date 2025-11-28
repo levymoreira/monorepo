@@ -51,9 +51,9 @@ export default function PricingSection() {
         value: 1
       })
     }
-    // Trigger the focus-signup event to open dialog
+    // Redirect to signup
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('focus-signup', { detail: { scroll: true } }))
+      window.location.href = `/${locale}/signup`
     }
   }
 

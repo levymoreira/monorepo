@@ -115,7 +115,7 @@ export default function Navigation() {
               className="btn btn-primary"
               onClick={() => {
                 trackEvent('button_get_started_click', 'User Interaction', 'Desktop Get Started Free')
-                dispatchEvent('focus-signup', { scroll: true })
+                window.location.href = `/${locale}/signup`
               }}
             >
               Get Started Free
@@ -191,7 +191,7 @@ export default function Navigation() {
                 className="btn btn-primary w-full"
                 onClick={() => {
                   trackEvent('button_get_started_click', 'User Interaction', 'Mobile Get Started Free')
-                  dispatchEvent('focus-signup', { scroll: true })
+                  window.location.href = `/${locale}/signup`
                   setIsMenuOpen(false)
                 }}
               >
